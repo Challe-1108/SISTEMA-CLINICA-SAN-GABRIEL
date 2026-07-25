@@ -1,0 +1,2 @@
+CREATE DATABASE Sistema_Clinica_San_Gabriel;
+USE Sistema_Clinica_San_Gabriel;

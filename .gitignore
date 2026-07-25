@@ -1,0 +1,20 @@
+# Ignorar carpetas de compilación y temporales en CUALQUIER nivel
+**/build/
+**/dist/
+**/.idea/
+**/nbproject/private/
+
+# Archivos compilados e individuales
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.rar
+
+# Logs y Temporales del Sistema
+*.log
+hs_err_pid*
+replay_pid*
+.DS_Store
+Thumbs.db
