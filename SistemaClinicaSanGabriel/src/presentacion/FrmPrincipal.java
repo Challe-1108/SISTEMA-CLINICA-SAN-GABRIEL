@@ -31,7 +31,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal() {
         initComponents();
 
-        usuarioActual = new Usuario(1, "sdfsdf", "asdas", Rol.ADMINISTRADOR, true);
+        usuarioActual = new Usuario(1, "usuario1", "asdas", Rol.ADMINISTRADOR, true);
+
+        lblUsuario.setText(usuarioActual.getUsername());
+        lblRol.setText(usuarioActual.getRol().name());
 
         armarMenuDinamico();
     }
@@ -40,6 +43,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
 
         this.usuarioActual = usuarioActual;
+
+        lblUsuario.setText(usuarioActual.getUsername());
+        lblRol.setText(usuarioActual.getRol().name());
 
         armarMenuDinamico();
     }
@@ -54,18 +60,57 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        lblUsuario = new javax.swing.JLabel();
+        lblRol = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        desktopPane.setBackground(new java.awt.Color(204, 204, 204));
+
+        lblUsuario.setBackground(new java.awt.Color(255, 255, 255));
+        lblUsuario.setFont(new java.awt.Font("Segoe UI Black", 1, 48)); // NOI18N
+        lblUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblUsuario.setText("USUARIO");
+
+        lblRol.setBackground(new java.awt.Color(255, 255, 255));
+        lblRol.setFont(new java.awt.Font("Segoe UI Black", 1, 48)); // NOI18N
+        lblRol.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblRol.setText("ADMINISTRADOR");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setText("BIENVENIDO(A)");
+
+        desktopPane.setLayer(lblUsuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        desktopPane.setLayer(lblRol, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        desktopPane.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
         desktopPane.setLayout(desktopPaneLayout);
         desktopPaneLayout.setHorizontalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1216, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, desktopPaneLayout.createSequentialGroup()
+                .addContainerGap(250, Short.MAX_VALUE)
+                .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, desktopPaneLayout.createSequentialGroup()
+                            .addComponent(lblRol, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(223, 223, 223))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, desktopPaneLayout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(583, 583, 583)))))
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 785, Short.MAX_VALUE)
+            .addGroup(desktopPaneLayout.createSequentialGroup()
+                .addGap(119, 119, 119)
+                .addComponent(jLabel1)
+                .addGap(68, 68, 68)
+                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(lblRol, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(236, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -158,5 +203,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblRol;
+    private javax.swing.JLabel lblUsuario;
     // End of variables declaration//GEN-END:variables
 }
