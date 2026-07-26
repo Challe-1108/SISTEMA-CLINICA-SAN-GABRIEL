@@ -5,14 +5,14 @@ public class Usuario {
     private int idUsuario;
     private String username;
     private String password;
-    private String rol;
+    private Rol rol;
     private boolean estado;
 
     public Usuario() {
 
     }
 
-    public Usuario(int idUsuario, String username, String password, String rol, boolean estado) {
+    public Usuario(int idUsuario, String username, String password, Rol rol, boolean estado) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.password = password;
@@ -44,11 +44,11 @@ public class Usuario {
         this.password = password;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 

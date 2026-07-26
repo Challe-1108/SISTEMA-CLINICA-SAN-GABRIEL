@@ -4,13 +4,14 @@
  */
 package logica;
 
+import datos.UsuarioDAO;
+import entidades.Rol;
+import entidades.Usuario;
+
 import javax.swing.*;
-import java.rmi.MarshalException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HexFormat;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -26,7 +27,7 @@ public class UsuarioLOG {
             byte[] passwordBytes = passwordSinCifrar.getBytes();
             byte[] passwordCifradoHash = md.digest(passwordBytes);
 
-            return HexFormat.of().formatHex(passwordBytes);
+            return HexFormat.of().formatHex(passwordCifradoHash);
 
         } catch (NoSuchAlgorithmException e){
             System.err.println("Error al especificar el tipo de Increptacion: " + e.getMessage());
@@ -78,7 +79,7 @@ public class UsuarioLOG {
         return true;
     }
 
-    public static boolean registrarUsuario(String username, String passwordSinCifrar, String rol, boolean estado){
+    public static boolean registrarUsuario(String username, String passwordSinCifrar, Rol rol, boolean estado){
         if(username == null || username.equals("")){
             JOptionPane.showMessageDialog(null,
                     "Nombre de Usuario no valido",
@@ -100,12 +101,23 @@ public class UsuarioLOG {
                     "Contraseña no valido",
                     "Validacion de datos",
                     JOptionPane.ERROR_MESSAGE);
+            return false;
         }
 
         if(!validarPassword(passwordSinCifrar)) return false;
 
+        if(rol == null){
+            JOptionPane.showMessageDialog(null,
+                    "Rol no valido",
+                    "Validacion de datos",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
-        return true;
+        String passwordCifrado = cifrarPassword(passwordSinCifrar);
+        Usuario u = new Usuario(0, username, passwordCifrado, rol, estado);
+
+        return UsuarioDAO.registrarUsuario(u);
     }
     
 }

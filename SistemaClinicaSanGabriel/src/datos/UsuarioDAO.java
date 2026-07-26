@@ -4,6 +4,7 @@
  */
 package datos;
 
+import entidades.Rol;
 import entidades.Usuario;
 
 import java.sql.Connection;
@@ -27,7 +28,7 @@ public class UsuarioDAO {
 
             ps.setString(1, usuario.getUsername());
             ps.setString(2, usuario.getPassword());
-            ps.setString(3, usuario.getRol());
+            ps.setString(3, usuario.getRol().name());
             ps.setBoolean(4, usuario.isEstado());
 
             filasAfectadas = ps.executeUpdate();
@@ -56,7 +57,7 @@ public class UsuarioDAO {
                 usuarioEncontrado.setIdUsuario(rs.getInt("idUsuario"));
                 usuarioEncontrado.setUsername(rs.getString("username"));
                 usuarioEncontrado.setPassword(rs.getString("password"));
-                usuarioEncontrado.setRol(rs.getString("rol"));
+                usuarioEncontrado.setRol(Rol.valueOf(rs.getString("rol")));
                 usuarioEncontrado.setEstado(rs.getBoolean("estado"));
             }
 
@@ -81,7 +82,7 @@ public class UsuarioDAO {
                 usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setUsername(rs.getString("username"));
                 usuario.setPassword(rs.getString("password"));
-                usuario.setRol(rs.getString("rol"));
+                usuario.setRol(Rol.valueOf(rs.getString("rol")));
                 usuario.setEstado(rs.getBoolean("estado"));
 
                 lista.add(usuario);
@@ -103,7 +104,7 @@ public class UsuarioDAO {
 
             ps.setString(1, usuario.getUsername());
             ps.setString(2, usuario.getPassword());
-            ps.setString(3, usuario.getRol());
+            ps.setString(3, usuario.getRol().name());
             ps.setBoolean(4, usuario.isEstado());
             ps.setInt(5, usuario.getIdUsuario());
 
@@ -135,7 +136,7 @@ public class UsuarioDAO {
         return filasAfectadas>0;
     }
 
-    public static boolean cambiarRol(int idUsuario, String nuevoRol){
+    public static boolean cambiarRol(int idUsuario, Rol nuevoRol){
         String sql = "UPDATE Usuarios SET rol = ? WHERE idUsuario = ?";
         int filasAfectadas = 0;
 
@@ -143,7 +144,7 @@ public class UsuarioDAO {
             PreparedStatement ps = cn.prepareStatement(sql)){
 
             ps.setInt(1, idUsuario);
-            ps.setString(2, nuevoRol);
+            ps.setString(2, nuevoRol.name());
 
             filasAfectadas = ps.executeUpdate();
 
