@@ -4,7 +4,10 @@
  */
 package presentacion;
 
-import javax.swing.JInternalFrame;
+import entidades.Usuario;
+import logica.UsuarioLOG;
+
+import javax.swing.*;
 
 /**
  *
@@ -35,10 +38,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtUsuario = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        txtPassword = new javax.swing.JPasswordField();
+        btnIniciarSesion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -59,14 +62,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Usuario:");
 
-        jTextField1.setSelectionColor(new java.awt.Color(0, 204, 204));
+        txtUsuario.setSelectionColor(new java.awt.Color(0, 204, 204));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Contraseña:");
 
-        jPasswordField1.setSelectionColor(new java.awt.Color(0, 204, 204));
+        txtPassword.setSelectionColor(new java.awt.Color(0, 204, 204));
 
-        jButton1.setText("Iniciar Sesión");
+        btnIniciarSesion.setText("Iniciar Sesión");
+        btnIniciarSesion.addActionListener(this::btnIniciarSesionActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,14 +85,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             .addComponent(jLabel4))
                         .addGap(72, 72, 72)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(195, 195, 195)
                         .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(221, 221, 221)
-                        .addComponent(jButton1)))
+                        .addComponent(btnIniciarSesion)))
                 .addContainerGap(138, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -99,13 +103,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(51, 51, 51)
-                .addComponent(jButton1)
+                .addComponent(btnIniciarSesion)
                 .addContainerGap(95, Short.MAX_VALUE))
         );
 
@@ -143,6 +147,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        
+        if(!validarCampos()) return;
+
+        Usuario usuarioEncontrado = UsuarioLOG.buscarUsuario(username, password);
+
+        if(usuarioEncontrado != null){
+            JOptionPane.showMessageDialog(this, "Bienvenido: " + usuarioEncontrado.getUsername());
+        }
+        
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -167,17 +183,40 @@ public class FrmPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmPrincipal().setVisible(true));
     }
-    
+
+    private boolean validarCampos(){
+
+        if (txtUsuario.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Campo de Usuario vacio", "Error de datos", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        char[] passwordCaracteres = txtPassword.getPassword();
+
+        if(new String(passwordCaracteres).trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Campo de Password vacio", "Error de datos", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        username = txtUsuario.getText().trim();
+        password = new String(passwordCaracteres).trim();
+
+        return true;
+    }
+
+    private String username;
+    private String password;
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

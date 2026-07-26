@@ -19,6 +19,8 @@ VALUES ("yordin_cr", "12345678", "Administrador", true);
 INSERT INTO Usuarios (username, password, rol, estado)
 VALUES ("teffo", "87654321", "Administrador", true);
 
+-- ELIMINAR REGISTROS
+TRUNCATE TABLE Usuarios;
 
 -- CONSULTAS
 

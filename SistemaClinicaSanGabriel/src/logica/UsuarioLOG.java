@@ -119,5 +119,10 @@ public class UsuarioLOG {
 
         return UsuarioDAO.registrarUsuario(u);
     }
-    
+
+    public static Usuario buscarUsuario(String username, String password){
+        String passwordCifrada = cifrarPassword(password);
+
+        return UsuarioDAO.buscarUsuario(username, passwordCifrada);
+    }
 }
