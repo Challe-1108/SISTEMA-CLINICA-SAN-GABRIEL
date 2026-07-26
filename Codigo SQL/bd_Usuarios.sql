@@ -1,3 +1,5 @@
+
+-- EJECUCION PRIMORDIAL
 USE sistema_clinica_san_gabriel;
 
 CREATE TABLE Usuarios (
@@ -9,7 +11,7 @@ CREATE TABLE Usuarios (
 );
 
 
-
+-- FIN DE EJECUCION PRIMORDIAL
 
 
 -- EJEMPLOS DE INSERCION DE USUARIOS--
