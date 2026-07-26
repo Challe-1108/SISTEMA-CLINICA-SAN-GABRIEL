@@ -16,7 +16,15 @@ CREATE TABLE Usuarios (
 INSERT INTO Usuarios (username, password, rol, estado)
 VALUES ("yordin_cr", "12345678", "Administrador", true);
 
+INSERT INTO Usuarios (username, password, rol, estado)
+VALUES ("teffo", "87654321", "Administrador", true);
+
 
 -- CONSULTAS
 
 SELECT * FROM Usuarios;
+
+
+-- BUSQUEDA DE USUARIO POR USERNAME Y PASSWORD
+
+SELECT * FROM Usuarios WHERE (username = "teffo" AND password = "87654321");

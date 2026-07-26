@@ -8,6 +8,7 @@ import entidades.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -35,6 +36,24 @@ public class UsuarioDAO {
         }
 
         if(filasAfectadas > 0) return true;
+        return false;
+    }
+
+    public Boolean validarInicioSesion(String username, String password){
+        String sql = "SELECT * FROM Usuarios WHERE (username = ? AND password = ?)";
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            return ps.executeQuery().next();
+
+        } catch (SQLException e){
+            System.err.println("Error al buscar un usuario: " + e.getMessage());
+        }
+
         return false;
     }
 }
