@@ -17,7 +17,7 @@ import java.sql.SQLException;
  */
 public class UsuarioDAO {
 
-    public boolean registrarUsuario(Usuario usuario){
+    public static boolean registrarUsuario(Usuario usuario){
         String sql = "INSERT INTO Usuarios (username, password, rol, estado) VALUES (?, ?, ?, ?)";
         int filasAfectadas = 0;
 
@@ -39,8 +39,9 @@ public class UsuarioDAO {
         return false;
     }
 
-    public Boolean validarInicioSesion(String username, String password){
+    public static Usuario buscarUsuario(String username, String password){
         String sql = "SELECT * FROM Usuarios WHERE (username = ? AND password = ?)";
+        Usuario usuarioEncontrado = null;
 
         try(Connection cn = ConexionBD.getInstancia().getConexion();
             PreparedStatement ps = cn.prepareStatement(sql)){
@@ -48,12 +49,21 @@ public class UsuarioDAO {
             ps.setString(1, username);
             ps.setString(2, password);
 
-            return ps.executeQuery().next();
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                usuarioEncontrado = new Usuario();
+                usuarioEncontrado.setIdUsuario(rs.getInt("idUsuario"));
+                usuarioEncontrado.setUsername(rs.getString("username"));
+                usuarioEncontrado.setPassword(rs.getString("password"));
+                usuarioEncontrado.setRol(rs.getString("rol"));
+                usuarioEncontrado.setEstado(rs.getBoolean("estado"));
+            }
 
         } catch (SQLException e){
             System.err.println("Error al buscar un usuario: " + e.getMessage());
         }
 
-        return false;
+        return usuarioEncontrado;
     }
 }
