@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import entidades.Paciente;
 import entidades.Rol;
 import entidades.Usuario;
 import logica.composite.CategoriaMenu;
@@ -30,7 +31,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal() {
         initComponents();
 
-        usuarioActual = new Usuario(1, "Yordin_cr", "asdas", Rol.ENFERMERA, true);
+        usuarioActual = new Usuario(1, "sdfsdf", "asdas", Rol.ADMINISTRADOR, true);
 
         armarMenuDinamico();
     }
@@ -52,17 +53,30 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        desktopPane = new javax.swing.JDesktopPane();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
+        desktopPane.setLayout(desktopPaneLayout);
+        desktopPaneLayout.setHorizontalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1216, Short.MAX_VALUE)
+        );
+        desktopPaneLayout.setVerticalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 785, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1216, Short.MAX_VALUE)
+            .addComponent(desktopPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 785, Short.MAX_VALUE)
+            .addComponent(desktopPane)
         );
 
         pack();
@@ -95,19 +109,54 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     private void armarMenuDinamico(){
-        JMenuBar barraPrincipal = new JMenuBar();
+        JMenuBar barraPrincipal;
 
         barraPrincipal = MenuBuilder.crear()
+
                 .agregarCategoria("Usuarios")
                     .agregarItem("Registrar Usuario", e -> {}, Rol.ADMINISTRADOR)
-                    .agregarItem("Listar Usuarios", e -> {}, Rol.ADMINISTRADOR, Rol.ENFERMERA)
+                    .agregarItem("Buscar Usuario", e -> {}, Rol.ADMINISTRADOR)
+                    .agregarItem("Modificar Usuario", e -> {}, Rol.ADMINISTRADOR)
+                    .agregarItem("Eliminar Usuario", e -> {}, Rol.ADMINISTRADOR)
+                    .agregarItem("Listar Usuarios", e -> {}, Rol.ADMINISTRADOR)
+
+                .agregarCategoria("Pacientes")
+                    .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new FrmRegistroPaciente());}, Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
+                    .agregarItem("Buscar Paciente", e -> {}, Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
+                    .agregarItem("Editar Paciente", e -> {}, Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
+
                 .build(usuarioActual.getRol());
 
 
         this.setJMenuBar(barraPrincipal);
     }
 
+    public void abrirInternalFrame(JInternalFrame frame) {
+        if (frame == null) return;
+
+        if (frame.getParent() == null) {
+            desktopPane.add(frame);
+        }
+
+        int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
+        int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
+
+        x = Math.max(0, x);
+        y = Math.max(0, y);
+
+        frame.setLocation(x, y);
+        frame.setVisible(true);
+
+        try {
+            frame.setSelected(true);
+            frame.toFront();
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane desktopPane;
     // End of variables declaration//GEN-END:variables
 }

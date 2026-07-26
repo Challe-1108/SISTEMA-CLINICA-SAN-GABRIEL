@@ -156,6 +156,10 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         if(usuarioEncontrado != null){
             JOptionPane.showMessageDialog(this, "Bienvenido: " + usuarioEncontrado.getUsername());
         }
+
+        FrmPrincipal frmPrincipal = new FrmPrincipal(usuarioEncontrado);
+        frmPrincipal.setVisible(true);
+        this.dispose();
         
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
