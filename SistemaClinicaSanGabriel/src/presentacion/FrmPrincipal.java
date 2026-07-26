@@ -5,8 +5,10 @@
 package presentacion;
 
 import entidades.Rol;
+import entidades.Usuario;
 import logica.composite.CategoriaMenu;
 import logica.composite.ItemMenu;
+import logica.composite.MenuBuilder;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -19,11 +21,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPrincipal.class.getName());
 
+    private Usuario usuarioActual;
+
+
     /**
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
         initComponents();
+
+        usuarioActual = new Usuario(1, "Yordin_cr", "asdas", Rol.ENFERMERA, true);
+
+        armarMenuDinamico();
+    }
+
+    public FrmPrincipal(Usuario usuarioActual) {
+        initComponents();
+
+        this.usuarioActual = usuarioActual;
 
         armarMenuDinamico();
     }
@@ -82,31 +97,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void armarMenuDinamico(){
         JMenuBar barraPrincipal = new JMenuBar();
 
+        barraPrincipal = MenuBuilder.crear()
+                .agregarCategoria("Usuarios")
+                    .agregarItem("Registrar Usuario", e -> {}, Rol.ADMINISTRADOR)
+                    .agregarItem("Listar Usuarios", e -> {}, Rol.ADMINISTRADOR, Rol.ENFERMERA)
+                .build(usuarioActual.getRol());
 
-        //CATEGORIA USUARIOS
-        CategoriaMenu mnuUsuarios = new CategoriaMenu("Usuarios");
-
-        ItemMenu mniRegistrarUsuario = new ItemMenu("Registrar Usuario", e -> {}, Rol.ADMINISTRADOR);
-        ItemMenu mniBuscarUsuario = new ItemMenu("Buscar Usuario", e -> {}, Rol.ADMINISTRADOR);
-        ItemMenu mniModificarUsuario = new ItemMenu("Modificar Usuario", e -> {}, Rol.ADMINISTRADOR);
-        ItemMenu mniListarUsuarios = new ItemMenu("Listar Usuarios", e -> {}, Rol.ADMINISTRADOR);
-
-        mnuUsuarios.agregarElementoHijo(mniRegistrarUsuario);
-
-
-
-
-
-
-
-
-
-
-        JComponent menuResultante = mnuSeguridad.obtenerComponenteSwing(Rol.ADMINISTRADOR);
-
-        if(menuResultante != null){
-            barraPrincipal.add(menuResultante);
-        }
 
         this.setJMenuBar(barraPrincipal);
     }

@@ -30,7 +30,7 @@ public class ItemMenu implements ElementoMenu{
     public JComponent obtenerComponenteSwing(Rol rolUsuario) {
 
         for(Rol r : rolesPermitidos){
-            if(r == rolUsuario || r == Rol.ADMINISTRADOR){
+            if(r == rolUsuario){
                 JMenuItem mniItem = new JMenuItem(texto);
                 mniItem.addActionListener(accion);
                 return mniItem;

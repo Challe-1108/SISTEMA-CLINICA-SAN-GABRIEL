@@ -6,7 +6,9 @@ package logica.composite;
 
 import entidades.Rol;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,11 +16,12 @@ import java.awt.event.ActionListener;
  */
 public class MenuBuilder {
     
-    private CategoriaMenu menuContenedor;
+    private JMenuBar barraContenedora;
     private CategoriaMenu menuActual;
+    private ArrayList<CategoriaMenu> listaCategorias = new ArrayList<>();
 
     private MenuBuilder() {
-        this.menuContenedor = new CategoriaMenu("Contenedor");
+        this.barraContenedora = new JMenuBar();
     }
 
     public static MenuBuilder crear(){
@@ -27,7 +30,7 @@ public class MenuBuilder {
 
     public MenuBuilder agregarCategoria(String titulo){
         this.menuActual = new CategoriaMenu(titulo);
-        this.menuContenedor.agregarElementoHijo(this.menuActual);
+        listaCategorias.add(this.menuActual);
         return this;
     }
 
@@ -38,7 +41,20 @@ public class MenuBuilder {
         return this;
     }
 
-    public CategoriaMenu build(){
-        return this.menuContenedor;
+    public JMenuBar build(Rol rolUsuario){
+        JMenuBar barraMenu = new JMenuBar();
+
+        for(CategoriaMenu cm : listaCategorias){
+            if(cm != null){
+
+                JComponent componente = cm.obtenerComponenteSwing(rolUsuario);
+
+                if(componente != null){
+                    barraMenu.add(componente);
+                }
+            }
+        }
+
+        return barraMenu;
     }
 }
