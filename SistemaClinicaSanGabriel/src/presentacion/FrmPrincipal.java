@@ -4,10 +4,12 @@
  */
 package presentacion;
 
-import entidades.Usuario;
-import logica.UsuarioLOG;
+import entidades.Rol;
+import logica.composite.CategoriaMenu;
+import logica.composite.ItemMenu;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -22,6 +24,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
      */
     public FrmPrincipal() {
         initComponents();
+
+        armarMenuDinamico();
     }
 
     /**
@@ -33,131 +37,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JPasswordField();
-        btnIniciarSesion = new javax.swing.JButton();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setExtendedState(6);
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 48)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("BIENVENIDOS");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
-        jLabel2.setText("CLÍNICA SAN GABRIEL");
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel3.setText("Iniciar Sesión");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Usuario:");
-
-        txtUsuario.setSelectionColor(new java.awt.Color(0, 204, 204));
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("Contraseña:");
-
-        txtPassword.setSelectionColor(new java.awt.Color(0, 204, 204));
-
-        btnIniciarSesion.setText("Iniciar Sesión");
-        btnIniciarSesion.addActionListener(this::btnIniciarSesionActionPerformed);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addGap(72, 72, 72)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(195, 195, 195)
-                        .addComponent(jLabel3))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(221, 221, 221)
-                        .addComponent(btnIniciarSesion)))
-                .addContainerGap(138, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel3)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addComponent(btnIniciarSesion)
-                .addContainerGap(95, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(349, 349, 349)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(304, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(439, 439, 439))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(281, 281, 281))))
+            .addGap(0, 1216, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(53, 53, 53)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(189, Short.MAX_VALUE))
+            .addGap(0, 785, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        
-        if(!validarCampos()) return;
-
-        Usuario usuarioEncontrado = UsuarioLOG.buscarUsuario(username, password);
-
-        if(usuarioEncontrado != null){
-            JOptionPane.showMessageDialog(this, "Bienvenido: " + usuarioEncontrado.getUsername());
-        }
-        
-    }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,39 +79,39 @@ public class FrmPrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new FrmPrincipal().setVisible(true));
     }
 
-    private boolean validarCampos(){
+    private void armarMenuDinamico(){
+        JMenuBar barraPrincipal = new JMenuBar();
 
-        if (txtUsuario.getText().trim().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Campo de Usuario vacio", "Error de datos", JOptionPane.ERROR_MESSAGE);
-            return false;
+
+        //CATEGORIA USUARIOS
+        CategoriaMenu mnuUsuarios = new CategoriaMenu("Usuarios");
+
+        ItemMenu mniRegistrarUsuario = new ItemMenu("Registrar Usuario", e -> {}, Rol.ADMINISTRADOR);
+        ItemMenu mniBuscarUsuario = new ItemMenu("Buscar Usuario", e -> {}, Rol.ADMINISTRADOR);
+        ItemMenu mniModificarUsuario = new ItemMenu("Modificar Usuario", e -> {}, Rol.ADMINISTRADOR);
+        ItemMenu mniListarUsuarios = new ItemMenu("Listar Usuarios", e -> {}, Rol.ADMINISTRADOR);
+
+        mnuUsuarios.agregarElementoHijo(mniRegistrarUsuario);
+
+
+
+
+
+
+
+
+
+
+        JComponent menuResultante = mnuSeguridad.obtenerComponenteSwing(Rol.ADMINISTRADOR);
+
+        if(menuResultante != null){
+            barraPrincipal.add(menuResultante);
         }
 
-        char[] passwordCaracteres = txtPassword.getPassword();
-
-        if(new String(passwordCaracteres).trim().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Campo de Password vacio", "Error de datos", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        username = txtUsuario.getText().trim();
-        password = new String(passwordCaracteres).trim();
-
-        return true;
+        this.setJMenuBar(barraPrincipal);
     }
-
-    private String username;
-    private String password;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnIniciarSesion;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
