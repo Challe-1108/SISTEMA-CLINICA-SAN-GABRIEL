@@ -36,8 +36,7 @@ public class UsuarioDAO {
             System.err.println("Error al registrar Usuario: " + e.getMessage());
         }
 
-        if(filasAfectadas > 0) return true;
-        return false;
+        return filasAfectadas>0;
     }
 
     public static Usuario buscarUsuario(String username, String password){
@@ -93,5 +92,84 @@ public class UsuarioDAO {
         }
 
         return lista;
+    }
+
+    public static boolean actualizarUsuario(Usuario usuario){
+        String sql = "UPDATE Usuarios SET username = ?, password = ?, rol = ?, estado = ? WHERE idUsuario = ?";
+        int filasAfectadas = 0;
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ps.setString(1, usuario.getUsername());
+            ps.setString(2, usuario.getPassword());
+            ps.setString(3, usuario.getRol());
+            ps.setBoolean(4, usuario.isEstado());
+            ps.setInt(5, usuario.getIdUsuario());
+
+            filasAfectadas = ps.executeUpdate();
+
+        } catch (SQLException e){
+            System.err.println("Error al actualizar Usuario: " + e.getMessage());
+        }
+
+        return filasAfectadas>0;
+    }
+
+    public static boolean cambiarPassword(int idUsuario, String nuevaPassword){
+        String sql = "UPDATE Usuarios SET password = ? WHERE idUsuario = ?";
+        int filasAfectadas = 0;
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ps.setInt(1, idUsuario);
+            ps.setString(2, nuevaPassword);
+
+            filasAfectadas = ps.executeUpdate();
+
+        } catch (SQLException e){
+            System.err.println("Error al cambiar la password: " + e.getMessage());
+        }
+
+        return filasAfectadas>0;
+    }
+
+    public static boolean cambiarRol(int idUsuario, String nuevoRol){
+        String sql = "UPDATE Usuarios SET rol = ? WHERE idUsuario = ?";
+        int filasAfectadas = 0;
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ps.setInt(1, idUsuario);
+            ps.setString(2, nuevoRol);
+
+            filasAfectadas = ps.executeUpdate();
+
+        } catch (SQLException e){
+            System.err.println("Error al cambiar el rol: " + e.getMessage());
+        }
+
+        return filasAfectadas>0;
+    }
+
+    public static boolean cambiarEstado(int idUsuario, Boolean nuevoEstado){
+        String sql = "UPDATE Usuarios SET estado = ? WHERE idUsuario = ?";
+        int filasAfectadas = 0;
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ps.setInt(1, idUsuario);
+            ps.setBoolean(2, nuevoEstado);
+
+            filasAfectadas = ps.executeUpdate();
+
+        } catch (SQLException e){
+            System.err.println("Error al cambiar el estado: " + e.getMessage());
+        }
+
+        return filasAfectadas>0;
     }
 }
