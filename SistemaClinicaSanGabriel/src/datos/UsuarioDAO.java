@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -65,5 +66,32 @@ public class UsuarioDAO {
         }
 
         return usuarioEncontrado;
+    }
+
+    public static ArrayList<Usuario> listarUsuarios(){
+        String sql = "SELECT * FROM Usuarios";
+        ArrayList<Usuario> lista = new ArrayList<>();
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()){
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("idUsuario"));
+                usuario.setUsername(rs.getString("username"));
+                usuario.setPassword(rs.getString("password"));
+                usuario.setRol(rs.getString("rol"));
+                usuario.setEstado(rs.getBoolean("estado"));
+
+                lista.add(usuario);
+            }
+
+        } catch (SQLException e){
+            System.err.println("Error al listar llos usuarios: " + e.getMessage());
+        }
+
+        return lista;
     }
 }
