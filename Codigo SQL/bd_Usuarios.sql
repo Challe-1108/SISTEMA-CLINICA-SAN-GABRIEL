@@ -14,6 +14,7 @@ CREATE TABLE Usuarios (
 -- FIN DE EJECUCION PRIMORDIAL
 
 
+
 -- EJEMPLOS DE INSERCION DE USUARIOS--
 INSERT INTO Usuarios (username, password, rol, estado)
 VALUES ("yordin_cr", "12345678", "Administrador", true);

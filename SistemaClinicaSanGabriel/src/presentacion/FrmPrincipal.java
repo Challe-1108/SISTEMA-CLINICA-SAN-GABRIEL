@@ -31,7 +31,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal() {
         initComponents();
 
-        usuarioActual = new Usuario(1, "usuario1", "asdas", Rol.DIRECTOR_MEDICO, true);
+        usuarioActual = new Usuario(1, "usuario1", "asdas", Rol.ADMINISTRADOR, true);
 
         lblUsuario.setText(usuarioActual.getUsername());
         lblRol.setText(usuarioActual.getRol().name());
@@ -163,7 +163,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.ADMINISTRADOR)
                     .agregarItem("Buscar Usuario", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());},
                             Rol.ADMINISTRADOR)
-                    .agregarItem("Auditoria del Sistema ", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());},
+                    .agregarItem("Auditoria del Sistema ", e -> {},
                             Rol.ADMINISTRADOR, Rol.DIRECTOR_MEDICO)
                     .agregarSeparador()
                     .agregarItem("Cerrar Sesion", e -> {}, Rol.values())
@@ -174,7 +174,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
                     .agregarItem("Modificar Paciente", e -> {},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
-                    .agregarItem("Buscar Paciente", e -> {},
+                    .agregarItem("Buscar Paciente", e -> {abrirInternalFrame(new IfrmBuscarPaciente());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.MEDICO, Rol.ENFERMERA, Rol.CAJERO)
                     .agregarItem("Seguros Medicos", e -> {},
                             Rol.CAJERO, Rol.RECEPCIONISTA)

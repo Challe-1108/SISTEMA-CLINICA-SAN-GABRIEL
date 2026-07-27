@@ -47,7 +47,7 @@ public class UsuarioLOG {
         Pattern patronMayuscula = Pattern.compile(".*[A-Z].*");
         Pattern patronMinuscula = Pattern.compile(".*[a-z].*");
         Pattern patronNumero    = Pattern.compile(".*[0-9].*");
-        Pattern patronEspecial  = Pattern.compile(".*[@$!%*?&.#_+\\-*].*");
+        Pattern patronEspecial = Pattern.compile(".*[@$!%*?&.#_+\\-].*");
 
         if (!patronMayuscula.matcher(password).matches()) {
             JOptionPane.showMessageDialog(null,
@@ -72,7 +72,7 @@ public class UsuarioLOG {
 
         if (!patronEspecial.matcher(password).matches()) {
             JOptionPane.showMessageDialog(null,
-                    "Contraseña no válida. Debe incluir al menos un carácter especial (@, $, !, %, *, etc.).",
+                    "Contraseña no válida. Debe incluir al menos un carácter especial (@ $ ! % * ? & . # _ + -).",
                     "Validación de datos", JOptionPane.ERROR_MESSAGE);
             return false;
         }

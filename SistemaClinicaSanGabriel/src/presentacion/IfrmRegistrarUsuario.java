@@ -55,6 +55,15 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
             txtUsername.requestFocus();
             return false;
         }
+
+        Usuario usuarioRepetido = UsuarioLOG.buscarUsuario(txtUsername.getText().trim());
+
+        if(usuarioRepetido != null){
+            JOptionPane.showMessageDialog(this, "Ya existe el USERNAME ingresado.", "Validacion", JOptionPane.WARNING_MESSAGE);
+            txtUsername.requestFocus();
+            return false;
+        }
+
         if (txtPassword.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo CONTRASEÑA esta vacio.", "Validacion", JOptionPane.WARNING_MESSAGE);
             txtPassword.requestFocus();
@@ -198,7 +207,12 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
 
         obtenerDatosFormulario();
 
-        UsuarioLOG.registrarUsuario(username, password, rol, estado);
+        if(!UsuarioLOG.registrarUsuario(username, password, rol, estado)){
+            JOptionPane.showMessageDialog(this, "No se registro el usuario", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, "Registro exitoso de " + username);
 
         limpiarFormulario();
         
