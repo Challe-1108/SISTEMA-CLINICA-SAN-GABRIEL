@@ -8,6 +8,7 @@ import entidades.Rol;
 import entidades.Usuario;
 import logica.UsuarioLOG;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,8 +25,19 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
 
     public IfrmRegistrarUsuario() {
         initComponents();
+
+        cargarRoles();
+
         cbxRol.setSelectedIndex(-1);
         cbxEstado.setSelectedIndex(-1);
+    }
+
+    private void cargarRoles() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        for (Rol rol : Rol.values()) {
+            model.addElement(rol.name());
+        }
+        cbxRol.setModel(model);
     }
 
     private void obtenerDatosFormulario() {
@@ -38,22 +50,22 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
     }
 
     private boolean validarCampos() {
-        if (username.isEmpty()) {
+        if (txtUsername.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo USERNAME esta vacio.", "Validacion", JOptionPane.WARNING_MESSAGE);
             txtUsername.requestFocus();
             return false;
         }
-        if (password.isEmpty()) {
+        if (txtPassword.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo CONTRASEÑA esta vacio.", "Validacion", JOptionPane.WARNING_MESSAGE);
             txtPassword.requestFocus();
             return false;
         }
-        if (cbxRol.getSelectedIndex() <= 0) {
+        if (cbxRol.getSelectedIndex() < 0) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un ROL.", "Validacion", JOptionPane.WARNING_MESSAGE);
             cbxRol.requestFocus();
             return false;
         }
-        if (cbxEstado.getSelectedIndex() <= 0) {
+        if (cbxEstado.getSelectedIndex() < 0) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un ESTADO.", "Validacion", JOptionPane.WARNING_MESSAGE);
             cbxEstado.requestFocus();
             return false;
@@ -71,6 +83,8 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
         rol = null;
         estado = false;
         usuario = null;
+
+        txtUsername.requestFocus();
     }
 
     @SuppressWarnings("unchecked")
@@ -87,6 +101,7 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
         cbxEstado = new javax.swing.JComboBox<>();
         cbxRol = new javax.swing.JComboBox<>();
         btnRegistrar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
         jLabel1.setText("Registrar Usuario");
@@ -105,6 +120,9 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(this::btnRegistrarActionPerformed);
+
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(this::btnSalirActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,8 +148,13 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
                 .addContainerGap(397, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(501, 501, 501))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(501, 501, 501))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnSalir)
+                        .addGap(44, 44, 44))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,7 +184,9 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
                     .addComponent(cbxEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(106, 106, 106))
+                .addGap(53, 53, 53)
+                .addComponent(btnSalir)
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -174,12 +199,19 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
         obtenerDatosFormulario();
 
         UsuarioLOG.registrarUsuario(username, password, rol, estado);
+
+        limpiarFormulario();
         
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cbxEstado;
     private javax.swing.JComboBox<String> cbxRol;
     private javax.swing.JLabel jLabel1;

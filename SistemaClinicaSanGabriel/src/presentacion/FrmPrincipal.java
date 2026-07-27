@@ -159,11 +159,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         barraPrincipal = MenuBuilder.crear()
 
                 .agregarCategoria("Usuarios")
-                    .agregarItem("Registrar Usuario", e -> {}, Rol.ADMINISTRADOR)
-                    .agregarItem("Buscar Usuario", e -> {}, Rol.ADMINISTRADOR)
-                    .agregarItem("Modificar Usuario", e -> {}, Rol.ADMINISTRADOR)
-                    .agregarItem("Eliminar Usuario", e -> {}, Rol.ADMINISTRADOR)
-                    .agregarItem("Listar Usuarios", e -> {}, Rol.ADMINISTRADOR)
+                    .agregarItem("Registrar Usuario", e -> { abrirInternalFrame(new IfrmRegistrarUsuario());}, Rol.ADMINISTRADOR)
+                    .agregarItem("Buscar Usuario", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());}, Rol.ADMINISTRADOR)
 
                 .agregarCategoria("Pacientes")
                     .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new FrmRegistroPaciente());}, Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)

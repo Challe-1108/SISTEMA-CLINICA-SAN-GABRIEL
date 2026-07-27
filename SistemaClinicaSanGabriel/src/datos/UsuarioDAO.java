@@ -68,6 +68,33 @@ public class UsuarioDAO {
         return usuarioEncontrado;
     }
 
+    public static Usuario buscarUsuario(String username){
+        String sql = "SELECT * FROM Usuarios WHERE username = ?";
+        Usuario usuarioEncontrado = null;
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ps.setString(1, username);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                usuarioEncontrado = new Usuario();
+                usuarioEncontrado.setIdUsuario(rs.getInt("idUsuario"));
+                usuarioEncontrado.setUsername(rs.getString("username"));
+                usuarioEncontrado.setPassword(rs.getString("password"));
+                usuarioEncontrado.setRol(Rol.valueOf(rs.getString("rol")));
+                usuarioEncontrado.setEstado(rs.getBoolean("estado"));
+            }
+
+        } catch (SQLException e){
+            System.err.println("Error al buscar usuario por username: " + e.getMessage());
+        }
+
+        return usuarioEncontrado;
+    }
+
     public static ArrayList<Usuario> listarUsuarios(){
         String sql = "SELECT * FROM Usuarios";
         ArrayList<Usuario> lista = new ArrayList<>();
@@ -95,18 +122,56 @@ public class UsuarioDAO {
         return lista;
     }
 
+    public static ArrayList<Usuario> listarUsuarios(String criterio) {
+        ArrayList<Usuario> lista = new ArrayList<>();
+
+        String sql = "SELECT * FROM Usuarios WHERE LOWER(username) LIKE ? OR LOWER(rol) LIKE ?";
+
+        try (Connection con = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            String parametroBusqueda = criterio.toLowerCase().trim() + "%";
+
+            ps.setString(1, parametroBusqueda);
+            ps.setString(2, parametroBusqueda);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("idUsuario"));
+                    u.setUsername(rs.getString("username"));
+                    u.setRol(Rol.valueOf(rs.getString("rol")));
+                    u.setEstado(rs.getBoolean("estado"));
+                    lista.add(u);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al listar con filtro: " + e.getMessage());
+        }
+        return lista;
+    }
+
     public static boolean actualizarUsuario(Usuario usuario){
-        String sql = "UPDATE Usuarios SET username = ?, password = ?, rol = ?, estado = ? WHERE idUsuario = ?";
+        String sql = "UPDATE Usuarios SET username = ?, rol = ?, estado = ?, password = ? WHERE idUsuario = ?";
+
+        if(usuario.getPassword() == null) {
+            sql = "UPDATE Usuarios SET username = ?, rol = ?, estado = ? WHERE idUsuario = ?";
+        }
+
         int filasAfectadas = 0;
 
         try(Connection cn = ConexionBD.getInstancia().getConexion();
             PreparedStatement ps = cn.prepareStatement(sql)){
 
             ps.setString(1, usuario.getUsername());
-            ps.setString(2, usuario.getPassword());
-            ps.setString(3, usuario.getRol().name());
-            ps.setBoolean(4, usuario.isEstado());
-            ps.setInt(5, usuario.getIdUsuario());
+            ps.setString(2, usuario.getRol().name());
+            ps.setBoolean(3, usuario.isEstado());
+            if(usuario.getPassword() == null){
+                ps.setInt(4, usuario.getIdUsuario());
+            } else {
+                ps.setString(4, usuario.getPassword());
+                ps.setInt(5, usuario.getIdUsuario());
+            }
 
             filasAfectadas = ps.executeUpdate();
 

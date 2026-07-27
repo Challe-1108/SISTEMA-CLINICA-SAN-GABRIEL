@@ -11,6 +11,7 @@ import entidades.Usuario;
 import javax.swing.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.regex.Pattern;
 
@@ -124,5 +125,58 @@ public class UsuarioLOG {
         String passwordCifrada = cifrarPassword(password);
 
         return UsuarioDAO.buscarUsuario(username, passwordCifrada);
+    }
+
+    public static ArrayList<Usuario> listarUsuarios(){
+        return UsuarioDAO.listarUsuarios();
+    }
+
+    public static ArrayList<Usuario> listarUsuarios(String criterio){
+        return UsuarioDAO.listarUsuarios(criterio);
+    }
+
+    public static Usuario buscarUsuario(String username){
+        return UsuarioDAO.buscarUsuario(username);
+    }
+
+    public static boolean actualizarUsuario(int idUsuario, String username, String passwordSinCifrar, Rol rol, boolean estado){
+        if(username == null || username.equals("")){
+            JOptionPane.showMessageDialog(null,
+                    "Nombre de Usuario no valido",
+                    "Validacion de datos",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if(username.length() < 3){
+            JOptionPane.showMessageDialog(null,
+                    "Nombre de Usuario no valido minimo 3 caracteres",
+                    "Validacion de datos",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if(rol == null){
+            JOptionPane.showMessageDialog(null,
+                    "Rol no valido",
+                    "Validacion de datos",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if(passwordSinCifrar == null || passwordSinCifrar.equals("")){
+            return UsuarioDAO.actualizarUsuario(new Usuario(idUsuario, username, null, rol, estado));
+        }
+
+        if(!validarPassword(passwordSinCifrar)) return false;
+
+        String passwordCifrado = cifrarPassword(passwordSinCifrar);
+        Usuario u = new Usuario(idUsuario, username, passwordCifrado, rol, estado);
+
+        return UsuarioDAO.actualizarUsuario(u);
+    }
+
+    public static boolean eliminarUsuario(int idUsuario){
+        return UsuarioDAO.eliminarUsuario(idUsuario);
     }
 }

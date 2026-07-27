@@ -12,6 +12,14 @@ public class Usuario {
 
     }
 
+    public Usuario(String username, String password, Rol rol, boolean estado) {
+        this.idUsuario = -1;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.estado = estado;
+    }
+
     public Usuario(int idUsuario, String username, String password, Rol rol, boolean estado) {
         this.idUsuario = idUsuario;
         this.username = username;
