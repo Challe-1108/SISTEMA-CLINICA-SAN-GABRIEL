@@ -8,21 +8,25 @@ import datos.SeguroDAO;
 import entidades.Apoderado;
 import entidades.Paciente;
 import entidades.SeguroMedico;
-import logica.PacienteService;
+import logica.PacienteLOG;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 /**
  *
  * @author sthef
  */
-public class FrmRegistroPaciente extends javax.swing.JInternalFrame {
-    private PacienteService pacienteService;
-    /**
-     * Creates new form FrmRegistroPaciente
-     */
-    public FrmRegistroPaciente() {
+public class IfrmRegistroPaciente extends javax.swing.JInternalFrame {
+    private javax.swing.JButton btnSalir;
+
+    public IfrmRegistroPaciente() {
+        btnSalir = new javax.swing.JButton();
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dispose();
+            }
+        });
         initComponents();
-         pacienteService = new PacienteService();
     }
     private void limpiarFormulario() {
         txtDni.setText("");
@@ -320,7 +324,10 @@ public class FrmRegistroPaciente extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(txtNumeroHistoriaClinica, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -390,7 +397,9 @@ public class FrmRegistroPaciente extends javax.swing.JInternalFrame {
                             .addComponent(jLabel8)
                             .addComponent(txtNumeroHistoriaClinica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(32, 32, 32)
-                        .addComponent(btnGuardar))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnGuardar)
+                            .addComponent(btnSalir)))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
@@ -423,7 +432,16 @@ public class FrmRegistroPaciente extends javax.swing.JInternalFrame {
                 String dni = txtDni.getText().trim();
                 String nombres = txtNombres.getText().trim();
                 String apellidos = txtApellidos.getText().trim();
-                LocalDate fechaNacimiento = LocalDate.parse(txtFechaNacimiento.getText().trim()); // formato AAAA-MM-DD
+                String fechaNacimientoStr = txtFechaNacimiento.getText().trim();
+                LocalDate fechaNacimiento;
+                try {
+                    fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
+                } catch (Exception exFecha) {
+                    JOptionPane.showMessageDialog(this,
+                            "Formato de fecha invalido.\nUse: AAAA-MM-DD (ejemplo: 1995-03-21)",
+                            "Fecha invalida", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 String sexo = txtSexo.getText().trim();
                 String telefono = txtTelefono.getText().trim();
                 String direccion = txtDireccion.getText().trim();
@@ -447,7 +465,7 @@ public class FrmRegistroPaciente extends javax.swing.JInternalFrame {
                     seguro.setNumeroPoliza(txtNumeroPoliza.getText().trim());
                     seguro.setTipoCobertura(txtTipoCobertura.getText().trim());
                     seguro.setEstado(true);
-                    new SeguroDAO().insertar(seguro);
+                    SeguroDAO.insertar(seguro);
                     builder.seguroMedico(seguro);
                 }
 
@@ -460,21 +478,24 @@ public class FrmRegistroPaciente extends javax.swing.JInternalFrame {
                     apoderado.setTelefono(txtTelefonoApoderado.getText().trim());
                     apoderado.setParentesco(txtParentesco.getText().trim());
                     apoderado.setEstado(true);
-                    new ApoderadoDAO().insertar(apoderado);
+                    ApoderadoDAO.insertar(apoderado);
                     builder.apoderado(apoderado);
                 }
 
                 Paciente paciente = builder.build();
-                boolean registrado = pacienteService.registrarPaciente(paciente);
+                boolean registrado = PacienteLOG.registrarPaciente(paciente);
 
                 if (registrado) {
                     limpiarFormulario();
+                    JOptionPane.showMessageDialog(this,
+                            "Paciente registrado exitosamente.",
+                            "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
-                        "Error al registrar el paciente: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }    // TODO add your handling code here:
+                        "Ocurrio un error inesperado al registrar el paciente.\nDetalle: " + e.getMessage(),
+                        "Error del sistema", JOptionPane.ERROR_MESSAGE);
+            }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
 

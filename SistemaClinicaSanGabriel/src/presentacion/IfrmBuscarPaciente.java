@@ -17,17 +17,21 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import entidades.Paciente;
-import logica.PacienteService;
-public class FrmBuscarPaciente extends javax.swing.JInternalFrame {
+import logica.PacienteLOG;
+public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form FrmBuscarPaciente
-     */
-    private PacienteService pacienteService;
     private Paciente pacienteEncontrado;
-    public FrmBuscarPaciente() {
+    private javax.swing.JButton btnSalir;
+
+    public IfrmBuscarPaciente() {
+        btnSalir = new javax.swing.JButton();
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dispose();
+            }
+        });
         initComponents();
-        pacienteService = new PacienteService();
     }
     private void btnBuscarPorDniActionPerformed(java.awt.event.ActionEvent evt) {
         String dni = txtBusquedaDni.getText().trim();
@@ -37,7 +41,7 @@ public class FrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        pacienteEncontrado = pacienteService.buscarPorDni(dni);
+        pacienteEncontrado = PacienteLOG.buscarPorDni(dni);
         mostrarDatosEnFormulario(pacienteEncontrado);
     }
 
@@ -49,7 +53,7 @@ public class FrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        java.util.List<Paciente> resultados = pacienteService.buscarPorNombreOApellido(texto);
+        java.util.List<Paciente> resultados = PacienteLOG.buscarPorNombreOApellido(texto);
         // Se asume una tabla (tblResultados) con su respectivo DefaultTableModel para mostrar la lista
         cargarResultadosEnTabla(resultados);
     }
@@ -62,12 +66,15 @@ public class FrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        pacienteEncontrado = pacienteService.buscarPorHistoriaClinica(historia);
+        pacienteEncontrado = PacienteLOG.buscarPorHistoriaClinica(historia);
         mostrarDatosEnFormulario(pacienteEncontrado);
     }
 
     private void mostrarDatosEnFormulario(Paciente paciente) {
         if (paciente == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontro ningun paciente con esos datos.\nVerifique el DNI o numero de historia clinica e intente nuevamente.",
+                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         txtNombresResultado.setText(paciente.getNombres());
@@ -79,6 +86,9 @@ public class FrmBuscarPaciente extends javax.swing.JInternalFrame {
 
     private void cargarResultadosEnTabla(java.util.List<Paciente> pacientes) {
         if (pacientes.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontraron pacientes con ese nombre o apellido.\nIntente con otro termino de busqueda.",
+                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -372,6 +382,10 @@ public class FrmBuscarPaciente extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(75, 75, 75))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,6 +399,8 @@ public class FrmBuscarPaciente extends javax.swing.JInternalFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
