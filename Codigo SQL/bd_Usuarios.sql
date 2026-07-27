@@ -10,6 +10,18 @@ CREATE TABLE Usuarios (
     estado BOOLEAN DEFAULT TRUE
 );
 
+CREATE TABLE Auditorias (
+    idAuditoria INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    modulo VARCHAR(50) NOT NULL,
+    operacion VARCHAR(255) NOT NULL,
+    
+    CONSTRAINT fk_auditoria_usuario 
+        FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario)
+        ON DELETE RESTRICT
+);
 
 -- FIN DE EJECUCION PRIMORDIAL
 
