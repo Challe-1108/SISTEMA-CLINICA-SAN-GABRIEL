@@ -5,10 +5,18 @@ import entidades.Rol;
 import entidades.Usuario;
 import logica.UsuarioLOG;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class ClasePruebaUsuarios {
 
     static void main() {
 
+        System.out.println();
+
+    }
+
+    void cargarDatosPrueba(){
         UsuarioLOG.registrarUsuario("admin", "@Admin2026", Rol.ADMINISTRADOR, true);
         UsuarioLOG.registrarUsuario("mrodriguez", "#ModAdmin2", Rol.ADMINISTRADOR, false); // Inactivo
 
@@ -34,7 +42,6 @@ public class ClasePruebaUsuarios {
         UsuarioLOG.registrarUsuario("fcampos", "Caja!1122", Rol.CAJERO, false); // Inactivo
 
         UsuarioLOG.registrarUsuario("director", "Direct#10", Rol.DIRECTOR_MEDICO, true);
-
     }
 
 }
