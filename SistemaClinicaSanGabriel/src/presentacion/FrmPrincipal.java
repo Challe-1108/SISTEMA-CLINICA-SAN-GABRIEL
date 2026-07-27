@@ -170,7 +170,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .agregarItem("Salir", e -> {}, Rol.values())
 
                 .agregarCategoria("Pacientes")
-                    .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new FrmRegistroPaciente());},
+                    .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new IfrmRegistroPaciente());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
                     .agregarItem("Modificar Paciente", e -> {},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
