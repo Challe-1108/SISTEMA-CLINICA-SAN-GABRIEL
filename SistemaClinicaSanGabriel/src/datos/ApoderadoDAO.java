@@ -1,87 +1,96 @@
 package datos;
 
-import datos.ConexionBD;
 import entidades.Apoderado;
 import java.sql.*;
 
 public class ApoderadoDAO {
 
-    private Connection con;
-
-    public ApoderadoDAO() {
-        this.con = ConexionBD.getInstancia().getConexion();
-    }
-
-    public boolean insertar(Apoderado apoderado) {
+    public static boolean insertar(Apoderado apoderado) {
         String sql = "INSERT INTO apoderado (dni, nombres, apellidos, telefono, parentesco, estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        int filasAfectadas = 0;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, apoderado.getDni());
             ps.setString(2, apoderado.getNombres());
             ps.setString(3, apoderado.getApellidos());
             ps.setString(4, apoderado.getTelefono());
             ps.setString(5, apoderado.getParentesco());
             ps.setBoolean(6, apoderado.isEstado());
-            int filas = ps.executeUpdate();
-            if (filas > 0) {
+            filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         apoderado.setIdApoderado(rs.getInt(1));
                     }
                 }
-                return true;
             }
-            return false;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("Error al insertar apoderado: " + e.getMessage());
         }
+
+        return filasAfectadas > 0;
     }
 
-    public boolean actualizar(Apoderado apoderado) {
+    public static boolean actualizar(Apoderado apoderado) {
         String sql = "UPDATE apoderado SET dni=?, nombres=?, apellidos=?, telefono=?, parentesco=? "
                 + "WHERE id_apoderado=?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        int filasAfectadas = 0;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, apoderado.getDni());
             ps.setString(2, apoderado.getNombres());
             ps.setString(3, apoderado.getApellidos());
             ps.setString(4, apoderado.getTelefono());
             ps.setString(5, apoderado.getParentesco());
             ps.setInt(6, apoderado.getIdApoderado());
-            return ps.executeUpdate() > 0;
+            filasAfectadas = ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("Error al actualizar apoderado: " + e.getMessage());
         }
+
+        return filasAfectadas > 0;
     }
 
-    public Apoderado buscarPorId(int idApoderado) {
+    public static Apoderado buscarPorId(int idApoderado) {
         String sql = "SELECT * FROM apoderado WHERE id_apoderado = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        Apoderado apoderado = null;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idApoderado);
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapear(rs);
+                    apoderado = mapear(rs);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error al buscar apoderado: " + e.getMessage());
         }
-        return null;
+
+        return apoderado;
     }
 
-    public boolean eliminarLogico(int idApoderado) {
+    public static boolean eliminarLogico(int idApoderado) {
         String sql = "UPDATE apoderado SET estado = false WHERE id_apoderado = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        int filasAfectadas = 0;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idApoderado);
-            return ps.executeUpdate() > 0;
+            filasAfectadas = ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("Error al inactivar apoderado: " + e.getMessage());
         }
+
+        return filasAfectadas > 0;
     }
 
-    private Apoderado mapear(ResultSet rs) throws SQLException {
+    private static Apoderado mapear(ResultSet rs) throws SQLException {
         return new Apoderado(
                 rs.getInt("id_apoderado"),
                 rs.getString("dni"),

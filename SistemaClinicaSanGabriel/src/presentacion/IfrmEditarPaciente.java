@@ -5,7 +5,7 @@
 package presentacion;
 import entidades.Apoderado;
 import entidades.Paciente;
-import logica.PacienteService;
+import logica.PacienteLOG;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
@@ -13,15 +13,19 @@ import javax.swing.JOptionPane;
  *
  * @author sthef
  */
-public class FrmEditarPaciente extends javax.swing.JInternalFrame {
-    private PacienteService pacienteService;
+public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
     private Paciente pacienteActual;
-    /**
-     * Creates new form FrmEditarPaciente
-     */
-    public FrmEditarPaciente(Paciente paciente) {
+    private javax.swing.JButton btnSalir;
+
+    public IfrmEditarPaciente(Paciente paciente) {
+        btnSalir = new javax.swing.JButton();
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dispose();
+            }
+        });
         initComponents();
-        pacienteService = new PacienteService();
         this.pacienteActual = paciente;
         cargarDatosEnFormulario();
     }
@@ -222,7 +226,9 @@ public class FrmEditarPaciente extends javax.swing.JInternalFrame {
                         .addGap(191, 191, 191)
                         .addComponent(btnGuardarCambios)
                         .addGap(129, 129, 129)
-                        .addComponent(btnInactivar))
+                        .addComponent(btnInactivar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSalir))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(211, 211, 211)
                         .addComponent(jLabel11)))
@@ -238,7 +244,8 @@ public class FrmEditarPaciente extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarCambios)
-                    .addComponent(btnInactivar))
+                    .addComponent(btnInactivar)
+                    .addComponent(btnSalir))
                 .addGap(21, 21, 21))
         );
 
@@ -247,6 +254,14 @@ public class FrmEditarPaciente extends javax.swing.JInternalFrame {
 
     private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         try {
+            if (txtNombres.getText().trim().isEmpty() || txtApellidos.getText().trim().isEmpty()
+                    || txtTelefono.getText().trim().isEmpty() || txtDireccion.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Todos los campos deben estar completos.\nVerifique nombres, apellidos, telefono y direccion.",
+                        "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             pacienteActual.setEstado(pacienteActual.isEstado());
 
             // Reflejar cambios editables (RN-09: nombres, apellidos, teléfono, dirección son actualizables)
@@ -277,7 +292,7 @@ public class FrmEditarPaciente extends javax.swing.JInternalFrame {
             }
 
             Paciente pacienteActualizado = builder.build();
-        boolean exito = pacienteService.actualizarPaciente(pacienteActualizado);
+        boolean exito = PacienteLOG.actualizarPaciente(pacienteActualizado);
 
         if (exito) {
             this.dispose(); // cierra el JInternalFrame solo si la actualización fue exitosa
@@ -286,18 +301,18 @@ public class FrmEditarPaciente extends javax.swing.JInternalFrame {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "Error al actualizar el paciente: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }    // TODO add your handling code here:
+                    "Ocurrio un error inesperado al actualizar el paciente.\nDetalle: " + e.getMessage(),
+                    "Error del sistema", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnGuardarCambiosActionPerformed
 
     private void btnInactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInactivarActionPerformed
         int confirmacion = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de marcar este paciente como inactivo?",
-                "Confirmar inactivación", JOptionPane.YES_NO_OPTION);
+                "Esta seguro de marcar este paciente como inactivo?\nEl paciente no aparecera en busquedas futuras.",
+                "Confirmar inactivacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-        boolean exito = pacienteService.inactivarPaciente(pacienteActual.getIdPaciente());
+        boolean exito = PacienteLOG.inactivarPaciente(pacienteActual.getIdPaciente());
         if (exito) {
             this.dispose();
         }

@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package datos;
 
-/**
- *
- * @author sthef
- */
 import entidades.Apoderado;
 import entidades.Paciente;
 import entidades.SeguroMedico;
@@ -18,17 +10,14 @@ import java.util.List;
 
 public class PacienteDAO {
 
-    private Connection con;
-
-    public PacienteDAO() {
-        this.con = ConexionBD.getInstancia().getConexion();
-    }
-
-    public boolean insertar(Paciente paciente) {
+    public static boolean insertar(Paciente paciente) {
         String sql = "INSERT INTO paciente (dni, nombres, apellidos, fecha_nacimiento, sexo, telefono, "
                 + "direccion, numero_historia_clinica, id_seguro, id_apoderado, estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        int filasAfectadas = 0;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, paciente.getDni());
             ps.setString(2, paciente.getNombres());
             ps.setString(3, paciente.getApellidos());
@@ -51,27 +40,29 @@ public class PacienteDAO {
             }
 
             ps.setBoolean(11, paciente.isEstado());
+            filasAfectadas = ps.executeUpdate();
 
-            int filas = ps.executeUpdate();
-            if (filas > 0) {
+            if (filasAfectadas > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         paciente.setIdPaciente(rs.getInt(1));
                     }
                 }
-                return true;
             }
-            return false;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("Error al insertar paciente: " + e.getMessage());
         }
+
+        return filasAfectadas > 0;
     }
 
-    public boolean actualizar(Paciente paciente) {
+    public static boolean actualizar(Paciente paciente) {
         String sql = "UPDATE paciente SET nombres=?, apellidos=?, telefono=?, direccion=?, "
                 + "id_seguro=?, id_apoderado=? WHERE id_paciente=?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        int filasAfectadas = 0;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, paciente.getNombres());
             ps.setString(2, paciente.getApellidos());
             ps.setString(3, paciente.getTelefono());
@@ -90,120 +81,169 @@ public class PacienteDAO {
             }
 
             ps.setInt(7, paciente.getIdPaciente());
-            return ps.executeUpdate() > 0;
+            filasAfectadas = ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("Error al actualizar paciente: " + e.getMessage());
         }
+
+        return filasAfectadas > 0;
     }
 
-    /**
-     * RN-11: Eliminación lógica. Nunca se realiza DELETE físico.
-     */
-    public boolean eliminarLogico(int idPaciente) {
+    public static boolean eliminarLogico(int idPaciente) {
         String sql = "UPDATE paciente SET estado = false WHERE id_paciente = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        int filasAfectadas = 0;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idPaciente);
-            return ps.executeUpdate() > 0;
+            filasAfectadas = ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("Error al inactivar paciente: " + e.getMessage());
         }
+
+        return filasAfectadas > 0;
     }
 
-    public Paciente buscarPorDni(String dni) {
-        String sql = "SELECT * FROM paciente WHERE dni = ?";
+    public static Paciente buscarPorDni(String dni) {
+        String sql = "SELECT * FROM paciente WHERE dni = ? AND estado = 1";
         return buscarUno(sql, dni);
     }
 
-    public Paciente buscarPorHistoriaClinica(String numeroHistoriaClinica) {
-        String sql = "SELECT * FROM paciente WHERE numero_historia_clinica = ?";
+    public static Paciente buscarPorHistoriaClinica(String numeroHistoriaClinica) {
+        String sql = "SELECT * FROM paciente WHERE numero_historia_clinica = ? AND estado = 1";
         return buscarUno(sql, numeroHistoriaClinica);
     }
 
-    private Paciente buscarUno(String sql, String parametro) {
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, parametro);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapear(rs);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<Paciente> buscarPorNombre(String nombreOApellido) {
+    public static List<Paciente> buscarPorNombre(String nombreOApellido) {
         List<Paciente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM paciente WHERE nombres LIKE ? OR apellidos LIKE ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        String sql = "SELECT * FROM paciente WHERE (nombres LIKE ? OR apellidos LIKE ?) AND estado = 1";
+
+        List<Object[]> datosBasicos = new ArrayList<>();
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             String like = "%" + nombreOApellido + "%";
             ps.setString(1, like);
             ps.setString(2, like);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    lista.add(mapear(rs));
+                    datosBasicos.add(leerDatosBasicos(rs));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error al buscar pacientes por nombre: " + e.getMessage());
         }
+
+        for (Object[] d : datosBasicos) {
+            lista.add(construirPaciente(d));
+        }
+
         return lista;
     }
 
-    public List<Paciente> listarTodos() {
+    public static List<Paciente> listarTodos() {
         List<Paciente> lista = new ArrayList<>();
         String sql = "SELECT * FROM paciente";
-        try (PreparedStatement ps = con.prepareStatement(sql);
+
+        List<Object[]> datosBasicos = new ArrayList<>();
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                lista.add(mapear(rs));
+                datosBasicos.add(leerDatosBasicos(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error al listar pacientes: " + e.getMessage());
         }
+
+        for (Object[] d : datosBasicos) {
+            lista.add(construirPaciente(d));
+        }
+
         return lista;
     }
 
-    private Paciente mapear(ResultSet rs) throws SQLException {
-        SeguroDAO seguroDAO = new SeguroDAO();
-        SeguroMedico seguro = null;
+    private static Paciente buscarUno(String sql, String parametro) {
+        Object[] datos = null;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, parametro);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    datos = leerDatosBasicos(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar paciente: " + e.getMessage());
+        }
+
+        if (datos == null) return null;
+        return construirPaciente(datos);
+    }
+
+    private static Object[] leerDatosBasicos(ResultSet rs) throws SQLException {
+        int idPaciente = rs.getInt("id_paciente");
+        String dni = rs.getString("dni");
+        String nombres = rs.getString("nombres");
+        String apellidos = rs.getString("apellidos");
+        LocalDate fechaNacimiento = rs.getDate("fecha_nacimiento").toLocalDate();
+        String sexo = rs.getString("sexo");
+        String telefono = rs.getString("telefono");
+        String direccion = rs.getString("direccion");
+        String numeroHistoriaClinica = rs.getString("numero_historia_clinica");
         int idSeguro = rs.getInt("id_seguro");
-        if (!rs.wasNull()) {
-            seguro = seguroDAO.buscarPorId(idSeguro);
+        boolean nuloSeguro = rs.wasNull();
+        int idApoderado = rs.getInt("id_apoderado");
+        boolean nuloApoderado = rs.wasNull();
+        boolean estado = rs.getBoolean("estado");
+
+        return new Object[]{idPaciente, dni, nombres, apellidos, fechaNacimiento,
+                sexo, telefono, direccion, numeroHistoriaClinica,
+                idSeguro, nuloSeguro, idApoderado, nuloApoderado, estado};
+    }
+
+    private static Paciente construirPaciente(Object[] d) {
+        SeguroMedico seguro = null;
+        if (!(boolean) d[10]) {
+            seguro = SeguroDAO.buscarPorId((int) d[9]);
         }
 
         Apoderado apoderado = null;
-        int idApoderado = rs.getInt("id_apoderado");
-        if (!rs.wasNull()) {
-            apoderado = buscarApoderadoPorId(idApoderado);
+        if (!(boolean) d[12]) {
+            apoderado = buscarApoderadoPorId((int) d[11]);
         }
 
         return new Paciente.Builder()
-                .idPaciente(rs.getInt("id_paciente"))
-                .dni(rs.getString("dni"))
-                .nombres(rs.getString("nombres"))
-                .apellidos(rs.getString("apellidos"))
-                .fechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate())
-                .sexo(rs.getString("sexo"))
-                .telefono(rs.getString("telefono"))
-                .direccion(rs.getString("direccion"))
-                .numeroHistoriaClinica(rs.getString("numero_historia_clinica"))
+                .idPaciente((int) d[0])
+                .dni((String) d[1])
+                .nombres((String) d[2])
+                .apellidos((String) d[3])
+                .fechaNacimiento((LocalDate) d[4])
+                .sexo((String) d[5])
+                .telefono((String) d[6])
+                .direccion((String) d[7])
+                .numeroHistoriaClinica((String) d[8])
                 .seguroMedico(seguro)
                 .apoderado(apoderado)
-                .estado(rs.getBoolean("estado"))
+                .estado((boolean) d[13])
                 .build();
     }
 
-    private Apoderado buscarApoderadoPorId(int idApoderado) {
+    private static Apoderado buscarApoderadoPorId(int idApoderado) {
         String sql = "SELECT * FROM apoderado WHERE id_apoderado = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        Apoderado apoderado = null;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idApoderado);
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Apoderado(
+                    apoderado = new Apoderado(
                             rs.getInt("id_apoderado"),
                             rs.getString("dni"),
                             rs.getString("nombres"),
@@ -215,8 +255,9 @@ public class PacienteDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error al buscar apoderado: " + e.getMessage());
         }
-        return null;
+
+        return apoderado;
     }
 }
