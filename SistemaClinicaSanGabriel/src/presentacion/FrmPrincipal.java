@@ -31,7 +31,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal() {
         initComponents();
 
-        usuarioActual = new Usuario(1, "usuario1", "asdas", Rol.ADMINISTRADOR, true);
+        usuarioActual = new Usuario(1, "usuario1", "asdas", Rol.DIRECTOR_MEDICO, true);
 
         lblUsuario.setText(usuarioActual.getUsername());
         lblRol.setText(usuarioActual.getRol().name());
@@ -158,14 +158,82 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         barraPrincipal = MenuBuilder.crear()
 
-                .agregarCategoria("Usuarios")
-                    .agregarItem("Registrar Usuario", e -> { abrirInternalFrame(new IfrmRegistrarUsuario());}, Rol.ADMINISTRADOR)
-                    .agregarItem("Buscar Usuario", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());}, Rol.ADMINISTRADOR)
+                .agregarCategoria("Seguridad/Usuarios")
+                    .agregarItem("Registrar Usuario", e -> { abrirInternalFrame(new IfrmRegistrarUsuario());},
+                            Rol.ADMINISTRADOR)
+                    .agregarItem("Buscar Usuario", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());},
+                            Rol.ADMINISTRADOR)
+                    .agregarItem("Auditoria del Sistema ", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());},
+                            Rol.ADMINISTRADOR, Rol.DIRECTOR_MEDICO)
+                    .agregarSeparador()
+                    .agregarItem("Cerrar Sesion", e -> {}, Rol.values())
+                    .agregarItem("Salir", e -> {}, Rol.values())
 
                 .agregarCategoria("Pacientes")
-                    .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new FrmRegistroPaciente());}, Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
-                    .agregarItem("Buscar Paciente", e -> {}, Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
-                    .agregarItem("Editar Paciente", e -> {}, Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
+                    .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new FrmRegistroPaciente());},
+                            Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
+                    .agregarItem("Modificar Paciente", e -> {},
+                            Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
+                    .agregarItem("Buscar Paciente", e -> {},
+                            Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.MEDICO, Rol.ENFERMERA, Rol.CAJERO)
+                    .agregarItem("Seguros Medicos", e -> {},
+                            Rol.CAJERO, Rol.RECEPCIONISTA)
+                    .agregarItem("Historial Clinico", e -> {},
+                            Rol.MEDICO, Rol.DIRECTOR_MEDICO, Rol.ENFERMERA)
+
+                .agregarCategoria("Medicos")
+                    .agregarItem("Gestión de Medicos", e -> {},
+                            Rol.ADMINISTRADOR)
+                    .agregarItem("Horarios y Turnos", e -> {},
+                            Rol.ADMINISTRADOR)
+                    .agregarItem("Agenda Medica", e -> {},
+                            Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.DIRECTOR_MEDICO)
+
+                .agregarCategoria("Citas")
+                    .agregarItem("Programar Cita", e -> {},
+                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
+                    .agregarItem("Consultar Disponibilidad", e -> {},
+                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR, Rol.MEDICO)
+                    .agregarItem("Reprogramar Cita", e -> {},
+                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
+                    .agregarItem("Cancelar Cita", e -> {},
+                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
+
+                .agregarCategoria("Atencion Medica")
+                    .agregarItem("Registrar Consulta / Diagnostico", e -> {},
+                            Rol.MEDICO)
+                    .agregarItem("Registrar Signos Vitales", e -> {},
+                            Rol.MEDICO, Rol.ENFERMERA)
+                    .agregarItem("Emitir Receta Electronica", e -> {},
+                            Rol.MEDICO)
+                    .agregarItem("Solicitar Examenes", e -> {},
+                            Rol.MEDICO)
+
+                .agregarCategoria("Laboratorio")
+                    .agregarItem("Solicitudes Pendientes", e -> {},
+                            Rol.LABORATORISTA, Rol.ADMINISTRADOR)
+                    .agregarItem("Registrar Resultados", e -> {},
+                            Rol.LABORATORISTA)
+
+                .agregarCategoria("Farmacia")
+                    .agregarItem("Entrega de Medicamentos", e -> {},
+                            Rol.FARMACEUTICO)
+                    .agregarItem("Inventario y Existencias", e -> {},
+                            Rol.FARMACEUTICO, Rol.ADMINISTRADOR)
+
+                .agregarCategoria("Caja")
+                    .agregarItem("Registrar Pago", e -> {},
+                            Rol.CAJERO)
+                    .agregarItem("Emitir Comprobante", e -> {},
+                            Rol.CAJERO)
+
+                .agregarCategoria("Reportes")
+                    .agregarItem("Pacientes Por Especialidad", e -> {},
+                            Rol.DIRECTOR_MEDICO, Rol.ADMINISTRADOR)
+                    .agregarItem("Ingresos Diarios", e -> {},
+                            Rol.CAJERO, Rol.DIRECTOR_MEDICO, Rol.ADMINISTRADOR)
+                    .agregarItem("Exportar Reportes", e -> {},
+                            Rol.DIRECTOR_MEDICO, Rol.ADMINISTRADOR)
 
                 .build(usuarioActual.getRol());
 

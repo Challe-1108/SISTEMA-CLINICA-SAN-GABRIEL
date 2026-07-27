@@ -41,6 +41,17 @@ public class MenuBuilder {
         return this;
     }
 
+    public MenuBuilder agregarSeparador(){
+        menuActual.agregarElementoHijo(new ElementoMenu() {
+            @Override
+            public JComponent obtenerComponenteSwing(Rol rolUsuario) {
+                return new JSeparator();
+            }
+        });
+
+        return this;
+    }
+
     public JMenuBar build(Rol rolUsuario){
         JMenuBar barraMenu = new JMenuBar();
 
