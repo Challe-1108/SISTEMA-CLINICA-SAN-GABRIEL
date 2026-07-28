@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import datos.SesionUsuario;
 import entidades.Paciente;
 import entidades.Rol;
 import entidades.Usuario;
@@ -22,8 +23,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPrincipal.class.getName());
 
-    private Usuario usuarioActual;
 
+    private Usuario usuarioActual;
 
     /**
      * Creates new form FrmPrincipal
@@ -31,7 +32,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal() {
         initComponents();
 
-        usuarioActual = new Usuario(1, "usuario1", "asdas", Rol.DIRECTOR_MEDICO, true);
+        usuarioActual = SesionUsuario.getInstance().getUsuario();
 
         lblUsuario.setText(usuarioActual.getUsername());
         lblRol.setText(usuarioActual.getRol().name());
@@ -39,16 +40,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         armarMenuDinamico();
     }
 
-    public FrmPrincipal(Usuario usuarioActual) {
-        initComponents();
-
-        this.usuarioActual = usuarioActual;
-
-        lblUsuario.setText(usuarioActual.getUsername());
-        lblRol.setText(usuarioActual.getRol().name());
-
-        armarMenuDinamico();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,6 +56,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         desktopPane.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -128,6 +124,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+        SesionUsuario.getInstance().cerrarSesion();
+        
+    }//GEN-LAST:event_formWindowClosed
+
     /**
      * @param args the command line arguments
      */
@@ -163,18 +165,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.ADMINISTRADOR)
                     .agregarItem("Buscar Usuario", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());},
                             Rol.ADMINISTRADOR)
-                    .agregarItem("Auditoria del Sistema ", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());},
+                    .agregarItem("Auditoria del Sistema ", e -> {abrirInternalFrame(new IfrmListarAuditorias());},
                             Rol.ADMINISTRADOR, Rol.DIRECTOR_MEDICO)
                     .agregarSeparador()
-                    .agregarItem("Cerrar Sesion", e -> {}, Rol.values())
-                    .agregarItem("Salir", e -> {}, Rol.values())
+                    .agregarItem("Cerrar Sesion", e -> {
+                        SesionUsuario.getInstance().cerrarSesion();
+                        this.dispose();
+                        FrmInicioSesion frmInicioSesion = new FrmInicioSesion();
+                        frmInicioSesion.setVisible(true);
+                        }, Rol.values())
+                    .agregarItem("Salir", e -> {
+                        SesionUsuario.getInstance().cerrarSesion();
+                        this.dispose();
+                    }, Rol.values())
 
                 .agregarCategoria("Pacientes")
-                    .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new FrmRegistroPaciente());},
+                    .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new IfrmRegistroPaciente());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
                     .agregarItem("Modificar Paciente", e -> {},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
-                    .agregarItem("Buscar Paciente", e -> {},
+                    .agregarItem("Buscar Paciente", e -> {abrirInternalFrame(new IfrmBuscarPaciente());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.MEDICO, Rol.ENFERMERA, Rol.CAJERO)
                     .agregarItem("Seguros Medicos", e -> {},
                             Rol.CAJERO, Rol.RECEPCIONISTA)
