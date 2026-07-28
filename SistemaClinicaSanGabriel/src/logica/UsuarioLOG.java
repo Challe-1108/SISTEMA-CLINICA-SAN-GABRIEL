@@ -6,6 +6,7 @@ package logica;
 
 import datos.SesionUsuario;
 import datos.UsuarioDAO;
+import entidades.Auditoria;
 import entidades.Rol;
 import entidades.Usuario;
 
@@ -172,7 +173,12 @@ public class UsuarioLOG {
             return false;
         }
 
+        Usuario usuarioAModificar = buscarUsuario(idUsuario);
+
         if(passwordSinCifrar == null || passwordSinCifrar.equals("")){
+
+            AuditoriaLOG.registrarAuditoria(SesionUsuario.getInstance().getIdUsuario(), "Usuarios","Modifico a " + usuarioAModificar.getUsername());
+
             return UsuarioDAO.actualizarUsuario(new Usuario(idUsuario, username, null, rol, estado));
         }
 
@@ -180,6 +186,8 @@ public class UsuarioLOG {
 
         String passwordCifrado = cifrarPassword(passwordSinCifrar);
         Usuario u = new Usuario(idUsuario, username, passwordCifrado, rol, estado);
+
+        AuditoriaLOG.registrarAuditoria(SesionUsuario.getInstance().getIdUsuario(), "Usuarios","Modifico a " + usuarioAModificar.getUsername());
 
         return UsuarioDAO.actualizarUsuario(u);
     }

@@ -36,6 +36,7 @@ VALUES ("teffo", "87654321", "Administrador", true);
 
 -- ELIMINAR REGISTROS
 TRUNCATE TABLE Usuarios;
+TRUNCATE TABLE Auditorias;
 
 DROP TABLE Auditorias;
 
