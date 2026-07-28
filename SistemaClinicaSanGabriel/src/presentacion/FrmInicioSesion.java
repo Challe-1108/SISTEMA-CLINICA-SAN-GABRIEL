@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import datos.SesionUsuario;
 import entidades.Usuario;
 import logica.UsuarioLOG;
 
@@ -153,12 +154,22 @@ public class FrmInicioSesion extends javax.swing.JFrame {
 
         Usuario usuarioEncontrado = UsuarioLOG.buscarUsuario(username, password);
 
-        if(usuarioEncontrado != null){
-            JOptionPane.showMessageDialog(this, "Bienvenido: " + usuarioEncontrado.getUsername());
+        if(usuarioEncontrado == null){
+            JOptionPane.showMessageDialog(this, "Usuario y/o contraseña no registrados", "Error de datos", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
-        FrmPrincipal frmPrincipal = new FrmPrincipal(usuarioEncontrado);
+        if(!usuarioEncontrado.isEstado()){
+            JOptionPane.showMessageDialog(this, "Usuario inactivo", "Error de datos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, "Bienvenido: " + usuarioEncontrado.getUsername());
+
+        SesionUsuario.getInstance().iniciarSesion(usuarioEncontrado);
+        FrmPrincipal frmPrincipal = new FrmPrincipal();
         frmPrincipal.setVisible(true);
+
         this.dispose();
         
     }//GEN-LAST:event_btnIniciarSesionActionPerformed

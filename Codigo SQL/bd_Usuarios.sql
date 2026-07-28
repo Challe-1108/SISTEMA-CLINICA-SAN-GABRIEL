@@ -37,10 +37,12 @@ VALUES ("teffo", "87654321", "Administrador", true);
 -- ELIMINAR REGISTROS
 TRUNCATE TABLE Usuarios;
 
+DROP TABLE Auditorias;
+
 -- CONSULTAS
 
 SELECT * FROM Usuarios;
-
+SELECT * FROM Auditorias;
 
 -- BUSQUEDA DE USUARIO POR USERNAME Y PASSWORD
 

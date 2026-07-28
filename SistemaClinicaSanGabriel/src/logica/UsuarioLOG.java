@@ -4,6 +4,7 @@
  */
 package logica;
 
+import datos.SesionUsuario;
 import datos.UsuarioDAO;
 import entidades.Rol;
 import entidades.Usuario;
@@ -117,6 +118,9 @@ public class UsuarioLOG {
 
         String passwordCifrado = cifrarPassword(passwordSinCifrar);
         Usuario u = new Usuario(0, username, passwordCifrado, rol, estado);
+
+        AuditoriaLOG.registrarAuditoria(SesionUsuario.getInstance().getIdUsuario(), "Usuarios",
+                "Registró a " + u.getUsername() + " como " + u.getRol().name());
 
         return UsuarioDAO.registrarUsuario(u);
     }

@@ -16,8 +16,8 @@ public class ClasePruebaUsuarios {
 
     }
 
-    void cargarDatosPrueba(){
-        UsuarioLOG.registrarUsuario("admin", "@Admin2026", Rol.ADMINISTRADOR, true);
+    static void cargarDatosPrueba(){
+        UsuarioLOG.registrarUsuario("admin", "%Admin2026", Rol.ADMINISTRADOR, true);
         UsuarioLOG.registrarUsuario("mrodriguez", "#ModAdmin2", Rol.ADMINISTRADOR, false); // Inactivo
 
         UsuarioLOG.registrarUsuario("mgarcia", "$Recep123", Rol.RECEPCIONISTA, true);
