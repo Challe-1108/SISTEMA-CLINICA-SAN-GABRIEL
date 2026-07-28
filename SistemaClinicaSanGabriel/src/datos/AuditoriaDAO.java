@@ -3,6 +3,8 @@ package datos;
 import entidades.Auditoria;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class AuditoriaDAO {
 
@@ -27,6 +29,35 @@ public class AuditoriaDAO {
         }
 
         return filasAfectadas > 0;
+    }
+
+    public static ArrayList<Auditoria> listarAuditorias(){
+        String sql = "SELECT * FROM Auditorias";
+
+        ArrayList<Auditoria> lista = new ArrayList<>();
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()){
+                Auditoria au = new Auditoria();
+                au.setIdAuditoria(rs.getInt("idAuditoria"));
+                au.setIdUsuario(rs.getInt("idUsuario"));
+                au.setFecha(rs.getDate("fecha").toLocalDate());
+                au.setHora(rs.getTime("hora").toLocalTime());
+                au.setModulo(rs.getString("modulo"));
+                au.setOperacion(rs.getString("operacion"));
+
+                lista.add(au);
+            }
+
+        } catch (SQLException e){
+            System.err.println("Error al listar las auditorias: " + e.getMessage());
+        }
+
+        return lista;
     }
 
 }

@@ -95,6 +95,33 @@ public class UsuarioDAO {
         return usuarioEncontrado;
     }
 
+    public static Usuario buscarUsuario(int idUsuario){
+        String sql = "SELECT * FROM Usuarios WHERE idUsuario = ?";
+        Usuario usuarioEncontrado = null;
+
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+
+            ps.setInt(1, idUsuario);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                usuarioEncontrado = new Usuario();
+                usuarioEncontrado.setIdUsuario(rs.getInt("idUsuario"));
+                usuarioEncontrado.setUsername(rs.getString("username"));
+                usuarioEncontrado.setPassword(rs.getString("password"));
+                usuarioEncontrado.setRol(Rol.valueOf(rs.getString("rol")));
+                usuarioEncontrado.setEstado(rs.getBoolean("estado"));
+            }
+
+        } catch (SQLException e){
+            System.err.println("Error al buscar usuario por username: " + e.getMessage());
+        }
+
+        return usuarioEncontrado;
+    }
+
     public static ArrayList<Usuario> listarUsuarios(){
         String sql = "SELECT * FROM Usuarios";
         ArrayList<Usuario> lista = new ArrayList<>();

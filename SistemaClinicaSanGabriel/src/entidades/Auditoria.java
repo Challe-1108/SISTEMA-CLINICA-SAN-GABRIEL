@@ -6,6 +6,7 @@ package entidades;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -19,6 +20,7 @@ public class Auditoria {
     private String modulo;
     private String operacion;
 
+    public Auditoria(){}
     public Auditoria(int idAuditoria, int idUsuario, LocalDate fecha, LocalTime hora, String modulo, String operacion) {
         this.idAuditoria = idAuditoria;
         this.idUsuario = idUsuario;
@@ -56,12 +58,22 @@ public class Auditoria {
         return fecha;
     }
 
+    public String getFechaFormateada() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return this.fecha.format(dateFormatter);
+    }
+
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
     public LocalTime getHora() {
         return hora;
+    }
+
+    public String getHoraFormateada() {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return this.hora.format(timeFormatter);
     }
 
     public void setHora(LocalTime hora) {
