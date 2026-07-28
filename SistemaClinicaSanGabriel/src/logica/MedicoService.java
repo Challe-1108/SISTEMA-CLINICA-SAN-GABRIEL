@@ -25,7 +25,7 @@ public class MedicoService {
             return false;
         }
 
-        // RN-12: especialidad obligatoria
+        // RN-12: especialidad obligatoriaa
         if (medico.getEspecialidades() == null || medico.getEspecialidades().isEmpty()) {
             JOptionPane.showMessageDialog(null,
                     "El medico debe tener al menos una especialidad.",
