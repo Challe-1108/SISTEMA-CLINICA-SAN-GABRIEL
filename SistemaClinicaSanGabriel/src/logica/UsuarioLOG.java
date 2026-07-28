@@ -143,6 +143,10 @@ public class UsuarioLOG {
         return UsuarioDAO.buscarUsuario(username);
     }
 
+    public static Usuario buscarUsuario(int idUsuario){
+        return UsuarioDAO.buscarUsuario(idUsuario);
+    }
+
     public static boolean actualizarUsuario(int idUsuario, String username, String passwordSinCifrar, Rol rol, boolean estado){
         if(username == null || username.equals("")){
             JOptionPane.showMessageDialog(null,
@@ -183,4 +187,5 @@ public class UsuarioLOG {
     public static boolean eliminarUsuario(int idUsuario){
         return UsuarioDAO.eliminarUsuario(idUsuario);
     }
+
 }

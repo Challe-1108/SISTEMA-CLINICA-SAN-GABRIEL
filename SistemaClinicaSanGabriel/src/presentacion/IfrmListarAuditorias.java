@@ -4,6 +4,14 @@
  */
 package presentacion;
 
+import entidades.Auditoria;
+import entidades.Usuario;
+import logica.AuditoriaLOG;
+import logica.UsuarioLOG;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+
 /**
  *
  * @author yordi
@@ -15,6 +23,8 @@ public class IfrmListarAuditorias extends javax.swing.JInternalFrame {
      */
     public IfrmListarAuditorias() {
         initComponents();
+
+        llenarTablas();
     }
 
     /**
@@ -27,11 +37,12 @@ public class IfrmListarAuditorias extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblDatosAuditoria = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblOperaciones = new javax.swing.JTable();
+        btnSalir = new javax.swing.JButton();
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblDatosAuditoria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -50,9 +61,9 @@ public class IfrmListarAuditorias extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblDatosAuditoria);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblOperaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -71,7 +82,10 @@ public class IfrmListarAuditorias extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblOperaciones);
+
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(this::btnSalirActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,6 +97,10 @@ public class IfrmListarAuditorias extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(43, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSalir)
+                .addGap(53, 53, 53))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,17 +109,63 @@ public class IfrmListarAuditorias extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(184, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addComponent(btnSalir)
+                .addGap(46, 46, 46))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void llenarTablas(){
+        String[] columnasDat = {"USUARIO", "FECHA", "HORA", "MODULO"};
+        DefaultTableModel modeloDat = new DefaultTableModel(columnasDat, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        String[] columnasOp = {"OPERACIONES"};
+        DefaultTableModel modeloOp = new DefaultTableModel(columnasOp, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        ArrayList<Auditoria> lista = AuditoriaLOG.listarAuditorias();
+
+        for(Auditoria a : lista){
+            Object[] filaDat = new Object[]{
+                    UsuarioLOG.buscarUsuario(a.getIdUsuario()).getUsername(),
+                    a.getFechaFormateada(),
+                    a.getHoraFormateada(),
+                    a.getModulo()
+            };
+
+            modeloDat.addRow(filaDat);
+
+            Object[] filaOp = new Object[]{
+                    a.getOperacion()
+            };
+
+            modeloOp.addRow(filaOp);
+        }
+
+        tblDatosAuditoria.setModel(modeloDat);
+        tblOperaciones.setModel(modeloOp);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSalir;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tblDatosAuditoria;
+    private javax.swing.JTable tblOperaciones;
     // End of variables declaration//GEN-END:variables
 }

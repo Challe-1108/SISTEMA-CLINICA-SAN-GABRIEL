@@ -165,7 +165,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.ADMINISTRADOR)
                     .agregarItem("Buscar Usuario", e -> {abrirInternalFrame(new IfrmBuscarEditarEliminarUsuario());},
                             Rol.ADMINISTRADOR)
-                    .agregarItem("Auditoria del Sistema ", e -> {},
+                    .agregarItem("Auditoria del Sistema ", e -> {abrirInternalFrame(new IfrmListarAuditorias());},
                             Rol.ADMINISTRADOR, Rol.DIRECTOR_MEDICO)
                     .agregarSeparador()
                     .agregarItem("Cerrar Sesion", e -> {
