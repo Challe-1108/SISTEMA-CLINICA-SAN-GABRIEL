@@ -1,7 +1,6 @@
 package entidades;
 
 import java.time.LocalDate;
-import java.time.Month;
 
 public class SolicitudExamenLab {
     private int idSolicitud;
@@ -22,4 +21,38 @@ public class SolicitudExamenLab {
         fecha = LocalDate.of(2026,07,01);
         descripcion = "NULL";
     }
+
+    public int getIdSolicitud() {
+        return idSolicitud;
+    }
+
+    public void setIdSolicitud(int idSolicitud) {
+        this.idSolicitud = idSolicitud;
+    }
+
+    public int getIdPaciente() {
+        return idPaciente;
+    }
+
+    public void setIdPaciente(int idPaciente) {
+        this.idPaciente = idPaciente;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
+    
 }
