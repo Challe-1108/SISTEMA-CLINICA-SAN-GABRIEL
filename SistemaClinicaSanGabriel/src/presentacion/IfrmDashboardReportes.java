@@ -32,15 +32,19 @@ public class IfrmDashboardReportes extends javax.swing.JInternalFrame {
         cmbTipoReporte.addItem("Pacientes por especialidad");
 
         DefaultTableModel modelo = new DefaultTableModel();
-        tblReporte.setModel(modelo);
+        modelo.setRowCount(0);
+tblReporte.setModel(modelo);
+tblReporte.setEnabled(false);
+        
 
-        lblIngresos.setText("S/. 0.00");
-        lblPagos.setText("0");
-        lblBoletas.setText("0");
-        lblFacturas.setText("0");
-
+        //*lblIngresos.setText("S/. 0.00");
+        //*lblPagos.setText("0");
+        //*lblBoletas.setText("0");
+        //*lblFacturas.setText("0");
         btnExportarPDF.setEnabled(false);
         btnExportarExcel.setEnabled(false);
+
+        actualizarTarjetas();
     }
 
     private void cargarReporteIngresos() {
@@ -62,6 +66,7 @@ public class IfrmDashboardReportes extends javax.swing.JInternalFrame {
             });
         }
         tblReporte.setModel(modelo);
+        tblReporte.setEnabled(true);
     }
 
     private void cargarReporteEspecialidad() {
@@ -80,9 +85,22 @@ public class IfrmDashboardReportes extends javax.swing.JInternalFrame {
             });
         }
         tblReporte.setModel(modelo);
+        tblReporte.setEnabled(true);
     }
 
     private void actualizarTarjetas() {
+
+        lblIngresos.setText(String.format("S/. %.2f",
+                ReporteLOG.obtenerTotalIngresos()));
+
+        lblPagos.setText(String.valueOf(
+                ReporteLOG.obtenerCantidadPagos()));
+
+        lblBoletas.setText(String.valueOf(
+                ReporteLOG.obtenerCantidadBoletas()));
+
+        lblFacturas.setText(String.valueOf(
+                ReporteLOG.obtenerCantidadFacturas()));
 
     }
 
@@ -394,14 +412,14 @@ public class IfrmDashboardReportes extends javax.swing.JInternalFrame {
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         if (cmbTipoReporte.getSelectedIndex() == 0) {
-
             cargarReporteIngresos();
         } else {
             cargarReporteEspecialidad();
         }
-        actualizarTarjetas();
+
         btnExportarPDF.setEnabled(true);
         btnExportarExcel.setEnabled(true);
+
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void tblReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblReporteMouseClicked
@@ -418,7 +436,7 @@ public class IfrmDashboardReportes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnExportarExcelActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        // TODO add your handling code here:
+        dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnCerrarActionPerformed
 
 
