@@ -220,15 +220,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.MEDICO)
 
                 .agregarCategoria("Laboratorio")
-                    .agregarItem("Solicitudes Pendientes", e -> {},
+                    .agregarItem("Solicitudes Pendientes", e -> {abrirInternalFrame(new IfrmLaboratorioAtencion());},
                             Rol.LABORATORISTA, Rol.ADMINISTRADOR)
-                    .agregarItem("Registrar Resultados", e -> {},
-                            Rol.LABORATORISTA)
 
                 .agregarCategoria("Farmacia")
-                    .agregarItem("Entrega de Medicamentos", e -> {},
+                    .agregarItem("Despacho y entrega de Medicamentos", e -> {abrirInternalFrame(new IfrmDespachoFarmacia());},
                             Rol.FARMACEUTICO)
-                    .agregarItem("Inventario y Existencias", e -> {},
+                    .agregarItem("Inventario de Medicamentos", e -> {abrirInternalFrame(new IfrmInventarioMedicamentos());},
                             Rol.FARMACEUTICO, Rol.ADMINISTRADOR)
 
                 .agregarCategoria("Caja")
