@@ -51,7 +51,6 @@ public class IfrmCobroCaja extends javax.swing.JInternalFrame {
         IblComprobante = new javax.swing.JLabel();
         spAtenciones = new javax.swing.JScrollPane();
         tblAtenciones = new javax.swing.JTable();
-        btnBuscar1 = new javax.swing.JButton();
         btnCobrar = new javax.swing.JButton();
         btnComprobante = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
@@ -158,12 +157,13 @@ public class IfrmCobroCaja extends javax.swing.JInternalFrame {
                     .addComponent(IblMedico)
                     .addComponent(txtMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(IblFecha)
-                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(IblMonto)
-                        .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(IblFecha)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -236,14 +236,6 @@ public class IfrmCobroCaja extends javax.swing.JInternalFrame {
         });
         spAtenciones.setViewportView(tblAtenciones);
 
-        btnBuscar1.setText("Buscar Atención");
-        btnBuscar1.setToolTipText("");
-        btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscar1ActionPerformed(evt);
-            }
-        });
-
         btnCobrar.setText("Registrar Cobro");
         btnCobrar.setToolTipText("");
         btnCobrar.addActionListener(new java.awt.event.ActionListener() {
@@ -305,11 +297,6 @@ public class IfrmCobroCaja extends javax.swing.JInternalFrame {
                                 .addComponent(btnCerrar))
                             .addComponent(spAtenciones, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(33, Short.MAX_VALUE))
-            .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                    .addGap(360, 360, 360)
-                    .addComponent(btnBuscar1)
-                    .addContainerGap(361, Short.MAX_VALUE)))
         );
         pnlPrincipalLayout.setVerticalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,11 +316,6 @@ public class IfrmCobroCaja extends javax.swing.JInternalFrame {
                     .addComponent(btnLimpiar)
                     .addComponent(btnCerrar))
                 .addGap(33, 33, 33))
-            .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                    .addGap(270, 270, 270)
-                    .addComponent(btnBuscar1)
-                    .addContainerGap(270, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -362,10 +344,6 @@ public class IfrmCobroCaja extends javax.swing.JInternalFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscar1ActionPerformed
 
     private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
         // TODO add your handling code here:
@@ -397,7 +375,6 @@ public class IfrmCobroCaja extends javax.swing.JInternalFrame {
     private javax.swing.JLabel IblTitulo1;
     private javax.swing.JLabel IblTitulo2;
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCobrar;
     private javax.swing.JButton btnComprobante;
