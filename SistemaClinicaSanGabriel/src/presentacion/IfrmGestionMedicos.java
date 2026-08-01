@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Usuario
  */
-public class FrmGestionMedicos extends javax.swing.JInternalFrame {
+public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form FrmGestionMedicos
@@ -21,7 +21,7 @@ public class FrmGestionMedicos extends javax.swing.JInternalFrame {
     
     private MedicoService medicoService = new MedicoService();
     
-    public FrmGestionMedicos() {
+    public IfrmGestionMedicos() {
         initComponents();
         cargarTablaMedicos();
     }
@@ -495,7 +495,7 @@ public class FrmGestionMedicos extends javax.swing.JInternalFrame {
     public static void main(String[] args) {
     javax.swing.JFrame frame = new javax.swing.JFrame("Prueba de Formulario");
     javax.swing.JDesktopPane desktop = new javax.swing.JDesktopPane();
-    FrmGestionMedicos internalFrame = new FrmGestionMedicos();
+    IfrmGestionMedicos internalFrame = new IfrmGestionMedicos();
     
     frame.setSize(900, 650);
     frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
