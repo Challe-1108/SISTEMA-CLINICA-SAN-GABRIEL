@@ -39,7 +39,7 @@ public class SolicitudExamenDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    soli = mapear(rs);
+                    soli = buscar(rs);
                 }
             }
         } catch (SQLException e) {
@@ -49,7 +49,7 @@ public class SolicitudExamenDAO {
         return soli;
     }
     
-    private static SolicitudExamenLab mapear(ResultSet rs) throws SQLException {
+    private static SolicitudExamenLab buscar(ResultSet rs) throws SQLException {
         return new SolicitudExamenLab(
                 rs.getInt("idSolicitud"),
                 rs.getInt("idPaciente"),

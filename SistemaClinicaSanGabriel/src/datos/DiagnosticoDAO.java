@@ -6,8 +6,8 @@ import java.sql.*;
 
 public class DiagnosticoDAO {
     
-    public static boolean registrar(Diagnostico dg){
-        String sql = "INSERT INTO diagnostico(idDiagnostico, idPaciente, fecha, tipo, desctripcion, observaciones)"
+    public static boolean registrarDiagnostico(Diagnostico dg){
+        String sql = "INSERT INTO diagnostico(idDiagnostico, idPaciente, fecha, tipo, descripcion, observaciones)"
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         int filasAfectadas=0;
         try(Connection cn = ConexionBD.getInstancia().getConexion();
@@ -25,6 +25,37 @@ public class DiagnosticoDAO {
         }
 
         return filasAfectadas>0;
+    }
+    
+    public static Diagnostico buscarDiagnosticoPorId(int idDiagnostico) {
+        String sql = "SELECT * FROM diagnostico WHERE idDiagnostico = ?";
+        Diagnostico diag = null;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idDiagnostico);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    diag = buscar(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar Diagnostico: " + e.getMessage());
+        }
+
+        return diag;
+    }
+    
+    private static Diagnostico buscar(ResultSet rs) throws SQLException {
+        return new Diagnostico(
+                rs.getInt("idDiagnostico"),
+                rs.getInt("idPaciente"),
+                rs.getDate("fechaemision") != null ? rs.getDate("fecha").toLocalDate() : null,
+                rs.getString("tipo"),
+                rs.getString("descripcion"),
+                rs.getString("observaciones")
+        );
     }
     
 }
