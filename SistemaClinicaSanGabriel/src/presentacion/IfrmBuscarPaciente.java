@@ -30,6 +30,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JTextField txtSeguroResultado;
     private javax.swing.JTextField txtApoderadoResultado;
+    private javax.swing.JTextField txtHistoriaClinicaResultado;
     private javax.swing.JCheckBox chkIncluirInactivos;
 
     public IfrmBuscarPaciente() {
@@ -55,6 +56,9 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
 
         txtApoderadoResultado = new javax.swing.JTextField();
         txtApoderadoResultado.setEditable(false);
+
+        txtHistoriaClinicaResultado = new javax.swing.JTextField();
+        txtHistoriaClinicaResultado.setEditable(false);
 
         chkIncluirInactivos = new javax.swing.JCheckBox("Incluir inactivos");
         chkIncluirInactivos.setToolTipText("Marcar para buscar también pacientes inactivos");
@@ -118,6 +122,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         txtDireccionResultado.setText(paciente.getDireccion());
         txtTelefonoResultado.setText(paciente.getTelefono());
         txtEstadoResultado.setText(paciente.isEstado() ? "Activo" : "Inactivo");
+        txtHistoriaClinicaResultado.setText(paciente.getNumeroHistoriaClinica());
 
         // Seguro
         SeguroMedico seguro = paciente.getSeguroMedico();
@@ -144,6 +149,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         txtDireccionResultado.setText("");
         txtTelefonoResultado.setText("");
         txtEstadoResultado.setText("");
+        txtHistoriaClinicaResultado.setText("");
         txtSeguroResultado.setText("");
         txtApoderadoResultado.setText("");
     }
@@ -177,7 +183,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        String[] columnas = {"DNI", "Nombres", "Apellidos", "Telefono", "Estado"};
+        String[] columnas = {"DNI", "Historia Clínica", "Nombres", "Apellidos", "Teléfono", "Seguro", "Apoderado", "Estado"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -186,11 +192,26 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         };
 
         for (Paciente p : pacientes) {
+            String seguroInfo = "Sin seguro";
+            SeguroMedico seguro = p.getSeguroMedico();
+            if (seguro != null) {
+                seguroInfo = seguro.getCompania() + " (" + seguro.getTipoCobertura() + ")";
+            }
+
+            String apoderadoInfo = "Sin apoderado";
+            Apoderado apoderado = p.getApoderado();
+            if (apoderado != null) {
+                apoderadoInfo = apoderado.getNombres() + " " + apoderado.getApellidos() + " (" + apoderado.getParentesco() + ")";
+            }
+
             Object[] fila = {
                 p.getDni(),
+                p.getNumeroHistoriaClinica(),
                 p.getNombres(),
                 p.getApellidos(),
                 p.getTelefono(),
+                seguroInfo,
+                apoderadoInfo,
                 p.isEstado() ? "Activo" : "Inactivo"
             };
             modelo.addRow(fila);
@@ -226,7 +247,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         panelBotones.add(btnEditarDialogo);
         dialogo.add(panelBotones, BorderLayout.SOUTH);
 
-        dialogo.setSize(600, 350);
+        dialogo.setSize(900, 350);
         dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
     }
@@ -519,7 +540,8 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         javax.swing.GroupLayout jPanel4Layout = (javax.swing.GroupLayout) jPanel4.getLayout();
         javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getContentPane().getLayout();
 
-        // 1) Crear labels para seguro y apoderado
+        // 1) Crear labels para historia clinica, seguro y apoderado
+        javax.swing.JLabel lblHistoriaClinica = new javax.swing.JLabel("Historia Clínica");
         javax.swing.JLabel lblSeguro = new javax.swing.JLabel("Seguro Medico");
         javax.swing.JLabel lblApoderado = new javax.swing.JLabel("Apoderado");
 
@@ -534,6 +556,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblHistoriaClinica, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblSeguro, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblApoderado, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
@@ -544,6 +567,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtApellidosResultado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                         .addComponent(txtNombresResultado, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(txtHistoriaClinicaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSeguroResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtApoderadoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(475, 475, 475))
@@ -574,6 +598,10 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(txtEstadoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblHistoriaClinica)
+                    .addComponent(txtHistoriaClinicaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSeguro)

@@ -18,3 +18,7 @@ hs_err_pid*
 replay_pid*
 .DS_Store
 Thumbs.db
+SistemaClinicaSanGabriel/src/datos/AuditoriaDAO.java
+SistemaClinicaSanGabriel/src/logica/AuditoriaLOG.java
+SistemaClinicaSanGabriel/src/entidades/Auditoria.java
+SistemaClinicaSanGabriel/src/logica/SesionUsuario.java
