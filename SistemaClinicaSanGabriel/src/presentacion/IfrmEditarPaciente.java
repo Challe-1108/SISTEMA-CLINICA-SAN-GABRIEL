@@ -3,8 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
 package presentacion;
+import datos.SeguroDAO;
 import entidades.Apoderado;
 import entidades.Paciente;
+import entidades.SeguroMedico;
 import logica.PacienteLOG;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -16,6 +18,12 @@ import javax.swing.JOptionPane;
 public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
     private Paciente pacienteActual;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JTextField txtCompaniaSeguro;
+    private javax.swing.JTextField txtNumeroPoliza;
+    private javax.swing.JTextField txtTipoCobertura;
+    private javax.swing.JLabel lblCompaniaSeguro;
+    private javax.swing.JLabel lblNumeroPoliza;
+    private javax.swing.JLabel lblTipoCobertura;
 
     public IfrmEditarPaciente(Paciente paciente) {
         btnSalir = new javax.swing.JButton();
@@ -25,10 +33,20 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                 dispose();
             }
         });
+
+        txtCompaniaSeguro = new javax.swing.JTextField();
+        txtNumeroPoliza = new javax.swing.JTextField();
+        txtTipoCobertura = new javax.swing.JTextField();
+
+        lblCompaniaSeguro = new javax.swing.JLabel("Compañía Seguro");
+        lblNumeroPoliza = new javax.swing.JLabel("N° Póliza");
+        lblTipoCobertura = new javax.swing.JLabel("Cobertura (T/P)");
+
         initComponents();
         this.pacienteActual = paciente;
         configurarSegunEstado();
         cargarDatosEnFormulario();
+        agregarCamposSeguro();
     }
 
     private void configurarSegunEstado() {
@@ -60,7 +78,94 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
             txtApellidos.setText(pacienteActual.getApellidos());
             txtTelefono.setText(pacienteActual.getTelefono());
             txtDireccion.setText(pacienteActual.getDireccion());
+
+            // Cargar datos de seguro si existe
+            SeguroMedico seguro = pacienteActual.getSeguroMedico();
+            if (seguro != null) {
+                txtCompaniaSeguro.setText(seguro.getCompania());
+                txtNumeroPoliza.setText(seguro.getNumeroPoliza());
+                txtTipoCobertura.setText(seguro.getTipoCobertura());
+            }
         }
+
+    private void agregarCamposSeguro() {
+        javax.swing.GroupLayout jPanel1Layout = (javax.swing.GroupLayout) jPanel1.getLayout();
+        javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getContentPane().getLayout();
+
+        // Agregar campos de seguro al jPanel1 (después de Dirección)
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(lblCompaniaSeguro)
+                    .addComponent(lblNumeroPoliza)
+                    .addComponent(lblTipoCobertura))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtApellidos)
+                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
+                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCompaniaSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNumeroPoliza, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTipoCobertura, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(7, Short.MAX_VALUE))
+        );
+
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCompaniaSeguro)
+                    .addComponent(txtCompaniaSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNumeroPoliza)
+                    .addComponent(txtNumeroPoliza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTipoCobertura)
+                    .addComponent(txtTipoCobertura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        // Habilitar/deshabilitar campos de seguro según estado del paciente
+        boolean activo = pacienteActual.isEstado();
+        txtCompaniaSeguro.setEnabled(activo);
+        txtNumeroPoliza.setEnabled(activo);
+        txtTipoCobertura.setEnabled(activo);
+
+        pack();
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -301,8 +406,20 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                     .telefono(txtTelefono.getText().trim())
                     .direccion(txtDireccion.getText().trim())
                     .numeroHistoriaClinica(pacienteActual.getNumeroHistoriaClinica())
-                    .seguroMedico(pacienteActual.getSeguroMedico())
                     .estado(pacienteActual.isEstado());
+
+            // Seguro médico (opcional, editable)
+            if (!txtCompaniaSeguro.getText().trim().isEmpty()) {
+                SeguroMedico seguro = new SeguroMedico();
+                seguro.setCompania(txtCompaniaSeguro.getText().trim());
+                seguro.setNumeroPoliza(txtNumeroPoliza.getText().trim());
+                seguro.setTipoCobertura(txtTipoCobertura.getText().trim().toUpperCase());
+                seguro.setEstado(true);
+                SeguroDAO.insertar(seguro);
+                builder.seguroMedico(seguro);
+            } else if (pacienteActual.getSeguroMedico() != null) {
+                builder.seguroMedico(pacienteActual.getSeguroMedico());
+            }
 
             if (!txtDniApoderado.getText().trim().isEmpty()) {
                 Apoderado apoderado = new Apoderado();
@@ -361,7 +478,7 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnInactivarActionPerformed
 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+// Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JButton btnInactivar;
     private javax.swing.JLabel jLabel1;
