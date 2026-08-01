@@ -17,12 +17,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Usuario
  */
-public class FrmAgendaMedica extends javax.swing.JInternalFrame {
+public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
     
     private MedicoService medicoService = new MedicoService();
     private ArrayList<Medico> listaMedicos;
     
-    public FrmAgendaMedica() {
+    public IfrmAgendaMedica() {
         initComponents();
         cargarComboMedicos();
     }
@@ -252,7 +252,7 @@ public class FrmAgendaMedica extends javax.swing.JInternalFrame {
     public static void main(String[] args) {
         javax.swing.JFrame frame = new javax.swing.JFrame("Prueba de Agenda Médica");
         javax.swing.JDesktopPane desktop = new javax.swing.JDesktopPane();
-        FrmAgendaMedica internalFrame = new FrmAgendaMedica();
+        IfrmAgendaMedica internalFrame = new IfrmAgendaMedica();
         
         frame.setSize(950, 680);
         frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);

@@ -4,17 +4,23 @@
  */
 package presentacion;
 
+import entidades.Cita;
+import logica.CitaService;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Usuario
  */
-public class FrmReprogramarCitaa extends javax.swing.JInternalFrame {
+public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form FrmReprogramarCitaa
-     */
-    public FrmReprogramarCitaa() {
+    private CitaService citaService = new CitaService();
+    
+    public IfrmReprogramarCita() {
         initComponents();
+        cargarTablaCitas();
     }
 
     /**
@@ -73,6 +79,11 @@ public class FrmReprogramarCitaa extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblCitas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCitasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCitas);
 
         jLabel2.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
@@ -82,10 +93,25 @@ public class FrmReprogramarCitaa extends javax.swing.JInternalFrame {
         jLabel1.setText("Tabla de Citas Programadas :");
 
         btnReprogramar.setText("REPROGRAMAR");
+        btnReprogramar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReprogramarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setText("LIMPIAR");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         txtCodigoCita.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -163,11 +189,9 @@ public class FrmReprogramarCitaa extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnReprogramar)
                             .addComponent(btnCancelar)
-                            .addComponent(btnLimpiar))
-                        .addContainerGap(29, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtNuevaHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnLimpiar)))
+                    .addComponent(txtNuevaHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -188,7 +212,109 @@ public class FrmReprogramarCitaa extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNuevaHoraActionPerformed
 
+    private void btnReprogramarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprogramarActionPerformed
+        if (txtCodigoCita.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Seleccione una cita de la tabla primero.",
+            "Aviso", JOptionPane.WARNING_MESSAGE);
+        return;
+        }
 
+        if (txtNuevaFecha.getText().isEmpty() || txtNuevaHora.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete la nueva fecha y hora.",
+                "Datos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        boolean exito = citaService.reprogramarCita(
+            txtCodigoCita.getText(), txtNuevaFecha.getText(), txtNuevaHora.getText()
+        );
+
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Cita reprogramada correctamente.");
+            limpiarCampos();
+            cargarTablaCitas();
+        }
+    }//GEN-LAST:event_btnReprogramarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        if (txtCodigoCita.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Seleccione una cita de la tabla primero.",
+            "Aviso", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int confirmacion = JOptionPane.showConfirmDialog(this,
+        "¿Esta seguro de cancelar esta cita?", "Confirmar",
+        JOptionPane.YES_NO_OPTION);
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        boolean exito = citaService.cancelarCita(txtCodigoCita.getText());
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Cita cancelada correctamente.");
+            limpiarCampos();
+            cargarTablaCitas();
+        }
+    }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void tblCitasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCitasMouseClicked
+        int fila = tblCitas.getSelectedRow();
+        if (fila >= 0) {
+        txtCodigoCita.setText(tblCitas.getValueAt(fila, 0).toString());
+        }
+    }//GEN-LAST:event_tblCitasMouseClicked
+    
+    private void limpiarCampos() {
+    txtCodigoCita.setText("");
+    txtNuevaFecha.setText("");
+    txtNuevaHora.setText("");
+    }
+    
+    private void cargarTablaCitas() {
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        };
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Medico");
+        modelo.addColumn("Historia Clinica");
+        modelo.addColumn("Fecha");
+        modelo.addColumn("Hora");
+        modelo.addColumn("Estado");
+
+        ArrayList<Cita> lista = citaService.listarCitas();
+            for (Cita c : lista) {
+            Object[] fila = {
+                c.getCodigo(),
+                c.getMedico().getNombres() + " " + c.getMedico().getApellidos(),
+                c.getNumeroHistoriaClinica(), c.getFecha(), c.getHora(), c.getEstado()
+            };
+            modelo.addRow(fila);
+            }
+        tblCitas.setModel(modelo);
+    }
+    
+    public static void main(String[] args) {
+        javax.swing.JFrame frame = new javax.swing.JFrame("Prueba de Reprogramar Cita");
+        javax.swing.JDesktopPane desktop = new javax.swing.JDesktopPane();
+        IfrmReprogramarCita internalFrame = new IfrmReprogramarCita();
+        
+        frame.setSize(850, 600);
+        frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(desktop);
+        
+        desktop.add(internalFrame);
+        internalFrame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnLimpiar;

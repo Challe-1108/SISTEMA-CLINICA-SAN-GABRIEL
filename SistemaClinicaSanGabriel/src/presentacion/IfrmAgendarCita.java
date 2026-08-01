@@ -15,13 +15,13 @@ import javax.swing.JOptionPane;
  *
  * @author Usuario
  */
-public class FrmAgendarCita extends javax.swing.JInternalFrame {
+public class IfrmAgendarCita extends javax.swing.JInternalFrame {
 
     private CitaService citaService = new CitaService();
     private MedicoService medicoService = new MedicoService();
     private ArrayList<Medico> listaMedicos;
 
-    public FrmAgendarCita() {
+    public IfrmAgendarCita() {
         initComponents();
         cargarComboMedicos();
     }
@@ -264,7 +264,7 @@ private String generarCodigoCita() {
     public static void main(String[] args) {
         javax.swing.JFrame frame = new javax.swing.JFrame("Prueba de Agendar Cita");
         javax.swing.JDesktopPane desktop = new javax.swing.JDesktopPane();
-        FrmAgendarCita internalFrame = new FrmAgendarCita();
+        IfrmAgendarCita internalFrame = new IfrmAgendarCita();
         
         frame.setSize(850, 600);
         frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
