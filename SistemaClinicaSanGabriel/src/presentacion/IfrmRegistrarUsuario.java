@@ -21,7 +21,6 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
     private String password;
     private Rol rol;
     private boolean estado;
-    private Usuario usuario;
 
     public IfrmRegistrarUsuario() {
         initComponents();
@@ -91,7 +90,6 @@ public class IfrmRegistrarUsuario extends javax.swing.JInternalFrame {
         password = "";
         rol = null;
         estado = false;
-        usuario = null;
 
         txtUsername.requestFocus();
     }
