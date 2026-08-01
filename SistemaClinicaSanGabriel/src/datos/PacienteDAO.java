@@ -104,19 +104,49 @@ public class PacienteDAO {
         return filasAfectadas > 0;
     }
 
+    public static boolean activarLogico(int idPaciente) {
+        String sql = "UPDATE paciente SET estado = true WHERE id_paciente = ?";
+        int filasAfectadas = 0;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idPaciente);
+            filasAfectadas = ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al activar paciente: " + e.getMessage());
+        }
+
+        return filasAfectadas > 0;
+    }
+
     public static Paciente buscarPorDni(String dni) {
-        String sql = "SELECT * FROM paciente WHERE dni = ? AND estado = 1";
+        return buscarPorDni(dni, true);
+    }
+
+    public static Paciente buscarPorDni(String dni, boolean soloActivos) {
+        String sql = "SELECT * FROM paciente WHERE dni = ?";
+        if (soloActivos) sql += " AND estado = 1";
         return buscarUno(sql, dni);
     }
 
     public static Paciente buscarPorHistoriaClinica(String numeroHistoriaClinica) {
-        String sql = "SELECT * FROM paciente WHERE numero_historia_clinica = ? AND estado = 1";
+        return buscarPorHistoriaClinica(numeroHistoriaClinica, true);
+    }
+
+    public static Paciente buscarPorHistoriaClinica(String numeroHistoriaClinica, boolean soloActivos) {
+        String sql = "SELECT * FROM paciente WHERE numero_historia_clinica = ?";
+        if (soloActivos) sql += " AND estado = 1";
         return buscarUno(sql, numeroHistoriaClinica);
     }
 
     public static List<Paciente> buscarPorNombre(String nombreOApellido) {
+        return buscarPorNombre(nombreOApellido, true);
+    }
+
+    public static List<Paciente> buscarPorNombre(String nombreOApellido, boolean soloActivos) {
         List<Paciente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM paciente WHERE (nombres LIKE ? OR apellidos LIKE ?) AND estado = 1";
+        String sql = "SELECT * FROM paciente WHERE (nombres LIKE ? OR apellidos LIKE ?)";
+        if (soloActivos) sql += " AND estado = 1";
 
         List<Object[]> datosBasicos = new ArrayList<>();
 
