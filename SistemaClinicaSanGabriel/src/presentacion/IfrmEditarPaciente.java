@@ -27,7 +27,33 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
         });
         initComponents();
         this.pacienteActual = paciente;
+        configurarSegunEstado();
         cargarDatosEnFormulario();
+    }
+
+    private void configurarSegunEstado() {
+        boolean activo = pacienteActual.isEstado();
+        
+        // Habilitar/deshabilitar campos editables según estado
+        txtNombres.setEnabled(activo);
+        txtApellidos.setEnabled(activo);
+        txtTelefono.setEnabled(activo);
+        txtDireccion.setEnabled(activo);
+        txtDniApoderado.setEnabled(activo);
+        txtNombresApoderado.setEnabled(activo);
+        txtApellidosApoderado.setEnabled(activo);
+        txtTelefonoApoderado.setEnabled(activo);
+        txtParentesco.setEnabled(activo);
+        
+        btnGuardarCambios.setEnabled(activo);
+        
+        if (activo) {
+            btnInactivar.setText("Inactivar");
+            btnInactivar.setToolTipText("Marcar paciente como inactivo");
+        } else {
+            btnInactivar.setText("Activar");
+            btnInactivar.setToolTipText("Reactivar paciente");
+        }
     }
     private void cargarDatosEnFormulario() {
             txtNombres.setText(pacienteActual.getNombres());
@@ -307,17 +333,31 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGuardarCambiosActionPerformed
 
     private void btnInactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInactivarActionPerformed
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-                "Esta seguro de marcar este paciente como inactivo?\nEl paciente no aparecera en busquedas futuras.",
-                "Confirmar inactivacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        boolean activo = pacienteActual.isEstado();
+        
+        if (activo) {
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de marcar este paciente como inactivo?\nEl paciente no aparecerá en búsquedas futuras.",
+                    "Confirmar inactivación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-        boolean exito = PacienteLOG.inactivarPaciente(pacienteActual.getIdPaciente());
-        if (exito) {
-            this.dispose();
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                boolean exito = PacienteLOG.inactivarPaciente(pacienteActual.getIdPaciente());
+                if (exito) {
+                    this.dispose();
+                }
+            }
+        } else {
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de reactivar este paciente?\nVolverá a aparecer en búsquedas activas.",
+                    "Confirmar activación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                boolean exito = PacienteLOG.activarPaciente(pacienteActual.getIdPaciente());
+                if (exito) {
+                    this.dispose();
+                }
+            }
         }
-    }
-    // TODO add your handling code here:
     }//GEN-LAST:event_btnInactivarActionPerformed
 
 

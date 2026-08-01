@@ -85,34 +85,46 @@ public class PacienteLOG {
     }
 
     public static Paciente buscarPorDni(String dni) {
-        Paciente paciente = PacienteDAO.buscarPorDni(dni);
+        return buscarPorDni(dni, true);
+    }
+
+    public static Paciente buscarPorDni(String dni, boolean soloActivos) {
+        Paciente paciente = PacienteDAO.buscarPorDni(dni, soloActivos);
         if (paciente == null) {
-            JOptionPane.showMessageDialog(null,
-                    "No se encontro ningun paciente con el DNI: " + dni + ".\n"
-                    + "Verifique que el DNI sea correcto e intente nuevamente.",
-                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+            String msg = soloActivos 
+                ? "No se encontro ningun paciente ACTIVO con el DNI: " + dni + ".\nVerifique que el DNI sea correcto e intente nuevamente."
+                : "No se encontro ningun paciente con el DNI: " + dni + ".\nVerifique que el DNI sea correcto e intente nuevamente.";
+            JOptionPane.showMessageDialog(null, msg, "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
         }
         return paciente;
     }
 
     public static List<Paciente> buscarPorNombreOApellido(String texto) {
-        List<Paciente> resultado = PacienteDAO.buscarPorNombre(texto);
+        return buscarPorNombreOApellido(texto, true);
+    }
+
+    public static List<Paciente> buscarPorNombreOApellido(String texto, boolean soloActivos) {
+        List<Paciente> resultado = PacienteDAO.buscarPorNombre(texto, soloActivos);
         if (resultado.isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "No se encontraron pacientes con el nombre o apellido: \"" + texto + "\".\n"
-                    + "Intente con un termino de busqueda diferente.",
-                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+            String msg = soloActivos
+                ? "No se encontraron pacientes ACTIVOS con el nombre o apellido: \"" + texto + "\".\nIntente con un termino de busqueda diferente."
+                : "No se encontraron pacientes con el nombre o apellido: \"" + texto + "\".\nIntente con un termino de busqueda diferente.";
+            JOptionPane.showMessageDialog(null, msg, "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
         }
         return resultado;
     }
 
     public static Paciente buscarPorHistoriaClinica(String numeroHistoriaClinica) {
-        Paciente paciente = PacienteDAO.buscarPorHistoriaClinica(numeroHistoriaClinica);
+        return buscarPorHistoriaClinica(numeroHistoriaClinica, true);
+    }
+
+    public static Paciente buscarPorHistoriaClinica(String numeroHistoriaClinica, boolean soloActivos) {
+        Paciente paciente = PacienteDAO.buscarPorHistoriaClinica(numeroHistoriaClinica, soloActivos);
         if (paciente == null) {
-            JOptionPane.showMessageDialog(null,
-                    "No se encontro ningun paciente con la historia clinica Nro. " + numeroHistoriaClinica + ".\n"
-                    + "Verifique el numero e intente nuevamente.",
-                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+            String msg = soloActivos
+                ? "No se encontro ningun paciente ACTIVO con la historia clinica Nro. " + numeroHistoriaClinica + ".\nVerifique el numero e intente nuevamente."
+                : "No se encontro ningun paciente con la historia clinica Nro. " + numeroHistoriaClinica + ".\nVerifique el numero e intente nuevamente.";
+            JOptionPane.showMessageDialog(null, msg, "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
         }
         return paciente;
     }
@@ -128,6 +140,21 @@ public class PacienteLOG {
             JOptionPane.showMessageDialog(null,
                     "No se pudo inactivar al paciente. Verifique la conexion e intente nuevamente.",
                     "Error al inactivar", JOptionPane.ERROR_MESSAGE);
+        }
+        return exito;
+    }
+
+    public static boolean activarPaciente(int idPaciente) {
+        boolean exito = PacienteDAO.activarLogico(idPaciente);
+        if (exito) {
+            JOptionPane.showMessageDialog(null,
+                    "El paciente ha sido reactivado correctamente.\n"
+                    + "Ahora aparecerá en las búsquedas activas del sistema.",
+                    "Paciente activado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "No se pudo activar al paciente. Verifique la conexion e intente nuevamente.",
+                    "Error al activar", JOptionPane.ERROR_MESSAGE);
         }
         return exito;
     }
