@@ -5,7 +5,7 @@ import java.util.*;
 import java.sql.*;
 
 public class RecetaDAO {
-    public static boolean registrar(RecetaMedica rec){
+    public static boolean registrarReceta(RecetaMedica rec){
         String sql = "INSERT INTO recetaMedica(idReceta, fechaemision, idPaciente, descripcion, idMedicamento, cantidad)"
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         int filasAfectadas=0;
@@ -24,5 +24,36 @@ public class RecetaDAO {
         }
 
         return filasAfectadas>0;
+    }
+    
+    public static RecetaMedica buscarRecetaPorId(int idReceta) {
+        String sql = "SELECT * FROM recetaMedica WHERE idReceta = ?";
+        RecetaMedica rm = null;
+
+        try (Connection cn = ConexionBD.getInstancia().getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idReceta);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    rm = buscar(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar Receta Medica: " + e.getMessage());
+        }
+
+        return rm;
+    }
+    
+    private static RecetaMedica buscar(ResultSet rs) throws SQLException {
+        return new RecetaMedica(
+                rs.getInt("idReceta"),
+                rs.getDate("fechaemision") != null ? rs.getDate("fechaemision").toLocalDate() : null,
+                rs.getInt("idPaciente"),
+                rs.getString("descripcion"),
+                rs.getInt("idMedicamento"),
+                rs.getFloat("cantidad")
+        );
     }
 }
