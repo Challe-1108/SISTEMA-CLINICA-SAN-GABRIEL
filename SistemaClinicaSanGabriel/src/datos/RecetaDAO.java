@@ -49,7 +49,7 @@ public class RecetaDAO {
     private static RecetaMedica buscar(ResultSet rs) throws SQLException {
         return new RecetaMedica(
                 rs.getInt("idReceta"),
-                rs.getDate("fechaemision") != null ? rs.getDate("fecha").toLocalDate() : null,
+                rs.getDate("fechaemision") != null ? rs.getDate("fechaemision").toLocalDate() : null,
                 rs.getInt("idPaciente"),
                 rs.getString("descripcion"),
                 rs.getInt("idMedicamento"),

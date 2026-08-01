@@ -6,8 +6,8 @@ import java.sql.*;
 
 public class SignosVitalesDAO {
     public static boolean registrarSignos(SignosVitales sig){
-        String sql = "INSERT INTO signosVitales (idSignosVitales, temperatura, pulso, presion, respiracion)"
-                + "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO signosVitales (idSignosVitales, temperatura, pulso, presionSistolica, presionDiastolica, respiracion)"
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         int filasAfectadas=0;
         
         try(Connection cn = ConexionBD.getInstancia().getConexion();
@@ -16,7 +16,8 @@ public class SignosVitalesDAO {
             ps.setInt(1, sig.getIdSignosVitales());
             ps.setFloat(2, sig.getTemperatura());
             ps.setInt(3, sig.getPulso());
-            ps.setInt(4, sig.getPresion());
+            ps.setInt(4, sig.getPresionSistolica());
+            ps.setInt(5, sig.getPresionDiastolica());
             ps.setInt(5, sig.getRespiracion());
 
             filasAfectadas = ps.executeUpdate();
@@ -54,7 +55,8 @@ public class SignosVitalesDAO {
                 rs.getInt("idSignosVitales"),
                 rs.getFloat("temperatura"),
                 rs.getInt("pulso"),
-                rs.getInt("presion"),
+                rs.getInt("presionSistolica"),
+                rs.getInt("presionDiastolica"),
                 rs.getInt("respiracion")
         );
     }
