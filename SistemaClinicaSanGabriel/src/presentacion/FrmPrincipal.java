@@ -192,9 +192,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.DIRECTOR_MEDICO)
 
                 .agregarCategoria("Citas")
-                    .agregarItem("Programar Cita", e -> {abrirInternalFrame(new IfrmAgendarCita() );},
+                    .agregarItem("Programar Cita", e -> {abrirInternalFrame(new IfrmAgendarCita());},
                             Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
-                    .agregarItem("Reprogramar Cita", e -> {},
+                    .agregarItem("Reprogramar Cita", e -> {abrirInternalFrame(new IfrmReprogramarCita());},
                             Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
 
                 .agregarCategoria("Atencion Medica")

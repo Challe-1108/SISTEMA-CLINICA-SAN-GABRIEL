@@ -23,3 +23,4 @@ CREATE TABLE Auditorias (
         FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario)
         ON DELETE RESTRICT
 );
+
