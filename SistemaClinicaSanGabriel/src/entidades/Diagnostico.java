@@ -6,27 +6,25 @@ import java.time.LocalTime;
 public class Diagnostico {
     
     private int idDiagnostico;
-    private Paciente paciente;
+    private int idPaciente;
     private LocalDate fecha;
-    private LocalTime hora;
     private String tipo;
     private String descripcion;
     private String observaciones;
     
     public Diagnostico(){
         idDiagnostico = 000;
+        idPaciente = 000;
         fecha = LocalDate.of(2001,01,01);
-        hora = LocalTime.of(0,0);
         tipo = "NT";
         descripcion = "ND";
         observaciones = "NO";
     }
 
-    public Diagnostico(int idDiagnostico, Paciente paciente, LocalDate fecha, LocalTime hora, String tipo, String descripcion, String observaciones) {
+    public Diagnostico(int idDiagnostico, int idPaciente, LocalDate fecha, String tipo, String descripcion, String observaciones) {
         this.idDiagnostico = idDiagnostico;
-        this.paciente = paciente;
+        this.idPaciente = idPaciente;
         this.fecha = fecha;
-        this.hora = hora;
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.observaciones = observaciones;
@@ -42,12 +40,12 @@ public class Diagnostico {
         this.idDiagnostico = idDiagnostico;
     }
 
-    public Paciente getPaciente() {
-        return paciente;
+    public int getIdPaciente() {
+        return idPaciente;
     }
 
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public void setPaciente(int idPaciente) {
+        this.idPaciente = idPaciente;
     }
 
     public LocalDate getFecha() {
@@ -56,14 +54,6 @@ public class Diagnostico {
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
-    }
-
-    public LocalTime getHora() {
-        return hora;
-    }
-
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
     }
 
     public String getTipo() {
@@ -94,9 +84,8 @@ public class Diagnostico {
     public String toString(){
         return "Diagnostico{" +
                 "idDiagnostico=" + getIdDiagnostico() +
-                ", paciente: '" + getPaciente() + '\'' +
+                ", paciente: '" + getIdPaciente() + '\'' +
                 ", fecha: '" + getFecha() + '\'' +
-                ", hora: " + getHora() + '\'' +
                 ", tipo: '" + getTipo() + '\'' +
                 ", descripcion '" + getDescripcion() + '\'' +
                 ", observaciones: '" + getObservaciones() +
