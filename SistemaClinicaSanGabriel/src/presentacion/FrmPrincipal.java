@@ -192,21 +192,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.MEDICO, Rol.DIRECTOR_MEDICO, Rol.ENFERMERA)
 
                 .agregarCategoria("Medicos")
-                    .agregarItem("Gestión de Medicos", e -> {},
+                    .agregarItem("Gestión de Medicos", e -> {abrirInternalFrame(new FrmGestionMedicos());},
                             Rol.ADMINISTRADOR)
-                    .agregarItem("Horarios y Turnos", e -> {},
-                            Rol.ADMINISTRADOR)
-                    .agregarItem("Agenda Medica", e -> {},
+                    .agregarItem("Agenda Medica", e -> {abrirInternalFrame(new FrmAgendaMedica());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.DIRECTOR_MEDICO)
 
                 .agregarCategoria("Citas")
-                    .agregarItem("Programar Cita", e -> {},
+                    .agregarItem("Programar Cita", e -> {abrirInternalFrame(new FrmAgendarCita());},
                             Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
-                    .agregarItem("Consultar Disponibilidad", e -> {},
-                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR, Rol.MEDICO)
                     .agregarItem("Reprogramar Cita", e -> {},
-                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
-                    .agregarItem("Cancelar Cita", e -> {},
                             Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
 
                 .agregarCategoria("Atencion Medica")
