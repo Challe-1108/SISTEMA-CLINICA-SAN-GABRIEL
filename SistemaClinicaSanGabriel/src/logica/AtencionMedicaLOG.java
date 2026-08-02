@@ -6,8 +6,8 @@ import javax.swing.JOptionPane;
 
 public class AtencionMedicaLOG {
     
-    public static boolean registrarAtencion(AtencionMedica atencion, SignosVitales signos, Diagnostico diagnostico){
-        if (!validarDatos(atencion, signos, diagnostico)){
+    public static boolean registrarAtencion(AtencionMedica atencion, SignosVitales signos, Diagnostico diagnostico, RecetaMedica receta){
+        if (!validarDatos(atencion, signos, diagnostico, receta)){
             return false;
         }
         AtencionMedica am = AtencionMedicaDAO.buscarAtencionPorId(atencion.getIdAtencion());
@@ -35,11 +35,11 @@ public class AtencionMedicaLOG {
         return at1 && sig1 && diag1;
     }
 
-    public static boolean validarDatos(AtencionMedica atencion, SignosVitales signos, Diagnostico diagnostico) {
+    public static boolean validarDatos(AtencionMedica atencion, SignosVitales signos, Diagnostico diagnostico, RecetaMedica receta) {
 
         StringBuilder errores = new StringBuilder();
 
-        if (atencion == null || signos == null || diagnostico == null) {
+        if (atencion == null || signos == null || diagnostico == null || receta==null) {
             JOptionPane.showMessageDialog(
                     null,
                     "Los datos de la atención médica no pueden estar vacíos.",
@@ -76,6 +76,26 @@ public class AtencionMedicaLOG {
         }
         if (signos.getRespiracion()<=1 || signos.getRespiracion()>100){
             errores.append("Colocar respiraciones/minuto valido\n");
+        }
+        //----------
+        //--Receta
+        if (receta.getIdReceta() <=0){
+            errores.append("Colocar ID de Receta valido");
+        }
+        if(receta.getFechaemision()==null){
+            errores.append("Completar el campo: Fecha de emision");
+        }
+        if (receta.getIdPaciente() <= 0){
+            errores.append("Colocar ID de Paciente valido");
+        }
+        if (receta.getDescripcion() == null || receta.getDescripcion().trim().isEmpty()){
+            errores.append("Completar el campo: Descripcion");
+        }
+        if (receta.getIdMedicamento() <=0){
+            errores.append("Colocar ID de Medicamento Valido");
+        }
+        if (receta.getCantidad() <=0.0){
+            errores.append("Colocar Cantidad Valida");
         }
         //----------
         
