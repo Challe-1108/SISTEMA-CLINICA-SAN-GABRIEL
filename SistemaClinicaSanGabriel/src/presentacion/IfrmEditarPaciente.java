@@ -357,13 +357,11 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                         .addGap(191, 191, 191)
                         .addComponent(btnGuardarCambios)
                         .addGap(129, 129, 129)
-                        .addComponent(btnInactivar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalir))
+                        .addComponent(btnInactivar))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(211, 211, 211)
                         .addComponent(jLabel11)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,11 +370,10 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                 .addComponent(jLabel11)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarCambios)
-                    .addComponent(btnInactivar)
-                    .addComponent(btnSalir))
+                    .addComponent(btnInactivar))
                 .addGap(21, 21, 21))
         );
 
@@ -478,7 +475,7 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnInactivarActionPerformed
 
 
-// Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JButton btnInactivar;
     private javax.swing.JLabel jLabel1;
