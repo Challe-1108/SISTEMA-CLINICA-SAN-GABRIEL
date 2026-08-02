@@ -2,22 +2,33 @@ package entidades;
 
 public class AtencionMedica {
 
+    private int idAtencion;
     private String motivo;
     private String antecedentes;
-    private SignosVitales signos;
-    private Diagnostico diagnostico;
+    private int idSignosVitales;
+    private int idDiagnostico;
     private String tratamiento;
     private String observaciones;
 
-    // Constructor privado: solo el Builder puede crear el objeto
     private AtencionMedica(Builder builder) {
+        this.idAtencion = builder.idAtencion;
         this.motivo = builder.motivo;
         this.antecedentes = builder.antecedentes;
-        this.signos = builder.signos;
-        this.diagnostico = builder.diagnostico;
+        this.idSignosVitales = builder.idSignosVitales;
+        this.idDiagnostico = builder.idDiagnostico;
         this.tratamiento = builder.tratamiento;
         this.observaciones = builder.observaciones;
     }
+
+    public int getIdAtencion() {
+        return idAtencion;
+    }
+
+    public void setIdAtencion(int idAtencion) {
+        this.idAtencion = idAtencion;
+    }
+    
+    
 
     public String getMotivo() {
         return motivo;
@@ -35,20 +46,20 @@ public class AtencionMedica {
         this.antecedentes = antecedentes;
     }
 
-    public SignosVitales getSignos() {
-        return signos;
+    public int getIdSignosVitales() {
+        return idSignosVitales;
     }
 
-    public void setSignos(SignosVitales signos) {
-        this.signos = signos;
+    public void setIdSignosVitales(int idSignosVitales) {
+        this.idSignosVitales = idSignosVitales;
     }
 
-    public Diagnostico getDiagnostico() {
-        return diagnostico;
+    public int getIdDiagnostico() {
+        return idDiagnostico;
     }
 
-    public void setDiagnostico(Diagnostico diagnostico) {
-        this.diagnostico = diagnostico;
+    public void setIdDiagnostico(int idDiagnostico) {
+        this.idDiagnostico = idDiagnostico;
     }
 
     public String getTratamiento() {
@@ -69,13 +80,21 @@ public class AtencionMedica {
 
     public static class Builder {
 
+        private int idAtencion;
         private String motivo;
         private String antecedentes;
-        private SignosVitales signos;
-        private Diagnostico diagnostico;
+        private int idSignosVitales;
+        private int idDiagnostico;
         private String tratamiento;
         private String observaciones;
 
+        public Builder idAtencion(int idAtencion){
+            this.idAtencion = idAtencion;
+            return this;
+        }
+
+        
+        
         public Builder motivo(String motivo) {
             this.motivo = motivo;
             return this;
@@ -86,13 +105,13 @@ public class AtencionMedica {
             return this;
         }
 
-        public Builder signos(SignosVitales signos) {
-            this.signos = signos;
+        public Builder signos(int idSignosVitales) {
+            this.idSignosVitales = idSignosVitales;
             return this;
         }
 
-        public Builder diagnostico(Diagnostico diagnostico) {
-            this.diagnostico = diagnostico;
+        public Builder diagnostico(int idDiagnostico) {
+            this.idDiagnostico = idDiagnostico;
             return this;
         }
 

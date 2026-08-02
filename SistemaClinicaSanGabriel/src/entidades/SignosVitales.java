@@ -2,23 +2,37 @@ package entidades;
 
 public class SignosVitales {
     
+    private int idSignosVitales;
     private float temperatura;
     private int pulso;
-    private int presion;
+    private int presionSistolica;
+    private int presionDiastolica;
     private int respiracion;
 
-    public SignosVitales(float temperatura, int pulso, int presion, int respiracion) {
+    public SignosVitales(int idSignosVitales, float temperatura, int pulso, int presionSistolica, int presionDiastolica, int respiracion) {
+        this.idSignosVitales = idSignosVitales;
         this.temperatura = temperatura;
         this.pulso = pulso;
-        this.presion = presion;
+        this.presionSistolica = presionSistolica;
+        this.presionDiastolica = presionDiastolica;
         this.respiracion = respiracion;
     }
     
     public SignosVitales(){
+        idSignosVitales = 000;
         temperatura = 36.5f;
         pulso = 60;
-        presion = 80;
+        presionSistolica = 80;
+        presionDiastolica = 50;
         respiracion = 16;
+    }
+    
+    public int getIdSignosVitales(){
+        return idSignosVitales;
+    }
+    
+    public void setIdSignosVitales(){
+        this.idSignosVitales = idSignosVitales;
     }
 
     public float getTemperatura() {
@@ -37,12 +51,20 @@ public class SignosVitales {
         this.pulso = pulso;
     }
 
-    public int getPresion() {
-        return presion;
+    public int getPresionSistolica() {
+        return presionSistolica;
     }
 
-    public void setPresion(int presion) {
-        this.presion = presion;
+    public void setPresionSistolica(int presionSistolica) {
+        this.presionSistolica = presionSistolica;
+    }
+    
+    public int getPresionDiastolica() {
+        return presionDiastolica;
+    }
+
+    public void setPresionDiastolica(int presionDiastolica) {
+        this.presionDiastolica = presionDiastolica;
     }
 
     public int getRespiracion() {
@@ -56,9 +78,11 @@ public class SignosVitales {
     @Override
     public String toString(){
         return "Signos vitales{" +
+                "signos vitales: " + getIdSignosVitales() + 
                 "temperatura: " + getTemperatura() +
                 ", pulso: '" + getPulso() + '\'' +
-                ", presion: '" + getPresion() + '\'' +
+                ", presion Sistolica: '" + getPresionSistolica() + '\'' +
+                ", presion Diastolica: '" + getPresionDiastolica() + '\'' +
                 ", respiracion: " + getRespiracion() +
                 '}';
     }
