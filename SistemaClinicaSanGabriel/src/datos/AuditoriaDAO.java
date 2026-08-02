@@ -32,7 +32,7 @@ public class AuditoriaDAO {
     }
 
     public static ArrayList<Auditoria> listarAuditorias(){
-        String sql = "SELECT * FROM Auditorias";
+        String sql = "SELECT * FROM Auditorias ORDER BY idAuditoria DESC";
 
         ArrayList<Auditoria> lista = new ArrayList<>();
 
