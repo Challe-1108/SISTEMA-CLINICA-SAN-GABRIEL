@@ -105,7 +105,7 @@ public class IfrmGestionHorarios extends javax.swing.JInternalFrame {
             }
         });
 
-        cmbDiaSemana.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabados" }));
+        cmbDiaSemana.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" }));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Tabla de Horarios");
@@ -152,7 +152,7 @@ public class IfrmGestionHorarios extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(39, 39, 39)
                                 .addComponent(btnEliminarHorario)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                                 .addComponent(btnSalir)))))
                 .addContainerGap(79, Short.MAX_VALUE))
         );

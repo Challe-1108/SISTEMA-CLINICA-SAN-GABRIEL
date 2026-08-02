@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 public class CitaLOG {
 
     public static boolean registrarCita(Cita cita) {
-        // Validar formato de historia clinica (PAC- seguido de 4 digitos, ej: PAC-1095)
+        // Validar formato de historia clinica (8 digitos, ej: 72819023)
         if (!cita.getNumeroHistoriaClinica().matches("\\d{8}")) {
             JOptionPane.showMessageDialog(null,
                     "La historia clínica debe ser un número de 8 dígitos.",
@@ -186,10 +186,12 @@ public class CitaLOG {
         LocalTime horaCita = LocalTime.parse(hora);
 
         for (HorarioMedico h : horarios) {
+            System.out.println("no hay horarios");
             if (h.getDiaSemana().equalsIgnoreCase(diaSemana)) {
                 LocalTime inicio = LocalTime.parse(h.getHoraInicio());
                 LocalTime fin = LocalTime.parse(h.getHoraFin());
-                if (!horaCita.isBefore(inicio) && !horaCita.isAfter(fin)) {
+
+                if (!horaCita.isBefore(inicio) && horaCita.isBefore(fin)) {
                     return true;
                 }
             }

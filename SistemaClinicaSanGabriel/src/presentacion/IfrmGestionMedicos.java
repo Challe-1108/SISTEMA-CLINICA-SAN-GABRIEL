@@ -175,6 +175,7 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setText("Username");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -456,7 +457,7 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Medico medico = new Medico(
-        getCodigo(), UsuarioLOG.buscarUsuario(getUsername()).getIdUsuario(), getColegiatura(), getDni(), getNombres(),
+        getCodigo(), -1, getColegiatura(), getDni(), getNombres(),
         getApellidos(), getTelefono(), getCorreo(),
         obtenerEspecialidadesSeleccionadas()
         );
@@ -468,27 +469,6 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
             cargarTablaMedicos();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (getCodigo().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Seleccione un medico de la tabla primero.",
-            "Aviso", JOptionPane.WARNING_MESSAGE);
-        return;
-        }
-
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Esta seguro de eliminar este medico?", "Confirmar",
-            JOptionPane.YES_NO_OPTION);
-
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            boolean exito = MedicoLOG.eliminarMedico(getCodigo());
-            if (exito) {
-                JOptionPane.showMessageDialog(this, "Medico eliminado correctamente.");
-                limpiarCampos();
-                cargarTablaMedicos();
-            }
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         limpiarCampos();
@@ -516,6 +496,27 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
             this.dispose();
         }
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (getCodigo().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione un medico de la tabla primero.",
+                "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Esta seguro de eliminar este medico?", "Confirmar",
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            boolean exito = MedicoLOG.eliminarMedico(getCodigo());
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Medico eliminado correctamente.");
+                limpiarCampos();
+                cargarTablaMedicos();
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void limpiarCampos() {
         txtUsername.setText("");

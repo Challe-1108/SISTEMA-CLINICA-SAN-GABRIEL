@@ -239,8 +239,8 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
                 .setCodigo(generarCodigoCita())
                 .setMedico(medico)
                 .setNumeroHistoriaClinica(txtHistoriaClinica.getText())
-                .setFecha(txtFecha.getText())
-                .setHora(txtHora.getText())
+                .setFecha(txtFecha.getText().trim())
+                .setHora(txtHora.getText().trim())
                 .setObservaciones(txtObservaciones.getText())
                 .build();
 

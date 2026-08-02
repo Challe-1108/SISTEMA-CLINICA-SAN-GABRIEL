@@ -36,8 +36,8 @@ public class HorarioDAO {
     public static ArrayList<HorarioMedico> listarHorariosPorMedico(Medico medico){
         String sql = "SELECT * FROM Horarios_Medicos WHERE idMedico = ?";
         ArrayList<HorarioMedico> lista = new ArrayList<>();
-        Connection cn = ConexionBD.getInstancia().getConexion();
-        try(PreparedStatement ps = cn.prepareStatement(sql)){
+        try(Connection cn = ConexionBD.getInstancia().getConexion();
+                PreparedStatement ps = cn.prepareStatement(sql)){
             int idMedico = MedicoDAO.obtenerIdMedico(medico.getCodigo());
             ps.setInt(1, idMedico);
             ResultSet rs = ps.executeQuery();
