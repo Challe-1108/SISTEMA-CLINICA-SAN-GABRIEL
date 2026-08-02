@@ -18,10 +18,10 @@ public class CitaLOG {
 
     public static boolean registrarCita(Cita cita) {
         // Validar formato de historia clinica (PAC- seguido de 4 digitos, ej: PAC-1095)
-        if (!cita.getNumeroHistoriaClinica().matches("PAC-\\d{4}")) {
+        if (!cita.getNumeroHistoriaClinica().matches("\\d{8}")) {
             JOptionPane.showMessageDialog(null,
-                    "La historia clinica debe tener el formato (PAC- seguido de 4 digitos).",
-                    "Historia clinica invalida", JOptionPane.WARNING_MESSAGE);
+                    "La historia clínica debe ser un número de 8 dígitos.",
+                    "Historia clínica inválida", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         

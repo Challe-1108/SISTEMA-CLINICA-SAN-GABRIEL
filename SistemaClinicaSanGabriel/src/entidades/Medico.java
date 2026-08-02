@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Medico {
     private String codigo;
+    private int idUsuario;
     private String colegiatura;
     private String dni;
     private String nombres;
@@ -23,6 +24,7 @@ public class Medico {
 
     public Medico() {
         this.codigo = "NN";
+        this.idUsuario = -1;
         this.colegiatura = "NN";
         this.dni = "NN";
         this.nombres = "NN";
@@ -32,9 +34,10 @@ public class Medico {
         this.especialidades = new ArrayList<>();
     }
 
-    public Medico(String codigo, String colegiatura, String dni, String nombres,
+    public Medico(String codigo, int idUsuario, String colegiatura, String dni, String nombres,
             String apellidos, String telefono, String correo, List<Especialidad> especialidades) {
         this.codigo = codigo;
+        this.idUsuario = idUsuario;
         this.colegiatura = colegiatura;
         this.dni = dni;
         this.nombres = nombres;
@@ -118,5 +121,13 @@ public class Medico {
                "\n\tTelefono: " + getTelefono() +
                "\n\tCorreo: " + getCorreo() +
                "\n\tEspecialidades: " + getEspecialidades();
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

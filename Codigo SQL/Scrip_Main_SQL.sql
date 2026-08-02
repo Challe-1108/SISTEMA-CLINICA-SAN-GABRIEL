@@ -59,3 +59,57 @@ CREATE TABLE IF NOT EXISTS paciente (
     FOREIGN KEY (id_seguro) REFERENCES seguro_medico(id_seguro),
     FOREIGN KEY (id_apoderado) REFERENCES apoderado(id_apoderado)
 );
+
+-- MODULO MEDICOS Y CITAS
+
+CREATE TABLE Especialidades (
+    idEspecialidad INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(255)
+);
+
+CREATE TABLE Medicos (
+    idMedico INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT NOT NULL,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    colegiatura VARCHAR(20) NOT NULL UNIQUE,
+    dni VARCHAR(15) NOT NULL,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    correo VARCHAR(100),
+    
+    CONSTRAINT fk_Medicos_usuarios
+        FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE Horarios_Medicos (
+    idHorario INT AUTO_INCREMENT PRIMARY KEY,
+    idMedico INT NOT NULL,
+    diaSemana VARCHAR(15) NOT NULL,
+    horaInicio TIME NOT NULL,
+    horaFin TIME NOT NULL,
+    FOREIGN KEY (idMedico) REFERENCES Medicos(idMedico)
+);
+
+CREATE TABLE Citas (
+    idCita INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    idMedico INT NOT NULL,
+    numeroHistoriaClinica VARCHAR(20) NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'Programada',
+    observaciones VARCHAR(255),
+    FOREIGN KEY (idMedico) REFERENCES Medicos(idMedico)
+);
+
+CREATE TABLE Medico_Especialidad (
+    idMedico INT NOT NULL,
+    idEspecialidad INT NOT NULL,
+    PRIMARY KEY (idMedico, idEspecialidad),
+    FOREIGN KEY (idMedico) REFERENCES Medicos(idMedico),
+    FOREIGN KEY (idEspecialidad) REFERENCES Especialidades(idEspecialidad)
+);

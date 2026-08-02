@@ -188,6 +188,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .agregarCategoria("Medicos")
                     .agregarItem("Gestión de Medicos", e -> {abrirInternalFrame(new IfrmGestionMedicos());},
                             Rol.ADMINISTRADOR)
+                    .agregarItem("Gestionar Horarios", e -> {abrirInternalFrame(new IfrmGestionHorarios());},
+                            Rol.ADMINISTRADOR)
                     .agregarItem("Agenda Medica", e -> {abrirInternalFrame(new IfrmAgendaMedica());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.DIRECTOR_MEDICO)
 
@@ -198,13 +200,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
 
                 .agregarCategoria("Atencion Medica")
-                    .agregarItem("Registrar Consulta / Diagnostico", e -> {},
-                            Rol.MEDICO)
-                    .agregarItem("Registrar Signos Vitales", e -> {},
-                            Rol.MEDICO, Rol.ENFERMERA)
-                    .agregarItem("Emitir Receta Electronica", e -> {},
-                            Rol.MEDICO)
-                    .agregarItem("Solicitar Examenes", e -> {},
+                    .agregarItem("Formulario de Atencion Medica", e -> {abrirInternalFrame(new IfrmAtencionMedica());},
                             Rol.MEDICO)
 
                 .agregarCategoria("Laboratorio")

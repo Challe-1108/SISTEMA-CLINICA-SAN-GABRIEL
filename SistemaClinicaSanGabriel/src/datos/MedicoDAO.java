@@ -17,26 +17,30 @@ import java.util.ArrayList;
 public class MedicoDAO {
 
     public static boolean registrarMedico(Medico medico){
-        String sql = "INSERT INTO Medicos (codigo, colegiatura, dni, nombres, apellidos, telefono, correo) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Medicos (idUsuario, codigo, colegiatura, dni, nombres, apellidos, telefono, correo) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         int filasAfectadas = 0;
         Connection cn = ConexionBD.getInstancia().getConexion();
+
         try(PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
-            ps.setString(1, medico.getCodigo());
-            ps.setString(2, medico.getColegiatura());
-            ps.setString(3, medico.getDni());
-            ps.setString(4, medico.getNombres());
-            ps.setString(5, medico.getApellidos());
-            ps.setString(6, medico.getTelefono());
-            ps.setString(7, medico.getCorreo());
+            ps.setInt(1, medico.getIdUsuario());
+            ps.setString(2, medico.getCodigo());
+            ps.setString(3, medico.getColegiatura());
+            ps.setString(4, medico.getDni());
+            ps.setString(5, medico.getNombres());
+            ps.setString(6, medico.getApellidos());
+            ps.setString(7, medico.getTelefono());
+            ps.setString(8, medico.getCorreo());
+
             filasAfectadas = ps.executeUpdate();
 
             if(filasAfectadas > 0){
-                ResultSet rs = ps.getGeneratedKeys();
-                if(rs.next()){
-                    int idMedico = rs.getInt(1);
-                    for(Especialidad esp : medico.getEspecialidades()){
-                        asignarEspecialidad(idMedico, obtenerIdEspecialidadPorNombre(esp.getNombre()));
+                try(ResultSet rs = ps.getGeneratedKeys()){
+                    if(rs.next()){
+                        int idMedico = rs.getInt(1);
+                        for(Especialidad esp : medico.getEspecialidades()){
+                            asignarEspecialidad(idMedico, obtenerIdEspecialidadPorNombre(esp.getNombre()));
+                        }
                     }
                 }
             }

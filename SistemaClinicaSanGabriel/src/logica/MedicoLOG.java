@@ -14,6 +14,20 @@ import javax.swing.JOptionPane;
 public class MedicoLOG {
 
     public static boolean registrarMedico(Medico medico) {
+        if(UsuarioLOG.buscarUsuario(medico.getIdUsuario()) == null){
+            JOptionPane.showMessageDialog(null,
+                    "No esta registrado el Usuario",
+                    "Datos no validos", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if(UsuarioLOG.buscarUsuario(medico.getIdUsuario()).getRol() != Rol.MEDICO){
+            JOptionPane.showMessageDialog(null,
+                    "El usuario no tiene el rol de medico",
+                    "Datos no validos", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         if (medico.getCodigo().isEmpty() || medico.getColegiatura().isEmpty()
             || medico.getDni().isEmpty() || medico.getNombres().isEmpty()
             || medico.getApellidos().isEmpty()) {

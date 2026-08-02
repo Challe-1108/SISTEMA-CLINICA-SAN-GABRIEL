@@ -200,6 +200,7 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
             modelo.addElement(m.getCodigo() + " - " + m.getNombres() + " " + m.getApellidos());
         }
         cmbMedico.setModel(modelo);
+
     }
 
     private Medico obtenerMedicoSeleccionado() {
