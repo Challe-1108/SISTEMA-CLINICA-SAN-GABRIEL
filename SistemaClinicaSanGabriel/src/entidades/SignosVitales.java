@@ -121,4 +121,20 @@ public class SignosVitales {
     public void setImc(double imc) {
         this.imc = imc;
     }
+
+    public String getCategoriaIMC() {
+        double valor = this.imc;
+        if (valor < 18.5) return "Bajo peso";
+        if (valor < 25) return "Normal";
+        if (valor < 30) return "Sobrepeso";
+        return "Obesidad";
+    }
+
+    @Override
+    public String toString() {
+        return "SignosVitales{PAS=" + pas + ", PAD=" + pad
+                + ", Temp=" + temperatura + ", Peso=" + peso
+                + ", Talla=" + talla + ", FC=" + fc + ", FR=" + fr
+                + ", IMC=" + imc + '}';
+    }
 }

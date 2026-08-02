@@ -69,4 +69,15 @@ public class DetalleReceta {
     public void setIndicacion(String indicacion) {
         this.indicacion = indicacion;
     }
+
+    public boolean esCantidadValida() {
+        return this.cantidad > 0;
+    }
+
+    @Override
+    public String toString() {
+        return "DetalleReceta{idMedicamento=" + idMedicamento
+                + ", nombreMedicamento='" + nombreMedicamento + '\''
+                + ", cantidad=" + cantidad + '}';
+    }
 }

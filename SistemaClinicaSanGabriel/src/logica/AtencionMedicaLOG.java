@@ -1,7 +1,9 @@
 package logica;
 
 import datos.AtencionMedicaDAO;
+import datos.CitaDAO;
 import entidades.AtencionMedica;
+import entidades.Cita;
 import entidades.Diagnostico;
 import entidades.SignosVitales;
 
@@ -17,12 +19,27 @@ public class AtencionMedicaLOG {
             return false;
         }
 
-        // Validación opcional/obligatoria según si la atención siempre viene ligada a un código de cita
-        if (atencion.getCodigoCita() != null && !atencion.getCodigoCita().isEmpty()) {
-            if (!atencion.getCodigoCita().matches("CIT-\\d{4}")) {
-                JOptionPane.showMessageDialog(null, "El código de cita no tiene el formato válido (ej: CIT-0001).", "Dato Incorrecto", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
+        // RN-23: validar que el código de cita exista y esté en estado programada
+        String codigoCita = atencion.getCodigoCita();
+        if (codigoCita == null || codigoCita.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El código de cita es obligatorio.", "Dato Incorrecto", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (!codigoCita.matches("CIT-\\d{4}")) {
+            JOptionPane.showMessageDialog(null, "El código de cita no tiene el formato válido (ej: CIT-0001).", "Dato Incorrecto", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        Cita cita = CitaDAO.buscarPorCodigo(codigoCita);
+        if (cita == null) {
+            JOptionPane.showMessageDialog(null, "No existe una cita registrada con el código " + codigoCita + ".", "Cita no encontrada", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (!"Programada".equalsIgnoreCase(cita.getEstado())) {
+            JOptionPane.showMessageDialog(null, "La cita " + codigoCita + " no está en estado Programada (estado actual: " + cita.getEstado() + "). No se puede registrar la atención.", "Cita no válida", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
 
         if (atencion.getMotivoConsulta() == null || atencion.getMotivoConsulta().trim().isEmpty()) {

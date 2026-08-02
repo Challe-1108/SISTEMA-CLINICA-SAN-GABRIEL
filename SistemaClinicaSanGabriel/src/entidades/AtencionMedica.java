@@ -18,6 +18,43 @@ public class AtencionMedica {
         this.listaDiagnosticos = new ArrayList<>();
     }
 
+    public AtencionMedica(String codigoCita, String motivoConsulta, String antecedentes) {
+        this();
+        this.codigoCita = codigoCita;
+        this.motivoConsulta = motivoConsulta;
+        this.antecedentes = antecedentes;
+    }
+
+    public void agregarDiagnostico(Diagnostico diagnostico) {
+        if (diagnostico != null) {
+            this.listaDiagnosticos.add(diagnostico);
+        }
+    }
+
+    public void agregarMedicamentoAReceta(int idMedicamento, String nombreMedicamento, int cantidad, String indicacion) {
+        if (this.receta == null) {
+            this.receta = new RecetaMedica();
+        }
+        this.receta.agregarDetalle(new DetalleReceta(idMedicamento, nombreMedicamento, cantidad, indicacion));
+    }
+
+    public boolean tieneDiagnosticos() {
+        return this.listaDiagnosticos != null && !this.listaDiagnosticos.isEmpty();
+    }
+
+    public boolean tieneReceta() {
+        return this.receta != null && this.receta.tieneDetalles();
+    }
+
+    @Override
+    public String toString() {
+        return "AtencionMedica{idAtencion=" + idAtencion
+                + ", codigoCita='" + codigoCita + '\''
+                + ", motivoConsulta='" + motivoConsulta + '\''
+                + ", diagnostico(s)=" + (listaDiagnosticos == null ? 0 : listaDiagnosticos.size())
+                + ", receta=" + (receta != null ? "Si" : "No") + '}';
+    }
+
     public int getIdAtencion() {
         return idAtencion;
     }

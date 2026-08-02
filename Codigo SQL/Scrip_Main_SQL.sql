@@ -138,6 +138,8 @@ CREATE TABLE atenciones_medicas (
     fechaAtencion DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+select * from atenciones_medicas;
+
 CREATE TABLE signos_vitales (
     idSignos INT AUTO_INCREMENT PRIMARY KEY,
     idAtencion INT NOT NULL,

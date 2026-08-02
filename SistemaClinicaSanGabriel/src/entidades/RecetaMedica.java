@@ -15,7 +15,21 @@ public class RecetaMedica {
 
     // Método helper para agregar un renglón de medicamento
     public void agregarDetalle(DetalleReceta detalle) {
-        this.detalles.add(detalle);
+        if (detalle != null) {
+            this.detalles.add(detalle);
+        }
+    }
+
+    public void agregarMedicamento(int idMedicamento, String nombreMedicamento, int cantidad, String indicacion) {
+        this.detalles.add(new DetalleReceta(idMedicamento, nombreMedicamento, cantidad, indicacion));
+    }
+
+    public boolean tieneDetalles() {
+        return this.detalles != null && !this.detalles.isEmpty();
+    }
+
+    public int getCantidadMedicamentos() {
+        return this.detalles == null ? 0 : this.detalles.size();
     }
 
     // --- GETTERS Y SETTERS ---
@@ -42,5 +56,12 @@ public class RecetaMedica {
 
     public void setDetalles(List<DetalleReceta> detalles) {
         this.detalles = detalles;
+    }
+
+    @Override
+    public String toString() {
+        return "RecetaMedica{idReceta=" + idReceta
+                + ", idAtencion=" + idAtencion
+                + ", medicamentos=" + getCantidadMedicamentos() + '}';
     }
 }

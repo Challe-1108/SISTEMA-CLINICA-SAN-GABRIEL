@@ -1,6 +1,7 @@
 package presentacion;
 
 import entidades.*;
+import datos.MedicamentoDAO;
 import datos.PacienteDAO;
 import logica.AtencionMedicaLOG;
 import logica.HistorialClinicoBuilder;
@@ -10,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.List;
 
 public class IfrmAtencionMedica extends JInternalFrame {
 
@@ -28,7 +30,8 @@ public class IfrmAtencionMedica extends JInternalFrame {
     private DefaultTableModel modelDiagnosticos;
 
     // Componentes Receta Médica
-    private JTextField txtMedId, txtMedNombre, txtMedCantidad, txtMedIndicacion;
+    private JComboBox<Medicamento> cbxMedicamentos;
+    private JTextField txtMedCantidad, txtMedIndicacion;
     private JTable tblReceta;
     private DefaultTableModel modelReceta;
 
@@ -37,6 +40,7 @@ public class IfrmAtencionMedica extends JInternalFrame {
         setSize(950, 820);
 
         iniciarComponentes();
+        cargarMedicamentos();
     }
 
     private void iniciarComponentes() {
@@ -156,17 +160,21 @@ public class IfrmAtencionMedica extends JInternalFrame {
         pnlReceta.setBorder(BorderFactory.createTitledBorder("4. Receta Médica"));
 
         JPanel pnlRecetaInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        txtMedId = new JTextField(4);
-        txtMedNombre = new JTextField(15);
+        cbxMedicamentos = new JComboBox<>();
+        cbxMedicamentos.setPreferredSize(new Dimension(280, 25));
         txtMedCantidad = new JTextField(4);
-        txtMedIndicacion = new JTextField(15);
+        txtMedIndicacion = new JTextField(18);
         JButton btnAgregarMed = new JButton("Agregar");
+        JButton btnQuitarMed = new JButton("Quitar");
 
-        pnlRecetaInputs.add(new JLabel("ID Med:")); pnlRecetaInputs.add(txtMedId);
-        pnlRecetaInputs.add(new JLabel("Medicamento:")); pnlRecetaInputs.add(txtMedNombre);
-        pnlRecetaInputs.add(new JLabel("Cant:")); pnlRecetaInputs.add(txtMedCantidad);
-        pnlRecetaInputs.add(new JLabel("Indicación:")); pnlRecetaInputs.add(txtMedIndicacion);
+        pnlRecetaInputs.add(new JLabel("Medicamento:"));
+        pnlRecetaInputs.add(cbxMedicamentos);
+        pnlRecetaInputs.add(new JLabel("Cant:"));
+        pnlRecetaInputs.add(txtMedCantidad);
+        pnlRecetaInputs.add(new JLabel("Indicación:"));
+        pnlRecetaInputs.add(txtMedIndicacion);
         pnlRecetaInputs.add(btnAgregarMed);
+        pnlRecetaInputs.add(btnQuitarMed);
 
         modelReceta = new DefaultTableModel(new String[]{"ID Med", "Medicamento", "Cantidad", "Indicación"}, 0);
         tblReceta = new JTable(modelReceta);
@@ -176,22 +184,8 @@ public class IfrmAtencionMedica extends JInternalFrame {
         tblReceta.getColumnModel().getColumn(2).setPreferredWidth(60);
         tblReceta.getColumnModel().getColumn(3).setPreferredWidth(400);
 
-        btnAgregarMed.addActionListener(e -> {
-            if (!txtMedId.getText().trim().isEmpty() && !txtMedCantidad.getText().trim().isEmpty()) {
-                modelReceta.addRow(new Object[]{
-                        txtMedId.getText().trim(),
-                        txtMedNombre.getText().trim(),
-                        txtMedCantidad.getText().trim(),
-                        txtMedIndicacion.getText().trim()
-                });
-                txtMedId.setText("");
-                txtMedNombre.setText("");
-                txtMedCantidad.setText("");
-                txtMedIndicacion.setText("");
-            } else {
-                JOptionPane.showMessageDialog(this, "Ingrese el ID y la Cantidad del medicamento.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            }
-        });
+        btnAgregarMed.addActionListener(e -> agregarMedicamentoAReceta());
+        btnQuitarMed.addActionListener(e -> quitarMedicamentoDeReceta());
 
         pnlReceta.add(pnlRecetaInputs, BorderLayout.NORTH);
         pnlReceta.add(new JScrollPane(tblReceta), BorderLayout.CENTER);
@@ -214,6 +208,70 @@ public class IfrmAtencionMedica extends JInternalFrame {
         btnGuardar.setFont(new Font("SansSerif", Font.BOLD, 14));
         btnGuardar.addActionListener(e -> guardarAtencion());
         add(btnGuardar, BorderLayout.SOUTH);
+    }
+
+    private void cargarMedicamentos() {
+        cbxMedicamentos.removeAllItems();
+        try {
+            List<Medicamento> lista = new MedicamentoDAO().listar();
+            for (Medicamento m : lista) {
+                cbxMedicamentos.addItem(m);
+            }
+            if (lista.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay medicamentos activos registrados en el inventario.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los medicamentos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void agregarMedicamentoAReceta() {
+        Medicamento medicamento = (Medicamento) cbxMedicamentos.getSelectedItem();
+        if (medicamento == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un medicamento de la lista.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String cantTexto = txtMedCantidad.getText().trim();
+        if (cantTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese la cantidad del medicamento.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            int cantidad = Integer.parseInt(cantTexto);
+            if (cantidad <= 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0 (RN-29).", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (cantidad > medicamento.getStockActual()) {
+                JOptionPane.showMessageDialog(this,
+                        "Stock insuficiente. Disponible: " + medicamento.getStockActual() + " (RN-28).",
+                        "Sin stock", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero válido.", "Error de Formato", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        modelReceta.addRow(new Object[]{
+                medicamento.getIdMedicamento(),
+                medicamento.getNombre(),
+                cantTexto,
+                txtMedIndicacion.getText().trim()
+        });
+        txtMedCantidad.setText("");
+        txtMedIndicacion.setText("");
+        cbxMedicamentos.setSelectedIndex(0);
+    }
+
+    private void quitarMedicamentoDeReceta() {
+        int fila = tblReceta.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione una fila de la receta para quitar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        modelReceta.removeRow(fila);
     }
 
     private void buscarPacientePorHistoriaClinica() {

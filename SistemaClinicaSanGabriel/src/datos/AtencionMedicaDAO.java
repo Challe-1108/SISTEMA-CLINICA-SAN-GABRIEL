@@ -17,7 +17,7 @@ public class AtencionMedicaDAO {
         String sqlAtencion = "INSERT INTO atenciones_medicas (codigoCita, motivoConsulta, antecedentes, planTratamiento, observaciones) VALUES (?, ?, ?, ?, ?)";
         String sqlSignos = "INSERT INTO signos_vitales (idAtencion, pas, pad, temperatura, peso, talla, fc, fr, imc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlDiag = "INSERT INTO diagnosticos_atencion (idAtencion, descripcion, tipo) VALUES (?, ?, ?)";
-        String sqlUpdateCita = "UPDATE citas SET estado = 'Atendida' WHERE codigoCita = ?";
+        String sqlUpdateCita = "UPDATE Citas SET estado = 'Atendida' WHERE codigo = ?";
 
         Connection cn = null;
 

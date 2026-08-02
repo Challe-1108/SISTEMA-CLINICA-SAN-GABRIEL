@@ -39,6 +39,16 @@ public class HistorialClinicoBuilder {
         return this;
     }
 
+    public HistorialClinicoBuilder agregarMedicamento(int idMedicamento, String nombreMedicamento, int cantidad, String indicacion) {
+        RecetaMedica receta = this.atencion.getReceta();
+        if (receta == null) {
+            receta = new RecetaMedica();
+            this.atencion.setReceta(receta);
+        }
+        receta.agregarMedicamento(idMedicamento, nombreMedicamento, cantidad, indicacion);
+        return this;
+    }
+
     public AtencionMedica build() {
         return this.atencion;
     }

@@ -1,6 +1,10 @@
 package entidades;
 
 public class Diagnostico {
+
+    public static final String TIPO_PRESUNTIVO = "Presuntivo";
+    public static final String TIPO_DEFINITIVO = "Definitivo";
+
     private int idDiagnostico;
     private int idAtencion;
     private String descripcion;
@@ -46,5 +50,12 @@ public class Diagnostico {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    @Override
+    public String toString() {
+        return "Diagnostico{idDiagnostico=" + idDiagnostico
+                + ", descripcion='" + descripcion + '\''
+                + ", tipo='" + tipo + '\'' + '}';
     }
 }
