@@ -11,6 +11,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import datos.SesionUsuario;
 
 public class PacienteLOG {
 

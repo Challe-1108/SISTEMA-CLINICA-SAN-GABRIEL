@@ -21,4 +21,3 @@ Thumbs.db
 SistemaClinicaSanGabriel/src/datos/AuditoriaDAO.java
 SistemaClinicaSanGabriel/src/logica/AuditoriaLOG.java
 SistemaClinicaSanGabriel/src/entidades/Auditoria.java
-SistemaClinicaSanGabriel/src/logica/SesionUsuario.java
