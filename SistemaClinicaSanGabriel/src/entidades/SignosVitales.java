@@ -1,89 +1,55 @@
 package entidades;
 
 public class SignosVitales {
-    
-    private int idSignosVitales;
-    private float temperatura;
-    private int pulso;
-    private int presionSistolica;
-    private int presionDiastolica;
-    private int respiracion;
+    private int idSignos;
+    private int idAtencion;
+    private double presionArterialSistolica;
+    private double presionArterialDiastolica;
+    private double temperatura;
+    private double peso;
+    private double talla;
+    private int frecuenciaCardiaca;
+    private int frecuenciaRespiratoria;
+    private double imc;
 
-    public SignosVitales(int idSignosVitales, float temperatura, int pulso, int presionSistolica, int presionDiastolica, int respiracion) {
-        this.idSignosVitales = idSignosVitales;
-        this.temperatura = temperatura;
-        this.pulso = pulso;
-        this.presionSistolica = presionSistolica;
-        this.presionDiastolica = presionDiastolica;
-        this.respiracion = respiracion;
-    }
-    
-    public SignosVitales(){
-        idSignosVitales = 000;
-        temperatura = 36.5f;
-        pulso = 60;
-        presionSistolica = 80;
-        presionDiastolica = 50;
-        respiracion = 16;
-    }
-    
-    public int getIdSignosVitales(){
-        return idSignosVitales;
-    }
-    
-    public void setIdSignosVitales(){
-        this.idSignosVitales = idSignosVitales;
+    public SignosVitales() {}
+
+    public SignosVitales(double pas, double pad, double temp, double peso, double talla, int fc, int fr) {
+        this.presionArterialSistolica = pas;
+        this.presionArterialDiastolica = pad;
+        this.temperatura = temp;
+        this.peso = peso;
+        this.talla = talla;
+        this.frecuenciaCardiaca = fc;
+        this.frecuenciaRespiratoria = fr;
+        calcularIMC();
     }
 
-    public float getTemperatura() {
-        return temperatura;
+    public void calcularIMC() {
+        if (this.talla > 0) {
+            double tallaMetros = this.talla / 100.0;
+            this.imc = Math.round((this.peso / (tallaMetros * tallaMetros)) * 100.0) / 100.0;
+        }
     }
 
-    public void setTemperatura(float temperatura) {
-        this.temperatura = temperatura;
-    }
-
-    public int getPulso() {
-        return pulso;
-    }
-
-    public void setPulso(int pulso) {
-        this.pulso = pulso;
-    }
-
-    public int getPresionSistolica() {
-        return presionSistolica;
-    }
-
-    public void setPresionSistolica(int presionSistolica) {
-        this.presionSistolica = presionSistolica;
-    }
-    
-    public int getPresionDiastolica() {
-        return presionDiastolica;
-    }
-
-    public void setPresionDiastolica(int presionDiastolica) {
-        this.presionDiastolica = presionDiastolica;
-    }
-
-    public int getRespiracion() {
-        return respiracion;
-    }
-
-    public void setRespiracion(int respiracion) {
-        this.respiracion = respiracion;
-    }
-    
-    @Override
-    public String toString(){
-        return "Signos vitales{" +
-                "signos vitales: " + getIdSignosVitales() + 
-                "temperatura: " + getTemperatura() +
-                ", pulso: '" + getPulso() + '\'' +
-                ", presion Sistolica: '" + getPresionSistolica() + '\'' +
-                ", presion Diastolica: '" + getPresionDiastolica() + '\'' +
-                ", respiracion: " + getRespiracion() +
-                '}';
-    }
+    public int getIdSignos() { return idSignos; }
+    public void setIdSignos(int idSignos) { this.idSignos = idSignos; }
+    public int getIdAtencion() { return idAtencion; }
+    public void setIdAtencion(int idAtencion) { this.idAtencion = idAtencion; }
+    public double getPresionArterialSistolica() { return presionArterialSistolica; }
+    public void setPresionArterialSistolica(double pas) { this.presionArterialSistolica = pas; }
+    public double getPresionArterialDiastolica() { return presionArterialDiastolica; }
+    public void setPresionArterialDiastolica(double pad) { this.presionArterialDiastolica = pad; }
+    public double getTemperatura() { return temperatura; }
+    public void setTemperatura(double temperatura) { this.temperatura = temperatura; }
+    public double getPeso() { return peso; }
+    public void setPeso(double peso) { this.peso = peso; calcularIMC(); }
+    public double getTalla() { return talla; }
+    public void setTalla(double talla) { this.talla = talla; calcularIMC(); }
+    public int getFrecuenciaCardiaca() { return frecuenciaCardiaca; }
+    public void setFrecuenciaCardiaca(int fc) { this.frecuenciaCardiaca = fc; }
+    public int getFrecuenciaRespiratoria() { return frecuenciaRespiratoria; }
+    public void setFrecuenciaRespiratoria(int fr) { this.frecuenciaRespiratoria = fr; }
+    public double getImc() { return imc; }
+    public void setImc(double imc) { this.imc = imc; }
 }
