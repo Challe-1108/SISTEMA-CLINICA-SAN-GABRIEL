@@ -17,11 +17,21 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import entidades.Paciente;
+import entidades.SeguroMedico;
+import entidades.Apoderado;
 import logica.PacienteLOG;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JDesktopPane;
 public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
 
     private Paciente pacienteEncontrado;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JTextField txtSeguroResultado;
+    private javax.swing.JTextField txtApoderadoResultado;
+    private javax.swing.JTextField txtHistoriaClinicaResultado;
+    private javax.swing.JCheckBox chkIncluirInactivos;
 
     public IfrmBuscarPaciente() {
         btnSalir = new javax.swing.JButton();
@@ -31,7 +41,32 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
                 dispose();
             }
         });
+
+        btnEditar = new javax.swing.JButton();
+        btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        txtSeguroResultado = new javax.swing.JTextField();
+        txtSeguroResultado.setEditable(false);
+
+        txtApoderadoResultado = new javax.swing.JTextField();
+        txtApoderadoResultado.setEditable(false);
+
+        txtHistoriaClinicaResultado = new javax.swing.JTextField();
+        txtHistoriaClinicaResultado.setEditable(false);
+
+        chkIncluirInactivos = new javax.swing.JCheckBox("Incluir inactivos");
+        chkIncluirInactivos.setToolTipText("Marcar para buscar también pacientes inactivos");
+
         initComponents();
+
+        // Agregar componentes dinámicos al layout después de initComponents
+        agregarComponentesDinamicos();
     }
     private void btnBuscarPorDniActionPerformed(java.awt.event.ActionEvent evt) {
         String dni = txtBusquedaDni.getText().trim();
@@ -41,7 +76,8 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        pacienteEncontrado = PacienteLOG.buscarPorDni(dni);
+        boolean soloActivos = !chkIncluirInactivos.isSelected();
+        pacienteEncontrado = PacienteLOG.buscarPorDni(dni, soloActivos);
         mostrarDatosEnFormulario(pacienteEncontrado);
     }
 
@@ -53,7 +89,8 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        java.util.List<Paciente> resultados = PacienteLOG.buscarPorNombreOApellido(texto);
+        boolean soloActivos = !chkIncluirInactivos.isSelected();
+        java.util.List<Paciente> resultados = PacienteLOG.buscarPorNombreOApellido(texto, soloActivos);
         // Se asume una tabla (tblResultados) con su respectivo DefaultTableModel para mostrar la lista
         cargarResultadosEnTabla(resultados);
     }
@@ -66,7 +103,8 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        pacienteEncontrado = PacienteLOG.buscarPorHistoriaClinica(historia);
+        boolean soloActivos = !chkIncluirInactivos.isSelected();
+        pacienteEncontrado = PacienteLOG.buscarPorHistoriaClinica(historia, soloActivos);
         mostrarDatosEnFormulario(pacienteEncontrado);
     }
 
@@ -75,6 +113,8 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this,
                     "No se encontro ningun paciente con esos datos.\nVerifique el DNI o numero de historia clinica e intente nuevamente.",
                     "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+            btnEditar.setEnabled(false);
+            limpiarFormularioResultado();
             return;
         }
         txtNombresResultado.setText(paciente.getNombres());
@@ -82,6 +122,57 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         txtDireccionResultado.setText(paciente.getDireccion());
         txtTelefonoResultado.setText(paciente.getTelefono());
         txtEstadoResultado.setText(paciente.isEstado() ? "Activo" : "Inactivo");
+        txtHistoriaClinicaResultado.setText(paciente.getNumeroHistoriaClinica());
+
+        // Seguro
+        SeguroMedico seguro = paciente.getSeguroMedico();
+        if (seguro != null) {
+            txtSeguroResultado.setText(seguro.getCompania() + " - " + seguro.getTipoCobertura() + " (Poliza: " + seguro.getNumeroPoliza() + ")");
+        } else {
+            txtSeguroResultado.setText("Sin seguro");
+        }
+
+        // Apoderado
+        Apoderado apoderado = paciente.getApoderado();
+        if (apoderado != null) {
+            txtApoderadoResultado.setText(apoderado.getNombres() + " " + apoderado.getApellidos() + " - " + apoderado.getParentesco() + " (DNI: " + apoderado.getDni() + ")");
+        } else {
+            txtApoderadoResultado.setText("Sin apoderado");
+        }
+
+        btnEditar.setEnabled(true); // Siempre habilitado: activos se editan/desactivan, inactivos se activan
+    }
+
+    private void limpiarFormularioResultado() {
+        txtNombresResultado.setText("");
+        txtApellidosResultado.setText("");
+        txtDireccionResultado.setText("");
+        txtTelefonoResultado.setText("");
+        txtEstadoResultado.setText("");
+        txtHistoriaClinicaResultado.setText("");
+        txtSeguroResultado.setText("");
+        txtApoderadoResultado.setText("");
+    }
+
+    private void abrirEditarPaciente(Paciente paciente) {
+        if (paciente == null) return;
+        IfrmEditarPaciente frmEditar = new IfrmEditarPaciente(paciente);
+        JDesktopPane desktop = getDesktopPane();
+        if (desktop != null) {
+            desktop.add(frmEditar);
+            frmEditar.setVisible(true);
+            try {
+                frmEditar.setSelected(true);
+            } catch (java.beans.PropertyVetoException ignored) {
+            }
+        }
+        dispose(); // Cierra el buscador al abrir el editor
+    }
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
+        if (pacienteEncontrado != null) {
+            abrirEditarPaciente(pacienteEncontrado);
+        }
     }
 
     private void cargarResultadosEnTabla(java.util.List<Paciente> pacientes) {
@@ -92,7 +183,7 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        String[] columnas = {"DNI", "Nombres", "Apellidos", "Telefono", "Estado"};
+        String[] columnas = {"DNI", "Historia Clínica", "Nombres", "Apellidos", "Teléfono", "Seguro", "Apoderado", "Estado"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -101,11 +192,26 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         };
 
         for (Paciente p : pacientes) {
+            String seguroInfo = "Sin seguro";
+            SeguroMedico seguro = p.getSeguroMedico();
+            if (seguro != null) {
+                seguroInfo = seguro.getCompania() + " (" + seguro.getTipoCobertura() + ")";
+            }
+
+            String apoderadoInfo = "Sin apoderado";
+            Apoderado apoderado = p.getApoderado();
+            if (apoderado != null) {
+                apoderadoInfo = apoderado.getNombres() + " " + apoderado.getApellidos() + " (" + apoderado.getParentesco() + ")";
+            }
+
             Object[] fila = {
                 p.getDni(),
+                p.getNumeroHistoriaClinica(),
                 p.getNombres(),
                 p.getApellidos(),
                 p.getTelefono(),
+                seguroInfo,
+                apoderadoInfo,
                 p.isEstado() ? "Activo" : "Inactivo"
             };
             modelo.addRow(fila);
@@ -118,7 +224,30 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
         JDialog dialogo = new JDialog((java.awt.Frame) null, "Resultados de búsqueda", true);
         dialogo.setLayout(new BorderLayout());
         dialogo.add(scrollPane, BorderLayout.CENTER);
-        dialogo.setSize(600, 300);
+
+        // Capturar el estado del checkbox al momento de abrir el diálogo
+        final boolean soloActivos = !chkIncluirInactivos.isSelected();
+
+        // Botón Editar en el diálogo
+        javax.swing.JButton btnEditarDialogo = new javax.swing.JButton("Editar");
+        btnEditarDialogo.addActionListener(e -> {
+            int fila = tabla.getSelectedRow();
+            if (fila >= 0) {
+                String dni = (String) modelo.getValueAt(fila, 0);
+                Paciente paciente = PacienteLOG.buscarPorDni(dni, soloActivos);
+                if (paciente != null) {
+                    dialogo.dispose();
+                    abrirEditarPaciente(paciente);
+                }
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(dialogo, "Seleccione un paciente de la lista.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        javax.swing.JPanel panelBotones = new javax.swing.JPanel();
+        panelBotones.add(btnEditarDialogo);
+        dialogo.add(panelBotones, BorderLayout.SOUTH);
+
+        dialogo.setSize(900, 350);
         dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
     }
@@ -406,6 +535,134 @@ public class IfrmBuscarPaciente extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void agregarComponentesDinamicos() {
+        javax.swing.GroupLayout jPanel4Layout = (javax.swing.GroupLayout) jPanel4.getLayout();
+        javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getContentPane().getLayout();
+
+        // 1) Crear labels para historia clinica, seguro y apoderado
+        javax.swing.JLabel lblHistoriaClinica = new javax.swing.JLabel("Historia Clínica");
+        javax.swing.JLabel lblSeguro = new javax.swing.JLabel("Seguro Medico");
+        javax.swing.JLabel lblApoderado = new javax.swing.JLabel("Apoderado");
+
+        // 2) Agregar al final de jPanel4 (después de Estado)
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblHistoriaClinica, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblSeguro, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblApoderado, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtEstadoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTelefonoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDireccionResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtApellidosResultado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                        .addComponent(txtNombresResultado, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(txtHistoriaClinicaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSeguroResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtApoderadoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(475, 475, 475))
+        );
+
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(28, 28, 28)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtNombresResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtApellidosResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtDireccionResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtTelefonoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtEstadoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblHistoriaClinica)
+                    .addComponent(txtHistoriaClinicaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSeguro)
+                    .addComponent(txtSeguroResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblApoderado)
+                    .addComponent(txtApoderadoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        // 3) Agregar botón Editar y checkbox al layout principal (junto a btnSalir)
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(75, 75, 75))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chkIncluirInactivos)
+                .addGap(18, 18, 18)
+                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+        );
+
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkIncluirInactivos))
+                .addContainerGap())
+        );
+
+        pack();
+    }
 
     private void txtBusquedaDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaDniActionPerformed
         // TODO add your handling code here:

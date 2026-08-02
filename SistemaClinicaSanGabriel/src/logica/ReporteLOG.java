@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class ReporteLOG {
-    
+
     public static ArrayList<ReporteAtencion> obtenerReportePacientesPorEspecialidad() {
 
         ArrayList<ReporteAtencion> lista = ReportesDAO.reportePacientesPorEspecialidad();
@@ -34,5 +34,21 @@ public class ReporteLOG {
         }
 
         return lista;
+    }
+
+    public static double obtenerTotalIngresos() {
+        return ReportesDAO.obtenerTotalIngresos();
+    }
+
+    public static int obtenerCantidadPagos() {
+        return ReportesDAO.obtenerCantidadPagos();
+    }
+
+    public static int obtenerCantidadBoletas() {
+        return ReportesDAO.obtenerCantidadBoletas();
+    }
+
+    public static int obtenerCantidadFacturas() {
+        return ReportesDAO.obtenerCantidadFacturas();
     }
 }

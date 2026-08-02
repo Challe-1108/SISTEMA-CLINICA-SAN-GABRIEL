@@ -182,31 +182,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .agregarCategoria("Pacientes")
                     .agregarItem("Registrar Paciente", e -> {abrirInternalFrame(new IfrmRegistroPaciente());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
-                    .agregarItem("Modificar Paciente", e -> {},
-                            Rol.ADMINISTRADOR, Rol.RECEPCIONISTA)
                     .agregarItem("Buscar Paciente", e -> {abrirInternalFrame(new IfrmBuscarPaciente());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.MEDICO, Rol.ENFERMERA, Rol.CAJERO)
-                    .agregarItem("Seguros Medicos", e -> {},
-                            Rol.CAJERO, Rol.RECEPCIONISTA)
-                    .agregarItem("Historial Clinico", e -> {},
-                            Rol.MEDICO, Rol.DIRECTOR_MEDICO, Rol.ENFERMERA)
 
                 .agregarCategoria("Medicos")
-                    .agregarItem("Gestión de Medicos", e -> {},
+                    .agregarItem("Gestión de Medicos", e -> {abrirInternalFrame(new IfrmGestionMedicos());},
                             Rol.ADMINISTRADOR)
-                    .agregarItem("Horarios y Turnos", e -> {},
-                            Rol.ADMINISTRADOR)
-                    .agregarItem("Agenda Medica", e -> {},
+                    .agregarItem("Agenda Medica", e -> {abrirInternalFrame(new IfrmAgendaMedica());},
                             Rol.ADMINISTRADOR, Rol.RECEPCIONISTA, Rol.DIRECTOR_MEDICO)
 
                 .agregarCategoria("Citas")
-                    .agregarItem("Programar Cita", e -> {},
+                    .agregarItem("Programar Cita", e -> {abrirInternalFrame(new IfrmAgendarCita());},
                             Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
-                    .agregarItem("Consultar Disponibilidad", e -> {},
-                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR, Rol.MEDICO)
-                    .agregarItem("Reprogramar Cita", e -> {},
-                            Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
-                    .agregarItem("Cancelar Cita", e -> {},
+                    .agregarItem("Reprogramar Cita", e -> {abrirInternalFrame(new IfrmReprogramarCita());},
                             Rol.RECEPCIONISTA, Rol.ADMINISTRADOR)
 
                 .agregarCategoria("Atencion Medica")

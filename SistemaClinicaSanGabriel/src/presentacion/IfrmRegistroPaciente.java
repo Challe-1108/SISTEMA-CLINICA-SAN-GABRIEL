@@ -428,35 +428,39 @@ public class IfrmRegistroPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtParentescoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-            try {
-                String dni = txtDni.getText().trim();
-                String nombres = txtNombres.getText().trim();
-                String apellidos = txtApellidos.getText().trim();
-                String fechaNacimientoStr = txtFechaNacimiento.getText().trim();
-                LocalDate fechaNacimiento;
+        try {
+            String dni = txtDni.getText().trim();
+            String nombres = txtNombres.getText().trim();
+            String apellidos = txtApellidos.getText().trim();
+            String fechaNacimientoStr = txtFechaNacimiento.getText().trim();
+            LocalDate fechaNacimiento = null;
+            
+            if (!fechaNacimientoStr.isEmpty()) {
                 try {
                     fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
                 } catch (Exception exFecha) {
                     JOptionPane.showMessageDialog(this,
-                            "Formato de fecha invalido.\nUse: AAAA-MM-DD (ejemplo: 1995-03-21)",
-                            "Fecha invalida", JOptionPane.WARNING_MESSAGE);
+                            "Formato de fecha inválido.\nUse: AAAA-MM-DD (ejemplo: 1995-03-21)",
+                            "Fecha inválida", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                String sexo = txtSexo.getText().trim();
-                String telefono = txtTelefono.getText().trim();
-                String direccion = txtDireccion.getText().trim();
-                String numeroHistoriaClinica = txtNumeroHistoriaClinica.getText().trim();
+            }
+            
+            String sexo = txtSexo.getText().trim();
+            String telefono = txtTelefono.getText().trim();
+            String direccion = txtDireccion.getText().trim();
+            String numeroHistoriaClinica = txtNumeroHistoriaClinica.getText().trim();
 
-                Paciente.Builder builder = new Paciente.Builder()
-                        .dni(dni)
-                        .nombres(nombres)
-                        .apellidos(apellidos)
-                        .fechaNacimiento(fechaNacimiento)
-                        .sexo(sexo)
-                        .telefono(telefono)
-                        .direccion(direccion)
-                        .numeroHistoriaClinica(numeroHistoriaClinica)
-                        .estado(true);
+            Paciente.Builder builder = new Paciente.Builder()
+                    .dni(dni)
+                    .nombres(nombres)
+                    .apellidos(apellidos)
+                    .fechaNacimiento(fechaNacimiento)
+                    .sexo(sexo)
+                    .telefono(telefono)
+                    .direccion(direccion)
+                    .numeroHistoriaClinica(numeroHistoriaClinica)
+                    .estado(true);
 
                 // Datos de seguro médico (opcional, HU-09)
                 if (!txtCompaniaSeguro.getText().trim().isEmpty()) {

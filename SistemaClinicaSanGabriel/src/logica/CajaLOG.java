@@ -4,9 +4,9 @@ package logica;
  *
  * @author Cristopher
  */
-
 import datos.ComprobanteDAO;
 import datos.PagoDAO;
+import datos.SesionUsuario;
 import entidades.Comprobante;
 import entidades.Pago;
 import java.time.LocalDate;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class CajaLOG {
-   
+
     public static boolean registrarPago(Pago pago, String tipoComprobante) {
 
         if (!validarPago(pago, tipoComprobante)) {
@@ -32,6 +32,7 @@ public class CajaLOG {
         boolean exito = PagoDAO.registrarPago(pago);
 
         if (!exito) {
+
             JOptionPane.showMessageDialog(null,
                     "No se pudo registrar el pago. Verifique la información e intente nuevamente.",
                     "Error",
@@ -39,10 +40,17 @@ public class CajaLOG {
             return false;
         }
 
+        
         Pago pagoRegistrado = PagoDAO.buscarPagoPorAtencion(pago.getIdAtencion());
 
         if (pagoRegistrado != null) {
 
+            AuditoriaLOG.registrarAuditoria(
+                    SesionUsuario.getInstance().getIdUsuario(),
+                    "Caja",
+                    "Registró el pago ID: " + pagoRegistrado.getIdPago()
+            );
+            
             Comprobante comprobante = new Comprobante();
             comprobante.setNumeroComprobante(generarNumeroComprobante(tipoComprobante));
             comprobante.setFechaEmision(LocalDate.now());
@@ -124,5 +132,5 @@ public class CajaLOG {
 
         return String.format("F001-%06d", numero);
     }
-    
+
 }
