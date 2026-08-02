@@ -71,6 +71,16 @@ public class MedicamentoDAO {
         }
     }
 
+    // Descuenta el stock dentro de la misma transacción (RN-28)
+    public static boolean descontarStock(int idMedicamento, int cantidad, Connection cn) throws SQLException {
+        String sql = "UPDATE medicamento SET stock_actual = stock_actual - ? WHERE id_medicamento = ?";
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, cantidad);
+            ps.setInt(2, idMedicamento);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     // Registro deespacho/entrega
     public boolean registrarEntrega(EntregaMedicamento entrega) throws SQLException {
         String sql = "INSERT INTO entrega_medicamento (id_atencion, id_medicamento, cantidad, fecha_entrega) "

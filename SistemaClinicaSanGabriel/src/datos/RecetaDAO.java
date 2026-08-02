@@ -39,7 +39,7 @@ public class RecetaDAO {
             }
         }
 
-        // 2. Insertar los detalles/medicamentos de la Receta
+        // 2. Insertar los detalles/medicamentos de la Receta y descontar stock (RN-28)
         if (receta.getDetalles() != null && !receta.getDetalles().isEmpty()) {
             try (PreparedStatement psDetalle = cn.prepareStatement(sqlDetalle)) {
                 for (DetalleReceta detalle : receta.getDetalles()) {
@@ -48,6 +48,8 @@ public class RecetaDAO {
                     psDetalle.setInt(3, detalle.getCantidad());
                     psDetalle.setString(4, detalle.getIndicacion());
                     psDetalle.executeUpdate();
+
+                    MedicamentoDAO.descontarStock(detalle.getIdMedicamento(), detalle.getCantidad(), cn);
                 }
             }
         }
