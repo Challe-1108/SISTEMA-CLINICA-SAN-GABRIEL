@@ -5,20 +5,16 @@
 package presentacion;
 
 import entidades.*;
-import logica.CitaService;
-import logica.MedicoService;
+import logica.CitaLOG;
+import logica.MedicoLOG;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Usuario
- */
+//@Harold
+
 public class IfrmAgendarCita extends javax.swing.JInternalFrame {
 
-    private CitaService citaService = new CitaService();
-    private MedicoService medicoService = new MedicoService();
     private ArrayList<Medico> listaMedicos;
 
     public IfrmAgendarCita() {
@@ -50,6 +46,7 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
         btnAgendar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        btnSalir = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
         jLabel2.setText("AGENDAR CITA");
@@ -81,14 +78,15 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
             }
         });
 
-        btnAgendar.setText("AGENDAR");
+        btnAgendar.setText("Agendar");
         btnAgendar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgendarActionPerformed(evt);
             }
         });
 
-        btnLimpiar.setText("LIMPIAR");
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.setToolTipText("");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimpiarActionPerformed(evt);
@@ -98,6 +96,13 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("(Formato de 24 hrs)");
 
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -105,34 +110,33 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnAgendar)
+                                .addComponent(jLabel6)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(116, 116, 116)
+                                .addGap(86, 86, 86)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel6)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(201, 201, 201)
-                                .addComponent(btnAgendar)))
-                        .addGap(55, 55, 55)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cmbMedico, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbMedico, 0, 153, Short.MAX_VALUE)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtHistoriaClinica)
-                                            .addComponent(txtFecha)
-                                            .addComponent(txtHora)
-                                            .addComponent(txtObservaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(btnSalir)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(txtHistoriaClinica)
+                                                .addComponent(txtFecha)
+                                                .addComponent(txtHora)
+                                                .addComponent(txtObservaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)))
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(34, 34, 34)
+                                .addGap(19, 19, 19)
                                 .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -170,8 +174,9 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
                 .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgendar)
-                    .addComponent(btnLimpiar))
-                .addContainerGap(56, Short.MAX_VALUE))
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnSalir))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -189,7 +194,7 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cargarComboMedicos() {
-        listaMedicos = medicoService.listarMedicos();
+        listaMedicos = MedicoLOG.listarMedicos();
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         for (Medico m : listaMedicos) {
             modelo.addElement(m.getCodigo() + " - " + m.getNombres() + " " + m.getApellidos());
@@ -215,38 +220,40 @@ public class IfrmAgendarCita extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtObservacionesActionPerformed
 
     private void btnAgendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendarActionPerformed
-    Medico medico = obtenerMedicoSeleccionado();
-    if (medico == null) {
-        JOptionPane.showMessageDialog(this, "Seleccione un medico.",
-        "Aviso", JOptionPane.WARNING_MESSAGE);
-        return;
+        Medico medico = obtenerMedicoSeleccionado();
+        if (medico == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un medico.",
+            "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (txtHistoriaClinica.getText().isEmpty() || txtFecha.getText().isEmpty()
+            || txtHora.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete historia clinica, fecha y hora.",
+            "Datos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Cita cita = new Cita.CitaBuilder()
+                .setCodigo(generarCodigoCita())
+                .setMedico(medico)
+                .setNumeroHistoriaClinica(txtHistoriaClinica.getText())
+                .setFecha(txtFecha.getText())
+                .setHora(txtHora.getText())
+                .setObservaciones(txtObservaciones.getText())
+                .build();
+
+        boolean exito = CitaLOG.registrarCita(cita);
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
+            limpiarCampos();
+        }
     }
 
-    if (txtHistoriaClinica.getText().isEmpty() || txtFecha.getText().isEmpty()
-        || txtHora.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Complete historia clinica, fecha y hora.",
-        "Datos incompletos", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    Cita cita = new Cita.CitaBuilder()
-            .setCodigo(generarCodigoCita())
-            .setMedico(medico)
-            .setNumeroHistoriaClinica(txtHistoriaClinica.getText())
-            .setFecha(txtFecha.getText())
-            .setHora(txtHora.getText())
-            .setObservaciones(txtObservaciones.getText())
-            .build();
-
-    boolean exito = citaService.registrarCita(cita);
-    if (exito) {
-        JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
-        limpiarCampos();
-    }
-    }
-
-private String generarCodigoCita() {
-    return "CITA" + System.currentTimeMillis();
+    private String generarCodigoCita() {
+        ArrayList<Cita> citas = CitaLOG.listarCitas();
+        int siguiente = citas.size() + 1;
+        return String.format("CIT-%04d", siguiente);
     }//GEN-LAST:event_btnAgendarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -259,6 +266,16 @@ private String generarCodigoCita() {
         txtHora.setText("");
         txtObservaciones.setText("");
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Esta seguro de salir?", "Confirmar",
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSalirActionPerformed
     
     //PROBAR
     public static void main(String[] args) {
@@ -279,6 +296,7 @@ private String generarCodigoCita() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgendar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cmbMedico;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -5,18 +5,14 @@
 package presentacion;
 
 import entidades.Cita;
-import logica.CitaService;
+import logica.CitaLOG;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Usuario
- */
-public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
+//@Harold
 
-    private CitaService citaService = new CitaService();
+public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
     
     public IfrmReprogramarCita() {
         initComponents();
@@ -47,6 +43,7 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
         txtCodigoCita = new javax.swing.JTextField();
         txtNuevaFecha = new javax.swing.JTextField();
         txtNuevaHora = new javax.swing.JTextField();
+        btnSalir = new javax.swing.JButton();
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Codigo de Cita :");
@@ -92,21 +89,21 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Tabla de Citas Programadas :");
 
-        btnReprogramar.setText("REPROGRAMAR");
+        btnReprogramar.setText("Reprogramar");
         btnReprogramar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReprogramarActionPerformed(evt);
             }
         });
 
-        btnCancelar.setText("CANCELAR");
+        btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
 
-        btnLimpiar.setText("LIMPIAR");
+        btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimpiarActionPerformed(evt);
@@ -124,43 +121,53 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
             }
         });
 
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(77, 77, 77)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
+                        .addGap(68, 68, 68)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
+                            .addComponent(jLabel4)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addComponent(jLabel2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(btnReprogramar))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
                                         .addGap(105, 105, 105)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(txtCodigoCita)
-                                                .addComponent(txtNuevaFecha)
-                                                .addComponent(txtNuevaHora, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(21, 21, 21)
-                                                .addComponent(btnCancelar)
-                                                .addGap(72, 72, 72)
-                                                .addComponent(btnLimpiar)))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addComponent(btnReprogramar)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtCodigoCita)
+                                            .addComponent(txtNuevaFecha)
+                                            .addComponent(txtNuevaHora, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(58, 58, 58)
+                                        .addComponent(btnCancelar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                                .addComponent(jLabel7))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(btnSalir)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(46, 46, 46))
         );
         jPanel1Layout.setVerticalGroup(
@@ -179,18 +186,20 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtNuevaFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(txtNuevaFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(43, 43, 43)
+                        .addGap(34, 34, 34)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnReprogramar)
                             .addComponent(btnCancelar)
-                            .addComponent(btnLimpiar)))
-                    .addComponent(txtNuevaHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnLimpiar)
+                            .addComponent(btnSalir)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtNuevaHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -225,7 +234,7 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
             return;
         }
 
-        boolean exito = citaService.reprogramarCita(
+        boolean exito = CitaLOG.reprogramarCita(
             txtCodigoCita.getText(), txtNuevaFecha.getText(), txtNuevaHora.getText()
         );
 
@@ -241,20 +250,20 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "Seleccione una cita de la tabla primero.",
             "Aviso", JOptionPane.WARNING_MESSAGE);
         return;
-    }
-
-    int confirmacion = JOptionPane.showConfirmDialog(this,
-        "¿Esta seguro de cancelar esta cita?", "Confirmar",
-        JOptionPane.YES_NO_OPTION);
-
-    if (confirmacion == JOptionPane.YES_OPTION) {
-        boolean exito = citaService.cancelarCita(txtCodigoCita.getText());
-        if (exito) {
-            JOptionPane.showMessageDialog(this, "Cita cancelada correctamente.");
-            limpiarCampos();
-            cargarTablaCitas();
         }
-    }
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Esta seguro de cancelar esta cita?", "Confirmar",
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            boolean exito = CitaLOG.cancelarCita(txtCodigoCita.getText());
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Cita cancelada correctamente.");
+                limpiarCampos();
+                cargarTablaCitas();
+            }
+        }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -267,11 +276,21 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
         txtCodigoCita.setText(tblCitas.getValueAt(fila, 0).toString());
         }
     }//GEN-LAST:event_tblCitasMouseClicked
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+        "¿Esta seguro de salir?", "Confirmar",
+        JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSalirActionPerformed
     
     private void limpiarCampos() {
-    txtCodigoCita.setText("");
-    txtNuevaFecha.setText("");
-    txtNuevaHora.setText("");
+        txtCodigoCita.setText("");
+        txtNuevaFecha.setText("");
+        txtNuevaHora.setText("");
     }
     
     private void cargarTablaCitas() {
@@ -288,7 +307,7 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
         modelo.addColumn("Hora");
         modelo.addColumn("Estado");
 
-        ArrayList<Cita> lista = citaService.listarCitas();
+        ArrayList<Cita> lista = CitaLOG.listarCitas();
             for (Cita c : lista) {
             Object[] fila = {
                 c.getCodigo(),
@@ -319,6 +338,7 @@ public class IfrmReprogramarCita extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnReprogramar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

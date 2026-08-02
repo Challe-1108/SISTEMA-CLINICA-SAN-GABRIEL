@@ -5,22 +5,15 @@
 package presentacion;
 
 import entidades.*;
-import logica.MedicoService;
+import logica.MedicoLOG;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-/**
- *
- * @author Usuario
- */
+
+//@Harold
+
 public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form FrmGestionMedicos
-     */
-    
-    private MedicoService medicoService = new MedicoService();
-    
     public IfrmGestionMedicos() {
         initComponents();
         cargarTablaMedicos();
@@ -65,6 +58,7 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
         jLabel1.setText("GESTIÓN DE CUENTAS");
@@ -170,6 +164,13 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
             }
         });
 
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -204,15 +205,17 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
                                             .addComponent(chkCardiologia))
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(chkDermatologia)
-                                                    .addComponent(chkNeurologia))
-                                                .addGap(28, 28, 28)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(chkTraumatologia)
-                                                    .addComponent(chkPediatria)))
-                                            .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(btnSalir)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(chkDermatologia)
+                                                        .addComponent(chkNeurologia))
+                                                    .addGap(28, 28, 28)
+                                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(chkTraumatologia)
+                                                        .addComponent(chkPediatria))))))
                                     .addComponent(chkEndocrinologia)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -279,7 +282,9 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton2)
-                            .addComponent(jButton3))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton3)
+                                .addComponent(btnSalir)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
@@ -307,7 +312,7 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
 
     private String getCodigo() {
     return txtCodigo.getText();
-}
+    }
 
     private String getColegiatura() {
         return txtColegiatura.getText();
@@ -348,7 +353,7 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
         modelo.addColumn("Telefono");
         modelo.addColumn("Correo");
 
-        ArrayList<Medico> lista = medicoService.listarMedicos();
+        ArrayList<Medico> lista = MedicoLOG.listarMedicos();
         for (Medico m : lista) {
             Object[] fila = {
                 m.getCodigo(), m.getColegiatura(), m.getDni(),
@@ -360,41 +365,41 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
     }
     
     private ArrayList<Especialidad> obtenerEspecialidadesSeleccionadas() {
-    ArrayList<Especialidad> seleccionadas = new ArrayList<>();
+        ArrayList<Especialidad> seleccionadas = new ArrayList<>();
 
-    if (chkCardiologia.isSelected()) {
-        Especialidad esp = new Especialidad();
-        esp.setCodigo("654322");
-        seleccionadas.add(esp);
+        if (chkCardiologia.isSelected()) {
+            Especialidad esp = new Especialidad();
+            esp.setCodigo("654322");
+            seleccionadas.add(esp);
+        }
+        if (chkDermatologia.isSelected()) {
+            Especialidad esp = new Especialidad();
+            esp.setCodigo("654323");
+            seleccionadas.add(esp);
+        }
+        if (chkPediatria.isSelected()) {
+            Especialidad esp = new Especialidad();
+            esp.setCodigo("654321");
+            seleccionadas.add(esp);
+        }
+        if (chkEndocrinologia.isSelected()) {
+            Especialidad esp = new Especialidad();
+            esp.setCodigo("654324");
+            seleccionadas.add(esp);
+        }
+        if (chkNeurologia.isSelected()) {
+            Especialidad esp = new Especialidad();
+            esp.setCodigo("654325");
+            seleccionadas.add(esp);
+        }
+        if (chkTraumatologia.isSelected()) {
+            Especialidad esp = new Especialidad();
+            esp.setCodigo("654326");
+            seleccionadas.add(esp);
+        }
+        return seleccionadas;
     }
-    if (chkDermatologia.isSelected()) {
-        Especialidad esp = new Especialidad();
-        esp.setCodigo("654323");
-        seleccionadas.add(esp);
-    }
-    if (chkPediatria.isSelected()) {
-        Especialidad esp = new Especialidad();
-        esp.setCodigo("654321");
-        seleccionadas.add(esp);
-    }
-    if (chkEndocrinologia.isSelected()) {
-        Especialidad esp = new Especialidad();
-        esp.setCodigo("654324");
-        seleccionadas.add(esp);
-    }
-    if (chkNeurologia.isSelected()) {
-        Especialidad esp = new Especialidad();
-        esp.setCodigo("654325");
-        seleccionadas.add(esp);
-    }
-    if (chkTraumatologia.isSelected()) {
-        Especialidad esp = new Especialidad();
-        esp.setCodigo("654326");
-        seleccionadas.add(esp);
-    }
-
-    return seleccionadas;
-    }
+    
     private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoActionPerformed
@@ -412,14 +417,14 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
         getCodigo(), getColegiatura(), getDni(), getNombres(),
         getApellidos(), getTelefono(), getCorreo(),
         obtenerEspecialidadesSeleccionadas()
-    );
+        );
 
-    boolean exito = medicoService.registrarMedico(medico);
-    if (exito) {
-        JOptionPane.showMessageDialog(this, "Medico registrado correctamente.");
-        limpiarCampos();
-        cargarTablaMedicos();
-    }
+        boolean exito = MedicoLOG.registrarMedico(medico);
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Medico registrado correctamente.");
+            limpiarCampos();
+            cargarTablaMedicos();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -427,14 +432,14 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
         getCodigo(), getColegiatura(), getDni(), getNombres(),
         getApellidos(), getTelefono(), getCorreo(),
         obtenerEspecialidadesSeleccionadas()
-    );
+        );
 
-    boolean exito = medicoService.actualizarMedico(medico);
-    if (exito) {
-        JOptionPane.showMessageDialog(this, "Medico actualizado correctamente.");
-        limpiarCampos();
-        cargarTablaMedicos();
-    }
+        boolean exito = MedicoLOG.actualizarMedico(medico);
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Medico actualizado correctamente.");
+            limpiarCampos();
+            cargarTablaMedicos();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -442,20 +447,20 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "Seleccione un medico de la tabla primero.",
             "Aviso", JOptionPane.WARNING_MESSAGE);
         return;
-    }
-
-    int confirmacion = JOptionPane.showConfirmDialog(this,
-        "¿Esta seguro de eliminar este medico?", "Confirmar",
-        JOptionPane.YES_NO_OPTION);
-
-    if (confirmacion == JOptionPane.YES_OPTION) {
-        boolean exito = medicoService.eliminarMedico(getCodigo());
-        if (exito) {
-            JOptionPane.showMessageDialog(this, "Medico eliminado correctamente.");
-            limpiarCampos();
-            cargarTablaMedicos();
         }
-    }
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Esta seguro de eliminar este medico?", "Confirmar",
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            boolean exito = MedicoLOG.eliminarMedico(getCodigo());
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Medico eliminado correctamente.");
+                limpiarCampos();
+                cargarTablaMedicos();
+            }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -475,38 +480,49 @@ public class IfrmGestionMedicos extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tblMedicosMouseClicked
 
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+        "¿Esta seguro de salir?", "Confirmar",
+        JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSalirActionPerformed
+
     private void limpiarCampos() {
-    txtCodigo.setText("");
-    txtColegiatura.setText("");
-    txtDni.setText("");
-    txtNombres.setText("");
-    txtApellidos.setText("");
-    txtTelefono.setText("");
-    txtCorreo.setText("");
-    chkCardiologia.setSelected(false);
-    chkDermatologia.setSelected(false);
-    chkPediatria.setSelected(false);
-    chkEndocrinologia.setSelected(false);
-    chkNeurologia.setSelected(false);
-    chkTraumatologia.setSelected(false);
+        txtCodigo.setText("");
+        txtColegiatura.setText("");
+        txtDni.setText("");
+        txtNombres.setText("");
+        txtApellidos.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
+        chkCardiologia.setSelected(false);
+        chkDermatologia.setSelected(false);
+        chkPediatria.setSelected(false);
+        chkEndocrinologia.setSelected(false);
+        chkNeurologia.setSelected(false);
+        chkTraumatologia.setSelected(false);
     }
     
     //PROBAR
     public static void main(String[] args) {
-    javax.swing.JFrame frame = new javax.swing.JFrame("Prueba de Formulario");
-    javax.swing.JDesktopPane desktop = new javax.swing.JDesktopPane();
-    IfrmGestionMedicos internalFrame = new IfrmGestionMedicos();
-    
-    frame.setSize(900, 650);
-    frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-    frame.setContentPane(desktop);
-    
-    desktop.add(internalFrame);
-    internalFrame.setVisible(true);
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
+        javax.swing.JFrame frame = new javax.swing.JFrame("Prueba de Formulario");
+        javax.swing.JDesktopPane desktop = new javax.swing.JDesktopPane();
+        IfrmGestionMedicos internalFrame = new IfrmGestionMedicos();
+
+        frame.setSize(900, 650);
+        frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(desktop);
+
+        desktop.add(internalFrame);
+        internalFrame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSalir;
     private javax.swing.JCheckBox chkCardiologia;
     private javax.swing.JCheckBox chkDermatologia;
     private javax.swing.JCheckBox chkEndocrinologia;
