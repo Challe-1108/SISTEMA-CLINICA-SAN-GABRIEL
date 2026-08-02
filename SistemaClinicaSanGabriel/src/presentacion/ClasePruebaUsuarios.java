@@ -12,7 +12,8 @@ public class ClasePruebaUsuarios {
 
     static void main() {
 
-        System.out.println();
+        FrmAtencionMedica frmAtencionMedica = new FrmAtencionMedica();
+        frmAtencionMedica.setVisible(true);
 
     }
 
