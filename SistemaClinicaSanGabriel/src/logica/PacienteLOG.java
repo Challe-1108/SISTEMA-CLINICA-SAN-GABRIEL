@@ -89,11 +89,15 @@ public class PacienteLOG {
 
         boolean exito = PacienteDAO.insertar(paciente);
         if (exito) {
-            AuditoriaLOG.registrarAuditoria(
-                    SesionUsuario.getInstance().getIdUsuario(),
-                    "Pacientes",
-                    "Registró al paciente DNI: " + paciente.getDni()
-            );
+            try {
+                AuditoriaLOG.registrarAuditoria(
+                        SesionUsuario.getInstance().getIdUsuario(),
+                        "Pacientes",
+                        "Registró al paciente DNI: " + paciente.getDni()
+                );
+            } catch (Exception e) {
+                System.err.println("Error al registrar la auditoría de Pacientes: " + e.getMessage());
+            }
             JOptionPane.showMessageDialog(null,
                     "El paciente " + paciente.getNombres() + " " + paciente.getApellidos()
                     + " ha sido registrado correctamente.",
@@ -135,11 +139,15 @@ public class PacienteLOG {
 
         boolean exito = PacienteDAO.actualizar(paciente);
         if (exito) {
-            AuditoriaLOG.registrarAuditoria(
-                    SesionUsuario.getInstance().getIdUsuario(),
-                    "Pacientes",
-                    "Actualizó al paciente DNI: " + paciente.getDni()
-            );
+            try {
+                AuditoriaLOG.registrarAuditoria(
+                        SesionUsuario.getInstance().getIdUsuario(),
+                        "Pacientes",
+                        "Actualizó al paciente DNI: " + paciente.getDni()
+                );
+            } catch (Exception e) {
+                System.err.println("Error al registrar la auditoría de Pacientes: " + e.getMessage());
+            }
             JOptionPane.showMessageDialog(null,
                     "Los datos de " + paciente.getNombres() + " " + paciente.getApellidos()
                     + " se han actualizado correctamente.",
@@ -223,11 +231,15 @@ public class PacienteLOG {
     public static boolean inactivarPaciente(int idPaciente) {
         boolean exito = PacienteDAO.eliminarLogico(idPaciente);
         if (exito) {
-            AuditoriaLOG.registrarAuditoria(
-                    SesionUsuario.getInstance().getIdUsuario(),
-                    "Pacientes",
-                    "Inactivó al paciente ID: " + idPaciente
-            );
+            try {
+                AuditoriaLOG.registrarAuditoria(
+                        SesionUsuario.getInstance().getIdUsuario(),
+                        "Pacientes",
+                        "Inactivó al paciente ID: " + idPaciente
+                );
+            } catch (Exception e) {
+                System.err.println("Error al registrar la auditoría de Pacientes: " + e.getMessage());
+            }
             JOptionPane.showMessageDialog(null,
                     "El paciente ha sido marcado como inactivo.\n"
                     + "Ya no aparecerá en las búsquedas activas del sistema.",
@@ -243,11 +255,15 @@ public class PacienteLOG {
     public static boolean activarPaciente(int idPaciente) {
         boolean exito = PacienteDAO.activarLogico(idPaciente);
         if (exito) {
-            AuditoriaLOG.registrarAuditoria(
-                    SesionUsuario.getInstance().getIdUsuario(),
-                    "Pacientes",
-                    "Reactivó al paciente ID: " + idPaciente
-            );
+            try {
+                AuditoriaLOG.registrarAuditoria(
+                        SesionUsuario.getInstance().getIdUsuario(),
+                        "Pacientes",
+                        "Reactivó al paciente ID: " + idPaciente
+                );
+            } catch (Exception e) {
+                System.err.println("Error al registrar la auditoría de Pacientes: " + e.getMessage());
+            }
             JOptionPane.showMessageDialog(null,
                     "El paciente ha sido reactivado correctamente.\n"
                     + "Ahora aparecerá en las búsquedas activas del sistema.",

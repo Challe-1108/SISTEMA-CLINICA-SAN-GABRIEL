@@ -57,30 +57,35 @@ public class PacienteDAO {
     }
 
     public static boolean actualizar(Paciente paciente) {
-        String sql = "UPDATE paciente SET nombres=?, apellidos=?, telefono=?, direccion=?, "
-                + "id_seguro=?, id_apoderado=? WHERE id_paciente=?";
+        String sql = "UPDATE paciente SET dni=?, nombres=?, apellidos=?, fecha_nacimiento=?, sexo=?, "
+                + "telefono=?, direccion=?, numero_historia_clinica=?, id_seguro=?, id_apoderado=? "
+                + "WHERE id_paciente=?";
         int filasAfectadas = 0;
 
         try (Connection cn = ConexionBD.getInstancia().getConexion();
              PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setString(1, paciente.getNombres());
-            ps.setString(2, paciente.getApellidos());
-            ps.setString(3, paciente.getTelefono());
-            ps.setString(4, paciente.getDireccion());
+            ps.setString(1, paciente.getDni());
+            ps.setString(2, paciente.getNombres());
+            ps.setString(3, paciente.getApellidos());
+            ps.setDate(4, Date.valueOf(paciente.getFechaNacimiento()));
+            ps.setString(5, paciente.getSexo());
+            ps.setString(6, paciente.getTelefono());
+            ps.setString(7, paciente.getDireccion());
+            ps.setString(8, paciente.getNumeroHistoriaClinica());
 
             if (paciente.getSeguroMedico() != null) {
-                ps.setInt(5, paciente.getSeguroMedico().getIdSeguro());
+                ps.setInt(9, paciente.getSeguroMedico().getIdSeguro());
             } else {
-                ps.setNull(5, Types.INTEGER);
+                ps.setNull(9, Types.INTEGER);
             }
 
             if (paciente.getApoderado() != null) {
-                ps.setInt(6, paciente.getApoderado().getIdApoderado());
+                ps.setInt(10, paciente.getApoderado().getIdApoderado());
             } else {
-                ps.setNull(6, Types.INTEGER);
+                ps.setNull(10, Types.INTEGER);
             }
 
-            ps.setInt(7, paciente.getIdPaciente());
+            ps.setInt(11, paciente.getIdPaciente());
             filasAfectadas = ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error al actualizar paciente: " + e.getMessage());

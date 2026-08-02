@@ -10,6 +10,7 @@ import entidades.SeguroMedico;
 import logica.PacienteLOG;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import java.time.LocalDate;
 
 /**
  *
@@ -17,7 +18,15 @@ import javax.swing.JOptionPane;
  */
 public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
     private Paciente pacienteActual;
-    private javax.swing.JButton btnSalir;
+    
+    private javax.swing.JTextField txtDni;
+    private javax.swing.JTextField txtFechaNacimiento;
+    private javax.swing.JTextField txtSexo;
+    private javax.swing.JTextField txtNumeroHistoriaClinica;
+    private javax.swing.JLabel lblDni;
+    private javax.swing.JLabel lblFechaNacimiento;
+    private javax.swing.JLabel lblSexo;
+    private javax.swing.JLabel lblNumeroHistoriaClinica;
     private javax.swing.JTextField txtCompaniaSeguro;
     private javax.swing.JTextField txtNumeroPoliza;
     private javax.swing.JTextField txtTipoCobertura;
@@ -26,18 +35,20 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblTipoCobertura;
 
     public IfrmEditarPaciente(Paciente paciente) {
-        btnSalir = new javax.swing.JButton();
-        btnSalir.setText("Salir");
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dispose();
-            }
-        });
+        
 
+        txtDni = new javax.swing.JTextField();
+        txtFechaNacimiento = new javax.swing.JTextField();
+        txtSexo = new javax.swing.JTextField();
+        txtNumeroHistoriaClinica = new javax.swing.JTextField();
         txtCompaniaSeguro = new javax.swing.JTextField();
         txtNumeroPoliza = new javax.swing.JTextField();
         txtTipoCobertura = new javax.swing.JTextField();
 
+        lblDni = new javax.swing.JLabel("DNI");
+        lblFechaNacimiento = new javax.swing.JLabel("Fecha de Nacimiento (AAAA-MM-DD)");
+        lblSexo = new javax.swing.JLabel("Sexo (M/F)");
+        lblNumeroHistoriaClinica = new javax.swing.JLabel("N° Historia Clínica");
         lblCompaniaSeguro = new javax.swing.JLabel("Compañía Seguro");
         lblNumeroPoliza = new javax.swing.JLabel("N° Póliza");
         lblTipoCobertura = new javax.swing.JLabel("Cobertura (T/P)");
@@ -53,10 +64,14 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
         boolean activo = pacienteActual.isEstado();
         
         // Habilitar/deshabilitar campos editables según estado
+        txtDni.setEnabled(activo);
         txtNombres.setEnabled(activo);
         txtApellidos.setEnabled(activo);
+        txtFechaNacimiento.setEnabled(activo);
+        txtSexo.setEnabled(activo);
         txtTelefono.setEnabled(activo);
         txtDireccion.setEnabled(activo);
+        txtNumeroHistoriaClinica.setEnabled(activo);
         txtDniApoderado.setEnabled(activo);
         txtNombresApoderado.setEnabled(activo);
         txtApellidosApoderado.setEnabled(activo);
@@ -74,10 +89,16 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
         }
     }
     private void cargarDatosEnFormulario() {
+            txtDni.setText(pacienteActual.getDni());
             txtNombres.setText(pacienteActual.getNombres());
             txtApellidos.setText(pacienteActual.getApellidos());
+            if (pacienteActual.getFechaNacimiento() != null) {
+                txtFechaNacimiento.setText(pacienteActual.getFechaNacimiento().toString());
+            }
+            txtSexo.setText(pacienteActual.getSexo());
             txtTelefono.setText(pacienteActual.getTelefono());
             txtDireccion.setText(pacienteActual.getDireccion());
+            txtNumeroHistoriaClinica.setText(pacienteActual.getNumeroHistoriaClinica());
 
             // Cargar datos de seguro si existe
             SeguroMedico seguro = pacienteActual.getSeguroMedico();
@@ -92,16 +113,20 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
         javax.swing.GroupLayout jPanel1Layout = (javax.swing.GroupLayout) jPanel1.getLayout();
         javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getContentPane().getLayout();
 
-        // Agregar campos de seguro al jPanel1 (después de Dirección)
+        // Agregar campos al jPanel1 (después de Dirección)
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDni)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
+                    .addComponent(lblFechaNacimiento)
+                    .addComponent(lblSexo)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
+                    .addComponent(lblNumeroHistoriaClinica)
                     .addComponent(lblCompaniaSeguro)
                     .addComponent(lblNumeroPoliza)
                     .addComponent(lblTipoCobertura))
@@ -111,7 +136,11 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                         .addComponent(txtApellidos)
                         .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
+                    .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNumeroHistoriaClinica, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCompaniaSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNumeroPoliza, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTipoCobertura, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -129,6 +158,10 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDni)
+                    .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -137,12 +170,24 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                     .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFechaNacimiento)
+                    .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSexo)
+                    .addComponent(txtSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNumeroHistoriaClinica)
+                    .addComponent(txtNumeroHistoriaClinica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCompaniaSeguro)
@@ -200,6 +245,7 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
         btnGuardarCambios = new javax.swing.JButton();
         btnInactivar = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
+        btnSalir = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -256,7 +302,7 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(txtNombresApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -276,7 +322,7 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
                     .addComponent(txtParentesco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12))
+                .addGap(126, 126, 126))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -297,34 +343,33 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                         .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
                     .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(174, Short.MAX_VALUE))
         );
 
         btnGuardarCambios.setText("Guardar");
@@ -344,6 +389,13 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         jLabel11.setText("Editar Información de Paciente");
 
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -351,17 +403,19 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(191, 191, 191)
                         .addComponent(btnGuardarCambios)
                         .addGap(129, 129, 129)
-                        .addComponent(btnInactivar))
+                        .addComponent(btnInactivar)
+                        .addGap(100, 100, 100)
+                        .addComponent(btnSalir))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(211, 211, 211)
-                        .addComponent(jLabel11)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addComponent(jLabel11))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -369,40 +423,170 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel11)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarCambios)
-                    .addComponent(btnInactivar))
+                    .addComponent(btnInactivar)
+                    .addComponent(btnSalir))
                 .addGap(21, 21, 21))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private String validarFormulario() {
+        StringBuilder errores = new StringBuilder();
+
+        String dni = txtDni.getText().trim();
+        String nombres = txtNombres.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
+        String fechaStr = txtFechaNacimiento.getText().trim();
+        String sexo = txtSexo.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String direccion = txtDireccion.getText().trim();
+        String historia = txtNumeroHistoriaClinica.getText().trim();
+
+        if (dni.isEmpty()) {
+            errores.append("- El DNI es obligatorio.\n");
+        } else if (!dni.matches("\\d{8}")) {
+            errores.append("- El DNI debe tener exactamente 8 dígitos numéricos.\n");
+        }
+
+        if (nombres.isEmpty()) {
+            errores.append("- Los nombres son obligatorios.\n");
+        } else if (!nombres.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+            errores.append("- Los nombres solo pueden contener letras y espacios.\n");
+        }
+
+        if (apellidos.isEmpty()) {
+            errores.append("- Los apellidos son obligatorios.\n");
+        } else if (!apellidos.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+            errores.append("- Los apellidos solo pueden contener letras y espacios.\n");
+        }
+
+        LocalDate fechaNacimiento = null;
+        if (fechaStr.isEmpty()) {
+            errores.append("- La fecha de nacimiento es obligatoria.\n");
+        } else {
+            try {
+                fechaNacimiento = LocalDate.parse(fechaStr);
+                if (fechaNacimiento.isAfter(LocalDate.now())) {
+                    errores.append("- La fecha de nacimiento no puede ser futura.\n");
+                }
+            } catch (Exception ex) {
+                errores.append("- La fecha de nacimiento debe usar el formato AAAA-MM-DD (ejemplo: 1995-03-21).\n");
+            }
+        }
+
+        if (sexo.isEmpty()) {
+            errores.append("- El sexo es obligatorio.\n");
+        } else if (!sexo.toUpperCase().matches("^[MF]$")) {
+            errores.append("- El sexo debe ser 'M' o 'F'.\n");
+        }
+
+        if (telefono.isEmpty()) {
+            errores.append("- El teléfono es obligatorio.\n");
+        } else if (!telefono.matches("\\d{9}")) {
+            errores.append("- El teléfono debe tener exactamente 9 dígitos numéricos.\n");
+        }
+
+        if (direccion.isEmpty()) {
+            errores.append("- La dirección es obligatoria.\n");
+        }
+
+        if (historia.isEmpty()) {
+            errores.append("- El número de historia clínica es obligatorio.\n");
+        } else if (!historia.matches("\\d{8}")) {
+            errores.append("- El número de historia clínica debe tener exactamente 8 dígitos numéricos.\n");
+        }
+
+        // Seguro médico (opcional): si se llena algún campo, todos los obligatorios
+        String compania = txtCompaniaSeguro.getText().trim();
+        String poliza = txtNumeroPoliza.getText().trim();
+        String cobertura = txtTipoCobertura.getText().trim().toUpperCase();
+
+        if (!compania.isEmpty() || !poliza.isEmpty() || !cobertura.isEmpty()) {
+            if (compania.isEmpty()) {
+                errores.append("- La compañía del seguro es obligatoria.\n");
+            }
+            if (poliza.isEmpty()) {
+                errores.append("- El número de póliza es obligatorio.\n");
+            } else if (!poliza.matches("\\d{10}")) {
+                errores.append("- El número de póliza debe tener exactamente 10 dígitos numéricos.\n");
+            }
+            if (cobertura.isEmpty()) {
+                errores.append("- El tipo de cobertura es obligatorio.\n");
+            } else if (!cobertura.matches("^[TP]$")) {
+                errores.append("- La cobertura debe ser 'T' (Total) o 'P' (Parcial).\n");
+            }
+        }
+
+        // Apoderado (opcional): si se llena algún campo, todos los obligatorios
+        String dniApoderado = txtDniApoderado.getText().trim();
+        String nombresApoderado = txtNombresApoderado.getText().trim();
+        String apellidosApoderado = txtApellidosApoderado.getText().trim();
+        String telefonoApoderado = txtTelefonoApoderado.getText().trim();
+        String parentesco = txtParentesco.getText().trim();
+
+        if (!dniApoderado.isEmpty() || !nombresApoderado.isEmpty() || !apellidosApoderado.isEmpty()
+                || !telefonoApoderado.isEmpty() || !parentesco.isEmpty()) {
+            if (dniApoderado.isEmpty()) {
+                errores.append("- El DNI del apoderado es obligatorio.\n");
+            } else if (!dniApoderado.matches("\\d{8}")) {
+                errores.append("- El DNI del apoderado debe tener exactamente 8 dígitos numéricos.\n");
+            }
+            if (nombresApoderado.isEmpty()) {
+                errores.append("- Los nombres del apoderado son obligatorios.\n");
+            } else if (!nombresApoderado.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+                errores.append("- Los nombres del apoderado solo pueden contener letras y espacios.\n");
+            }
+            if (apellidosApoderado.isEmpty()) {
+                errores.append("- Los apellidos del apoderado son obligatorios.\n");
+            } else if (!apellidosApoderado.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+                errores.append("- Los apellidos del apoderado solo pueden contener letras y espacios.\n");
+            }
+            if (telefonoApoderado.isEmpty()) {
+                errores.append("- El teléfono del apoderado es obligatorio.\n");
+            } else if (!telefonoApoderado.matches("\\d{9}")) {
+                errores.append("- El teléfono del apoderado debe tener exactamente 9 dígitos numéricos.\n");
+            }
+            if (parentesco.isEmpty()) {
+                errores.append("- El parentesco es obligatorio.\n");
+            } else if (!parentesco.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+                errores.append("- El parentesco solo puede contener letras y espacios.\n");
+            }
+        }
+
+        return errores.length() == 0 ? null : errores.toString();
+    }
+
     private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         try {
-            if (txtNombres.getText().trim().isEmpty() || txtApellidos.getText().trim().isEmpty()
-                    || txtTelefono.getText().trim().isEmpty() || txtDireccion.getText().trim().isEmpty()) {
+            String errores = validarFormulario();
+            if (errores != null) {
                 JOptionPane.showMessageDialog(this,
-                        "Todos los campos deben estar completos.\nVerifique nombres, apellidos, telefono y direccion.",
-                        "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+                        "Los siguientes campos son obligatorios o tienen formato inválido:\n\n" + errores,
+                        "Validación de datos", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+
+            String fechaStr = txtFechaNacimiento.getText().trim();
+            LocalDate fechaNacimiento = LocalDate.parse(fechaStr);
 
             pacienteActual.setEstado(pacienteActual.isEstado());
 
             // Reflejar cambios editables (RN-09: nombres, apellidos, teléfono, dirección son actualizables)
             Paciente.Builder builder = new Paciente.Builder()
                     .idPaciente(pacienteActual.getIdPaciente())
-                    .dni(pacienteActual.getDni())
+                    .dni(txtDni.getText().trim())
                     .nombres(txtNombres.getText().trim())
                     .apellidos(txtApellidos.getText().trim())
-                    .fechaNacimiento(pacienteActual.getFechaNacimiento())
-                    .sexo(pacienteActual.getSexo())
+                    .fechaNacimiento(fechaNacimiento)
+                    .sexo(txtSexo.getText().trim())
                     .telefono(txtTelefono.getText().trim())
                     .direccion(txtDireccion.getText().trim())
-                    .numeroHistoriaClinica(pacienteActual.getNumeroHistoriaClinica())
+                    .numeroHistoriaClinica(txtNumeroHistoriaClinica.getText().trim())
                     .estado(pacienteActual.isEstado());
 
             // Seguro médico (opcional, editable)
@@ -474,10 +658,15 @@ public class IfrmEditarPaciente extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnInactivarActionPerformed
 
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JButton btnInactivar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
