@@ -11,10 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-/**
- *
- * @author Usuario
- */
+ 
+//@Harold
 
 public class MedicoDAO {
 

@@ -7,19 +7,16 @@ package presentacion;
 import entidades.*;
 import datos.CitaDAO;
 import datos.HorarioDAO;
-import logica.MedicoService;
+import logica.MedicoLOG;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Usuario
- */
+//@Harold
+
 public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
     
-    private MedicoService medicoService = new MedicoService();
     private ArrayList<Medico> listaMedicos;
     
     public IfrmAgendaMedica() {
@@ -47,6 +44,7 @@ public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCitas = new javax.swing.JTable();
+        btnSalir = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
         jLabel2.setText("AGENDA MEDICA");
@@ -55,7 +53,6 @@ public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
         jLabel1.setText("Selecciona un medico :");
 
         cmbMedico.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmbMedico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnBuscarAgenda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnBuscarAgenda.setText("Buscar");
@@ -114,6 +111,14 @@ public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tblCitas);
 
+        btnSalir.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -136,6 +141,10 @@ public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(166, 166, 166))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(295, 295, 295)
+                .addComponent(btnSalir)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,11 +160,13 @@ public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSalir)
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -183,69 +194,79 @@ public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
         cargarTablaHorarios(medico);
         cargarTablaCitas(medico);
     }//GEN-LAST:event_btnBuscarAgendaActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+        "¿Esta seguro de salir?", "Confirmar",
+        JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSalirActionPerformed
     
     private void cargarComboMedicos() {
-    listaMedicos = medicoService.listarMedicos();
-    DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
-    for (Medico m : listaMedicos) {
-        modelo.addElement(m.getCodigo() + " - " + m.getNombres() + " " + m.getApellidos());
-    }
-    cmbMedico.setModel(modelo);
+        listaMedicos = MedicoLOG.listarMedicos();
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+        for (Medico m : listaMedicos) {
+            modelo.addElement(m.getCodigo() + " - " + m.getNombres() + " " + m.getApellidos());
+        }
+        cmbMedico.setModel(modelo);
     }
     
     private Medico obtenerMedicoSeleccionado() {
-    int indice = cmbMedico.getSelectedIndex();
-    if (indice >= 0) {
-        return listaMedicos.get(indice);
-    }
-    return null;
+        int indice = cmbMedico.getSelectedIndex();
+        if (indice >= 0) {
+            return listaMedicos.get(indice);
+        }
+        return null;
     }
     
     private void cargarTablaHorarios(Medico medico) {
-    DefaultTableModel modelo = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int fila, int columna) {
-            return false;
-        }
-    };
-    modelo.addColumn("Dia");
-    modelo.addColumn("Hora Inicio");
-    modelo.addColumn("Hora Fin");
-
-    ArrayList<HorarioMedico> horarios = HorarioDAO.listarHorariosPorMedico(medico);
-    for (HorarioMedico h : horarios) {
-        Object[] fila = {
-            h.getDiaSemana(), h.getHoraInicio(), h.getHoraFin()
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
         };
-        modelo.addRow(fila);
-    }
-    tblHorarios.setModel(modelo);
-    }
-    
-    private void cargarTablaCitas(Medico medico) {
-    DefaultTableModel modelo = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int fila, int columna) {
-            return false;
-        }
-    };
-    modelo.addColumn("Codigo Cita");
-    modelo.addColumn("Historia Clinica");
-    modelo.addColumn("Fecha");
-    modelo.addColumn("Hora");
-    modelo.addColumn("Estado");
+        modelo.addColumn("Dia");
+        modelo.addColumn("Hora Inicio");
+        modelo.addColumn("Hora Fin");
 
-    ArrayList<Cita> todasLasCitas = CitaDAO.listarCitas();
-    for (Cita c : todasLasCitas) {
-        if (c.getMedico().getCodigo().equals(medico.getCodigo())) {
+        ArrayList<HorarioMedico> horarios = HorarioDAO.listarHorariosPorMedico(medico);
+        for (HorarioMedico h : horarios) {
             Object[] fila = {
-                c.getCodigo(), c.getNumeroHistoriaClinica(),
-                c.getFecha(), c.getHora(), c.getEstado()
+                h.getDiaSemana(), h.getHoraInicio(), h.getHoraFin()
             };
             modelo.addRow(fila);
         }
+        tblHorarios.setModel(modelo);
     }
-    tblCitas.setModel(modelo);
+    
+    private void cargarTablaCitas(Medico medico) {
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        };
+        modelo.addColumn("Codigo Cita");
+        modelo.addColumn("Historia Clinica");
+        modelo.addColumn("Fecha");
+        modelo.addColumn("Hora");
+        modelo.addColumn("Estado");
+
+        ArrayList<Cita> todasLasCitas = CitaDAO.listarCitas();
+        for (Cita c : todasLasCitas) {
+            if (c.getMedico().getCodigo().equals(medico.getCodigo())) {
+                Object[] fila = {
+                    c.getCodigo(), c.getNumeroHistoriaClinica(),
+                    c.getFecha(), c.getHora(), c.getEstado()
+                };
+                modelo.addRow(fila);
+            }
+        }
+        tblCitas.setModel(modelo);
     }
 
     //PROBAR
@@ -266,6 +287,7 @@ public class IfrmAgendaMedica extends javax.swing.JInternalFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarAgenda;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cmbMedico;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
