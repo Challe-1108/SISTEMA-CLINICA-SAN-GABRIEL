@@ -12,9 +12,6 @@ public class ClasePruebaUsuarios {
 
     static void main() {
 
-        FrmAtencionMedica frmAtencionMedica = new FrmAtencionMedica();
-        frmAtencionMedica.setVisible(true);
-
     }
 
     static void cargarDatosPrueba(){

@@ -1,49 +1,44 @@
 package logica;
 
-
-import entidades.AtencionMedica;
-import entidades.Diagnostico;
-import entidades.RecetaMedica;
-import entidades.SignosVitales;
+import entidades.*;
 
 public class HistorialClinicoBuilder {
 
-    private final AtencionMedica atencion;
+    private AtencionMedica atencion;
 
-    // Constructor que exige el ID de la cita obligatoria
-    public HistorialClinicoBuilder(int idCita) {
+    // Cambiado de int idCita a String codigoCita
+    public HistorialClinicoBuilder(String codigoCita) {
         this.atencion = new AtencionMedica();
-        this.atencion.setIdCita(idCita);
+        this.atencion.setCodigoCita(codigoCita);
     }
 
-    public HistorialClinicoBuilder conAnamnesis(String motivoConsulta, String antecedentes) {
-        this.atencion.setMotivoConsulta(motivoConsulta);
+    public HistorialClinicoBuilder conAnamnesis(String motivo, String antecedentes) {
+        this.atencion.setMotivoConsulta(motivo);
         this.atencion.setAntecedentes(antecedentes);
         return this;
     }
 
-    public HistorialClinicoBuilder conSignosVitales(SignosVitales signosVitales) {
-        this.atencion.setSignosVitales(signosVitales);
+    public HistorialClinicoBuilder conSignosVitales(SignosVitales sv) {
+        this.atencion.setSignosVitales(sv);
         return this;
     }
 
-    public HistorialClinicoBuilder agregarDiagnostico(Diagnostico diagnostico) {
-        this.atencion.agregarDiagnostico(diagnostico);
-        return this;
-    }
-
-    public HistorialClinicoBuilder conTratamientoYObservaciones(String planTratamiento, String observaciones) {
-        this.atencion.setPlanTratamiento(planTratamiento);
+    public HistorialClinicoBuilder conTratamientoYObservaciones(String tratamiento, String observaciones) {
+        this.atencion.setTratamiento(tratamiento);
         this.atencion.setObservaciones(observaciones);
         return this;
     }
 
-    public HistorialClinicoBuilder conRecetaMedica(RecetaMedica receta) {
-        this.atencion.setRecetaMedica(receta);
+    public HistorialClinicoBuilder agregarDiagnostico(Diagnostico diag) {
+        this.atencion.getListaDiagnosticos().add(diag);
         return this;
     }
 
-    // Devuelve el objeto AtencionMedica completamente construido
+    public HistorialClinicoBuilder conRecetaMedica(RecetaMedica receta) {
+        this.atencion.setReceta(receta);
+        return this;
+    }
+
     public AtencionMedica build() {
         return this.atencion;
     }

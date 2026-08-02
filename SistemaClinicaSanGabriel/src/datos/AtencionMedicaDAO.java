@@ -13,10 +13,11 @@ import java.sql.Statement;
 public class AtencionMedicaDAO {
 
     public static boolean registrarAtencionCompleta(AtencionMedica atencion) {
-        String sqlAtencion = "INSERT INTO atenciones_medicas (idCita, motivoConsulta, antecedentes, planTratamiento, observaciones) VALUES (?, ?, ?, ?, ?)";
+        // Consultas alineadas con la estructura del script SQL
+        String sqlAtencion = "INSERT INTO atenciones_medicas (codigoCita, motivoConsulta, antecedentes, planTratamiento, observaciones) VALUES (?, ?, ?, ?, ?)";
         String sqlSignos = "INSERT INTO signos_vitales (idAtencion, pas, pad, temperatura, peso, talla, fc, fr, imc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlDiag = "INSERT INTO diagnosticos_atencion (idAtencion, descripcion, tipo) VALUES (?, ?, ?)";
-        String sqlUpdateCita = "UPDATE citas SET estado = 'Atendida' WHERE idCita = ?";
+        String sqlUpdateCita = "UPDATE citas SET estado = 'Atendida' WHERE codigoCita = ?";
 
         Connection cn = null;
 
@@ -28,10 +29,10 @@ public class AtencionMedicaDAO {
             // 1. Guardar la Atención Médica Principal
             int idAtencionGenerado = -1;
             try (PreparedStatement psAtencion = cn.prepareStatement(sqlAtencion, Statement.RETURN_GENERATED_KEYS)) {
-                psAtencion.setInt(1, atencion.getIdCita());
+                psAtencion.setString(1, atencion.getCodigoCita());
                 psAtencion.setString(2, atencion.getMotivoConsulta());
                 psAtencion.setString(3, atencion.getAntecedentes());
-                psAtencion.setString(4, atencion.getPlanTratamiento());
+                psAtencion.setString(4, atencion.getTratamiento()); // Mapea a planTratamiento en MySQL
                 psAtencion.setString(5, atencion.getObservaciones());
                 psAtencion.executeUpdate();
 
@@ -63,9 +64,9 @@ public class AtencionMedicaDAO {
             }
 
             // 3. Guardar Diagnósticos
-            if (atencion.getDiagnosticos() != null && !atencion.getDiagnosticos().isEmpty()) {
+            if (atencion.getListaDiagnosticos() != null && !atencion.getListaDiagnosticos().isEmpty()) {
                 try (PreparedStatement psDiag = cn.prepareStatement(sqlDiag)) {
-                    for (Diagnostico d : atencion.getDiagnosticos()) {
+                    for (Diagnostico d : atencion.getListaDiagnosticos()) {
                         psDiag.setInt(1, idAtencionGenerado);
                         psDiag.setString(2, d.getDescripcion());
                         psDiag.setString(3, d.getTipo());
@@ -75,17 +76,19 @@ public class AtencionMedicaDAO {
             }
 
             // 4. Guardar Receta Médica (si contiene medicamentos)
-            if (atencion.getRecetaMedica() != null && atencion.getRecetaMedica().getDetalles() != null
-                    && !atencion.getRecetaMedica().getDetalles().isEmpty()) {
+            if (atencion.getReceta() != null && atencion.getReceta().getDetalles() != null
+                    && !atencion.getReceta().getDetalles().isEmpty()) {
 
-                atencion.getRecetaMedica().setIdAtencion(idAtencionGenerado);
-                RecetaDAO.registrarReceta(atencion.getRecetaMedica(), cn);
+                atencion.getReceta().setIdAtencion(idAtencionGenerado);
+                RecetaDAO.registrarReceta(atencion.getReceta(), cn);
             }
 
-            // 5. Actualizar el estado de la Cita a 'Atendida'
-            try (PreparedStatement psCita = cn.prepareStatement(sqlUpdateCita)) {
-                psCita.setInt(1, atencion.getIdCita());
-                psCita.executeUpdate();
+            // 5. Actualizar el estado de la Cita a 'Atendida' por su código
+            if (atencion.getCodigoCita() != null && !atencion.getCodigoCita().isEmpty()) {
+                try (PreparedStatement psCita = cn.prepareStatement(sqlUpdateCita)) {
+                    psCita.setString(1, atencion.getCodigoCita());
+                    psCita.executeUpdate();
+                }
             }
 
             // Confirmar transacción

@@ -10,6 +10,8 @@ CREATE TABLE Usuarios (
     estado BOOLEAN DEFAULT TRUE
 );
 
+select * from Usuarios;
+
 CREATE TABLE Auditorias (
     idAuditoria INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario INT NOT NULL,
@@ -34,6 +36,8 @@ CREATE TABLE IF NOT EXISTS apoderado (
     parentesco VARCHAR(50) NOT NULL,
     estado BOOLEAN NOT NULL DEFAULT TRUE
 );
+
+select * from paciente;
 
 CREATE TABLE IF NOT EXISTS seguro_medico (
     id_seguro INT AUTO_INCREMENT PRIMARY KEY,
@@ -93,6 +97,9 @@ CREATE TABLE Horarios_Medicos (
     horaFin TIME NOT NULL,
     FOREIGN KEY (idMedico) REFERENCES Medicos(idMedico)
 );
+select * from citas;
+select * from Horarios_Medicos;
+TRUNCATE TABLE Horarios_Medicos;
 
 CREATE TABLE Citas (
     idCita INT AUTO_INCREMENT PRIMARY KEY,
@@ -112,4 +119,60 @@ CREATE TABLE Medico_Especialidad (
     PRIMARY KEY (idMedico, idEspecialidad),
     FOREIGN KEY (idMedico) REFERENCES Medicos(idMedico),
     FOREIGN KEY (idEspecialidad) REFERENCES Especialidades(idEspecialidad)
+);
+
+-- MODULO ATENCION MEDICA
+DROP TABLE IF EXISTS detalle_receta;
+DROP TABLE IF EXISTS recetas_medicas;
+DROP TABLE IF EXISTS diagnosticos_atencion;
+DROP TABLE IF EXISTS signos_vitales;
+DROP TABLE IF EXISTS atenciones_medicas;
+
+CREATE TABLE atenciones_medicas (
+    idAtencion INT AUTO_INCREMENT PRIMARY KEY,
+    codigoCita VARCHAR(20) NOT NULL,
+    motivoConsulta TEXT NOT NULL,
+    antecedentes TEXT,
+    planTratamiento TEXT,
+    observaciones TEXT,
+    fechaAtencion DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE signos_vitales (
+    idSignos INT AUTO_INCREMENT PRIMARY KEY,
+    idAtencion INT NOT NULL,
+    pas DOUBLE NOT NULL,
+    pad DOUBLE NOT NULL,
+    temperatura DOUBLE NOT NULL,
+    peso DOUBLE NOT NULL,
+    talla DOUBLE NOT NULL,
+    fc INT NOT NULL,
+    fr INT NOT NULL,
+    imc DOUBLE NOT NULL,
+    CONSTRAINT fk_signos_atencion FOREIGN KEY (idAtencion) REFERENCES atenciones_medicas(idAtencion) ON DELETE CASCADE
+);
+
+CREATE TABLE diagnosticos_atencion (
+    idDiagnostico INT AUTO_INCREMENT PRIMARY KEY,
+    idAtencion INT NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    tipo VARCHAR(20) NOT NULL, -- 'Presuntivo' o 'Definitivo'
+    CONSTRAINT fk_diag_atencion FOREIGN KEY (idAtencion) REFERENCES atenciones_medicas(idAtencion) ON DELETE CASCADE
+);
+
+CREATE TABLE recetas_medicas (
+    idReceta INT AUTO_INCREMENT PRIMARY KEY,
+    idAtencion INT NOT NULL,
+    fechaEmision DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_receta_atencion FOREIGN KEY (idAtencion) REFERENCES atenciones_medicas(idAtencion) ON DELETE CASCADE
+);
+
+CREATE TABLE detalle_receta (
+    idDetalle INT AUTO_INCREMENT PRIMARY KEY,
+    idReceta INT NOT NULL,
+    idMedicamento INT NOT NULL,
+    cantidad INT NOT NULL,
+    indicacion TEXT NOT NULL,
+    CONSTRAINT fk_detalle_receta FOREIGN KEY (idReceta) REFERENCES recetas_medicas(idReceta) ON DELETE CASCADE,
+    CONSTRAINT fk_detalle_medicamento FOREIGN KEY (idMedicamento) REFERENCES medicamento(id_Medicamento)
 );

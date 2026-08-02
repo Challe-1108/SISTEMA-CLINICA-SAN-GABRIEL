@@ -228,4 +228,11 @@ public class CitaLOG {
             return false;
         }
     }
+
+    public static Cita buscarPorCodigo(String codigoCita) {
+        if (codigoCita == null || codigoCita.trim().isEmpty()) {
+            return null;
+        }
+        return CitaDAO.buscarPorCodigo(codigoCita.trim());
+    }
 }

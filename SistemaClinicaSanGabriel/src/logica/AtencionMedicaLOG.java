@@ -1,6 +1,5 @@
 package logica;
 
-
 import datos.AtencionMedicaDAO;
 import entidades.AtencionMedica;
 import entidades.Diagnostico;
@@ -18,9 +17,12 @@ public class AtencionMedicaLOG {
             return false;
         }
 
-        if (atencion.getIdCita() <= 0) {
-            JOptionPane.showMessageDialog(null, "La atención médica debe estar asociada a una cita válida.", "Dato Incorrecto", JOptionPane.WARNING_MESSAGE);
-            return false;
+        // Validación opcional/obligatoria según si la atención siempre viene ligada a un código de cita
+        if (atencion.getCodigoCita() != null && !atencion.getCodigoCita().isEmpty()) {
+            if (!atencion.getCodigoCita().matches("CIT-\\d{4}")) {
+                JOptionPane.showMessageDialog(null, "El código de cita no tiene el formato válido (ej: CIT-0001).", "Dato Incorrecto", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
         }
 
         if (atencion.getMotivoConsulta() == null || atencion.getMotivoConsulta().trim().isEmpty()) {
@@ -46,12 +48,12 @@ public class AtencionMedicaLOG {
         }
 
         // 3. Validaciones de Diagnósticos
-        if (atencion.getDiagnosticos() == null || atencion.getDiagnosticos().isEmpty()) {
+        if (atencion.getListaDiagnosticos() == null || atencion.getListaDiagnosticos().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe registrar al menos un diagnóstico para el paciente.", "Dato Incorrecto", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
-        for (Diagnostico d : atencion.getDiagnosticos()) {
+        for (Diagnostico d : atencion.getListaDiagnosticos()) {
             if (d.getDescripcion() == null || d.getDescripcion().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Uno de los diagnósticos no cuenta con una descripción.", "Dato Incorrecto", JOptionPane.WARNING_MESSAGE);
                 return false;

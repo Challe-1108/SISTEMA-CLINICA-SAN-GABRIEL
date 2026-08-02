@@ -1,36 +1,22 @@
 package entidades;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AtencionMedica {
+
     private int idAtencion;
-    private int idCita;
+    private String codigoCita; // Cambiado de int idCita a String codigoCita
     private String motivoConsulta;
     private String antecedentes;
-    private String planTratamiento;
-    private String observaciones;
-    private Timestamp fechaAtencion;
-
-    // Relaciones integradas en la atención
     private SignosVitales signosVitales;
-    private List<Diagnostico> diagnosticos;
-    private RecetaMedica recetaMedica;
+    private ArrayList<Diagnostico> listaDiagnosticos;
+    private RecetaMedica receta;
+    private String tratamiento;
+    private String observaciones;
 
-    // Constructor inicializando objetos y listas para evitar NullPointerException
     public AtencionMedica() {
-        this.signosVitales = new SignosVitales();
-        this.diagnosticos = new ArrayList<>();
-        this.recetaMedica = new RecetaMedica();
+        this.listaDiagnosticos = new ArrayList<>();
     }
-
-    // Método helper para agregar diagnósticos fácilmente
-    public void agregarDiagnostico(Diagnostico diagnostico) {
-        this.diagnosticos.add(diagnostico);
-    }
-
-    // --- GETTERS Y SETTERS ---
 
     public int getIdAtencion() {
         return idAtencion;
@@ -40,12 +26,12 @@ public class AtencionMedica {
         this.idAtencion = idAtencion;
     }
 
-    public int getIdCita() {
-        return idCita;
+    public String getCodigoCita() {
+        return codigoCita;
     }
 
-    public void setIdCita(int idCita) {
-        this.idCita = idCita;
+    public void setCodigoCita(String codigoCita) {
+        this.codigoCita = codigoCita;
     }
 
     public String getMotivoConsulta() {
@@ -64,30 +50,6 @@ public class AtencionMedica {
         this.antecedentes = antecedentes;
     }
 
-    public String getPlanTratamiento() {
-        return planTratamiento;
-    }
-
-    public void setPlanTratamiento(String planTratamiento) {
-        this.planTratamiento = planTratamiento;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public Timestamp getFechaAtencion() {
-        return fechaAtencion;
-    }
-
-    public void setFechaAtencion(Timestamp fechaAtencion) {
-        this.fechaAtencion = fechaAtencion;
-    }
-
     public SignosVitales getSignosVitales() {
         return signosVitales;
     }
@@ -96,19 +58,35 @@ public class AtencionMedica {
         this.signosVitales = signosVitales;
     }
 
-    public List<Diagnostico> getDiagnosticos() {
-        return diagnosticos;
+    public ArrayList<Diagnostico> getListaDiagnosticos() {
+        return listaDiagnosticos;
     }
 
-    public void setDiagnosticos(List<Diagnostico> diagnosticos) {
-        this.diagnosticos = diagnosticos;
+    public void setListaDiagnosticos(ArrayList<Diagnostico> listaDiagnosticos) {
+        this.listaDiagnosticos = listaDiagnosticos;
     }
 
-    public RecetaMedica getRecetaMedica() {
-        return recetaMedica;
+    public RecetaMedica getReceta() {
+        return receta;
     }
 
-    public void setRecetaMedica(RecetaMedica recetaMedica) {
-        this.recetaMedica = recetaMedica;
+    public void setReceta(RecetaMedica receta) {
+        this.receta = receta;
+    }
+
+    public String getTratamiento() {
+        return tratamiento;
+    }
+
+    public void setTratamiento(String tratamiento) {
+        this.tratamiento = tratamiento;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 }
